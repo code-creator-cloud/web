@@ -2,12 +2,13 @@
 import { Button } from "../../components/ui/button"
 import { Link } from "react-router-dom"
 
+
 const HeroSection = () => {
   return (
     <section 
       className="relative min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat pt-16"
       style={{
-        backgroundImage: "url('/src/assets/images/hero_image.jpg')",
+        backgroundImage: "url('/images/hero_image.jpg')",
       }}
     >
       {/* Overlay */}
