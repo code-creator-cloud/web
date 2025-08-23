@@ -1,12 +1,18 @@
-import './App.css'
+// src/App.tsx
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import Home from "./pages/Home"
+import Register from "./pages/Register"
+import Login from "./pages/Login"
 
 function App() {
   return (
-    <div className="p-8 flex items-center justify-center min-h-screen bg-gray-50">
-      <h1 className="text-3xl font-bold text-blue-600">
-        🚀 Welcome! This is the test link for the development stage.
-      </h1>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </Router>
   )
 }
 
