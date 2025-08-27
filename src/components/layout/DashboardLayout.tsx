@@ -1,6 +1,6 @@
 // src/components/layout/DashboardLayout.tsx
-
-import { Link, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { 
   Home, 
   CreditCard, 
@@ -8,22 +8,24 @@ import {
   Menu, 
   Settings,
   User,
-  Bell,
   ChevronDown,
   Wallet,
-  
+  MessageCircle,
+  X
 } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '../../components/ui/sheet';
-import { Input } from '../../components/ui/input';
+import AIChatBot from '../../components/ui/ai-chatbot';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
-
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const menuItems = [
     {
@@ -41,11 +43,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       icon: Wallet,
       path: '/accounts',
     },
-    // {
-    //   name: 'Analytics',
-    //   icon: BarChart3,
-    //   path: '/analytics',
-    // },
     {
       name: 'Settings',
       icon: Settings,
@@ -53,10 +50,34 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     },
   ];
 
+  const getBreadcrumb = () => {
+    const path = location.pathname;
+    if (path === '/dashboard') return 'Dashboard';
+    if (path === '/transactions') return 'Transactions';
+    if (path === '/accounts') return 'Accounts';
+    if (path === '/settings') return 'Settings';
+    return 'Dashboard';
+  };
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    setIsSidebarOpen(false); // Close sidebar on mobile after navigation
+  };
+
   const SidebarContent = () => (
     <div className="flex flex-col h-full bg-[var(--color-primary)] text-[var(--color-primary-foreground)]">
       <div className="flex items-center justify-between p-6 border-b border-[#382a6b]">
         <h1 className="text-xl font-bold">FinTrack Pro</h1>
+        <div className="md:hidden">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-white hover:bg-white/20"
+            onClick={() => setIsSidebarOpen(false)}
+          >
+            <X size={16} />
+          </Button>
+        </div>
       </div>
       
       <nav className="flex-1 p-4 space-y-1 mt-6">
@@ -65,18 +86,18 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           const isActive = location.pathname === item.path;
           
           return (
-            <Link
+            <button
               key={item.name}
-              to={item.path}
-              className={`flex items-center gap-3 rounded-lg px-4 py-3 transition-all hover:bg-[#382a6b] ${
+              onClick={() => handleNavigation(item.path)}
+              className={`flex items-center gap-3 rounded-lg px-4 py-3 transition-all hover:bg-[#382a6b] w-full text-left ${
                 isActive
-                  ? 'bg-[var(--color-accent)] text-[var(--color-accent-foreground)]'
+                  ? 'bg-[var(--color-accent)] text-[var(--color-accent-foreground)] font-bold'
                   : 'text-gray-300'
               }`}
             >
               <Icon size={20} />
               <span className="font-medium">{item.name}</span>
-            </Link>
+            </button>
           );
         })}
       </nav>
@@ -113,10 +134,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       </aside>
 
       {/* Mobile sidebar */}
-      <Sheet>
+      <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
         <div className="md:hidden fixed top-4 left-4 z-50">
           <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="h-10 w-10 bg-white">
+            <Button 
+              variant="outline" 
+              size="icon" 
+              className="h-10 w-10 bg-white"
+              onClick={() => setIsSidebarOpen(true)}
+            >
               <Menu size={16} />
             </Button>
           </SheetTrigger>
@@ -128,42 +154,53 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
       {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Top header */}
+        {/* Top header - Fixed for mobile */}
         <header className="bg-white border-b border-gray-200 py-4 px-6 flex items-center justify-between">
-          <div className="relative max-w-md w-full">
-            <Input
-              type="search"
-              placeholder="Search..."
-              className="pl-10 bg-gray-100 border-0 focus-visible:ring-1 focus-visible:ring-[var(--color-primary)]"
-            />
-            <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <div className="flex items-center gap-4">
+            {/* Mobile hamburger and home link side by side */}
+            <div className="flex items-center gap-4 md:gap-2">
+              <div className="md:hidden flex items-center gap-4">
+                <span className="text-lg font-bold text-[var(--color-primary)]">FinTrack</span>
+              </div>
+              <div className="hidden md:flex items-center gap-2 text-sm text-gray-600">
+                <button 
+                  onClick={() => navigate('/')}
+                  className="text-gray-400 hover:text-[var(--color-primary)]"
+                >
+                  Home
+                </button>
+                <span className="text-gray-400">/</span>
+                <span className="text-[var(--color-primary)] font-medium">{getBreadcrumb()}</span>
+              </div>
+            </div>
           </div>
           
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" className="relative">
-              <Bell size={20} />
-              <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-[var(--color-accent)] text-xs text-white flex items-center justify-center">
-                3
-              </span>
-            </Button>
-            
-            <div className="w-10 h-10 rounded-full bg-[var(--color-primary)] flex items-center justify-center text-white">
-              <User size={20} />
+            <div className="text-sm text-gray-700 font-medium hidden sm:block">John Doe</div>
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[var(--color-primary)] flex items-center justify-center text-white">
+              <User size={16} className="sm:size-5" />
             </div>
           </div>
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-auto p-6">
+        <main className="flex-1 overflow-auto p-4 sm:p-6">
           {children}
         </main>
+
+        {/* AI Chat Bot Button */}
+        <button
+          onClick={() => setIsChatOpen(true)}
+          className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-[var(--color-accent)] text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-all z-40"
+        >
+          <MessageCircle size={24} />
+        </button>
+
+        {/* AI Chat Bot Modal */}
+        {isChatOpen && (
+          <AIChatBot onClose={() => setIsChatOpen(false)} />
+        )}
       </div>
     </div>
   );
 }
-
-const SearchIcon = ({ className }: { className?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill="currentColor">
-    <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
-  </svg>
-);

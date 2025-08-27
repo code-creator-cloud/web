@@ -118,18 +118,19 @@ export default function Transactions() {
               <div>
                 <label className="text-sm font-medium text-gray-700 mb-2 block">Payment Method</label>
                 <div className="grid grid-cols-2 gap-3">
-                  <button
-                    onClick={() => setSelectedMethod('mtn')}
+                  
+                <button
+                    onClick={() => setSelectedMethod('trx')}
                     className={`p-3 border rounded-lg flex flex-col items-center justify-center transition-all ${
-                      selectedMethod === 'mtn' 
+                      selectedMethod === 'trx' 
                         ? 'border-[var(--color-accent)] bg-orange-50' 
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
                     <div className="w-8 h-8 flex items-center justify-center mb-1">
-                      <MTNIcon />
+                      <TRXIcon />
                     </div>
-                    <span className="text-xs font-medium">MTN</span>
+                    <span className="text-xs font-medium">TRX</span>
                   </button>
                   
                   <button
@@ -147,17 +148,17 @@ export default function Transactions() {
                   </button>
                   
                   <button
-                    onClick={() => setSelectedMethod('trx')}
+                    onClick={() => setSelectedMethod('mtn')}
                     className={`p-3 border rounded-lg flex flex-col items-center justify-center transition-all ${
-                      selectedMethod === 'trx' 
+                      selectedMethod === 'mtn' 
                         ? 'border-[var(--color-accent)] bg-orange-50' 
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
                     <div className="w-8 h-8 flex items-center justify-center mb-1">
-                      <TRXIcon />
+                      <MTNIcon />
                     </div>
-                    <span className="text-xs font-medium">TRX</span>
+                    <span className="text-xs font-medium">MTN</span>
                   </button>
                   
                   <button
@@ -210,18 +211,19 @@ export default function Transactions() {
               <div>
                 <label className="text-sm font-medium text-gray-700 mb-2 block">Withdrawal Method</label>
                 <div className="grid grid-cols-2 gap-3">
-                  <button
-                    onClick={() => setSelectedMethod('mtn')}
+                   
+                <button
+                    onClick={() => setSelectedMethod('trx')}
                     className={`p-3 border rounded-lg flex flex-col items-center justify-center transition-all ${
-                      selectedMethod === 'mtn' 
+                      selectedMethod === 'trx' 
                         ? 'border-[var(--color-accent)] bg-orange-50' 
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
                     <div className="w-8 h-8 flex items-center justify-center mb-1">
-                      <MTNIcon />
+                      <TRXIcon />
                     </div>
-                    <span className="text-xs font-medium">MTN</span>
+                    <span className="text-xs font-medium">TRX</span>
                   </button>
                   
                   <button
@@ -237,19 +239,19 @@ export default function Transactions() {
                     </div>
                     <span className="text-xs font-medium">BNB</span>
                   </button>
-                  
+                 
                   <button
-                    onClick={() => setSelectedMethod('trx')}
+                    onClick={() => setSelectedMethod('mtn')}
                     className={`p-3 border rounded-lg flex flex-col items-center justify-center transition-all ${
-                      selectedMethod === 'trx' 
+                      selectedMethod === 'mtn' 
                         ? 'border-[var(--color-accent)] bg-orange-50' 
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
                     <div className="w-8 h-8 flex items-center justify-center mb-1">
-                      <TRXIcon />
+                      <MTNIcon />
                     </div>
-                    <span className="text-xs font-medium">TRX</span>
+                    <span className="text-xs font-medium">MTN</span>
                   </button>
                   
                   <button
