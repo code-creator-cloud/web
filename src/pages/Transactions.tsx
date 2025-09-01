@@ -1,9 +1,11 @@
 // src/pages/Transactions.tsx
 import { useState } from 'react';
-import { Download, Filter, Search,  ArrowDown, ArrowUp, Calendar } from 'lucide-react';
+import { Download, Filter, Search, ArrowDown, ArrowUp, Calendar, Plus, Minus } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Badge } from '../components/ui/badge';
+import { Tabs, TabsList, TabsTrigger } from '../components/ui/tabs';
 
 // SVG components for payment methods
 const MTNIcon = () => (
@@ -39,7 +41,8 @@ export default function Transactions() {
   const [activeTab, setActiveTab] = useState('all');
   const [depositAmount, setDepositAmount] = useState('');
   const [withdrawAmount, setWithdrawAmount] = useState('');
-  const [selectedMethod, setSelectedMethod] = useState('');
+  const [depositMethod, setDepositMethod] = useState('');
+  const [withdrawMethod, setWithdrawMethod] = useState('');
 
   const transactions = [
     { id: 1, type: 'deposit', method: 'mtn', amount: 500, date: '2023-05-15', status: 'completed' },
@@ -64,37 +67,37 @@ export default function Transactions() {
   };
 
   const getStatusColor = (status: string) => {
-    return status === 'completed' ? 'text-green-600' : 'text-yellow-600';
+    return status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
   };
 
   const handleDeposit = () => {
-    if (depositAmount && selectedMethod) {
-      alert(`Deposit of $${depositAmount} via ${selectedMethod.toUpperCase()} requested`);
+    if (depositAmount && depositMethod) {
+      alert(`Deposit of $${depositAmount} via ${depositMethod.toUpperCase()} requested`);
       setDepositAmount('');
-      setSelectedMethod('');
+      setDepositMethod('');
     }
   };
 
   const handleWithdraw = () => {
-    if (withdrawAmount && selectedMethod) {
-      alert(`Withdrawal of $${withdrawAmount} via ${selectedMethod.toUpperCase()} requested`);
+    if (withdrawAmount && withdrawMethod) {
+      alert(`Withdrawal of $${withdrawAmount} via ${withdrawMethod.toUpperCase()} requested`);
       setWithdrawAmount('');
-      setSelectedMethod('');
+      setWithdrawMethod('');
     }
   };
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold text-[var(--color-primary)]">Transactions</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Transactions</h1>
         <p className="text-gray-600">Manage your deposits, withdrawals, and transaction history</p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Deposit Section */}
-        <Card className="lg:col-span-1 border-0 shadow-md">
-          <CardHeader className="bg-[var(--color-primary)] text-[var(--color-primary-foreground)] rounded-t-lg py-4">
-            <CardTitle className="flex items-center gap-2 text-lg">
+        <Card className="lg:col-span-1 border border-gray-200 shadow-sm">
+          <CardHeader className="bg-accent text-white rounded-t-lg py-4">
+            <CardTitle className="flex items-center gap-2 text-lg font-semibold">
               <ArrowDown className="h-5 w-5" />
               Deposit Funds
             </CardTitle>
@@ -118,12 +121,11 @@ export default function Transactions() {
               <div>
                 <label className="text-sm font-medium text-gray-700 mb-2 block">Payment Method</label>
                 <div className="grid grid-cols-2 gap-3">
-                  
-                <button
-                    onClick={() => setSelectedMethod('trx')}
+                  <button
+                    onClick={() => setDepositMethod('trx')}
                     className={`p-3 border rounded-lg flex flex-col items-center justify-center transition-all ${
-                      selectedMethod === 'trx' 
-                        ? 'border-[var(--color-accent)] bg-orange-50' 
+                      depositMethod === 'trx' 
+                        ? 'border-blue-500 bg-blue-50' 
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
@@ -134,10 +136,10 @@ export default function Transactions() {
                   </button>
                   
                   <button
-                    onClick={() => setSelectedMethod('bnb')}
+                    onClick={() => setDepositMethod('bnb')}
                     className={`p-3 border rounded-lg flex flex-col items-center justify-center transition-all ${
-                      selectedMethod === 'bnb' 
-                        ? 'border-[var(--color-accent)] bg-orange-50' 
+                      depositMethod === 'bnb' 
+                        ? 'border-blue-500 bg-blue-50' 
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
@@ -148,12 +150,9 @@ export default function Transactions() {
                   </button>
                   
                   <button
-                    onClick={() => setSelectedMethod('mtn')}
-                    className={`p-3 border rounded-lg flex flex-col items-center justify-center transition-all ${
-                      selectedMethod === 'mtn' 
-                        ? 'border-[var(--color-accent)] bg-orange-50' 
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
+                    className="p-3 border border-gray-200 rounded-lg flex flex-col items-center justify-center opacity-50 cursor-not-allowed"
+                    disabled
+                    title="MTN is currently unavailable"
                   >
                     <div className="w-8 h-8 flex items-center justify-center mb-1">
                       <MTNIcon />
@@ -164,6 +163,7 @@ export default function Transactions() {
                   <button
                     className="p-3 border border-gray-200 rounded-lg flex flex-col items-center justify-center opacity-50 cursor-not-allowed"
                     disabled
+                    title="Orange is currently unavailable"
                   >
                     <div className="w-8 h-8 flex items-center justify-center mb-1">
                       <OrangeIcon />
@@ -174,9 +174,9 @@ export default function Transactions() {
               </div>
               
               <Button 
-                className="w-full bg-[var(--color-primary)] hover:bg-[var(--color-primary)]/90"
+                className="w-full bg-accent"
                 onClick={handleDeposit}
-                disabled={!depositAmount || !selectedMethod}
+                disabled={!depositAmount || !depositMethod}
               >
                 Deposit Funds
               </Button>
@@ -185,9 +185,9 @@ export default function Transactions() {
         </Card>
 
         {/* Withdraw Section */}
-        <Card className="lg:col-span-1 border-0 shadow-md">
-          <CardHeader className="bg-[var(--color-primary)] text-[var(--color-primary-foreground)] rounded-t-lg py-4">
-            <CardTitle className="flex items-center gap-2 text-lg">
+        <Card className="lg:col-span-1 border border-gray-200 shadow-sm">
+          <CardHeader className="bg-primary text-white rounded-t-lg py-4">
+            <CardTitle className="flex items-center gap-2 text-lg font-semibold">
               <ArrowUp className="h-5 w-5" />
               Withdraw Funds
             </CardTitle>
@@ -211,12 +211,11 @@ export default function Transactions() {
               <div>
                 <label className="text-sm font-medium text-gray-700 mb-2 block">Withdrawal Method</label>
                 <div className="grid grid-cols-2 gap-3">
-                   
-                <button
-                    onClick={() => setSelectedMethod('trx')}
+                  <button
+                    onClick={() => setWithdrawMethod('trx')}
                     className={`p-3 border rounded-lg flex flex-col items-center justify-center transition-all ${
-                      selectedMethod === 'trx' 
-                        ? 'border-[var(--color-accent)] bg-orange-50' 
+                      withdrawMethod === 'trx' 
+                        ? 'border-blue-500 bg-blue-50' 
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
@@ -227,10 +226,10 @@ export default function Transactions() {
                   </button>
                   
                   <button
-                    onClick={() => setSelectedMethod('bnb')}
+                    onClick={() => setWithdrawMethod('bnb')}
                     className={`p-3 border rounded-lg flex flex-col items-center justify-center transition-all ${
-                      selectedMethod === 'bnb' 
-                        ? 'border-[var(--color-accent)] bg-orange-50' 
+                      withdrawMethod === 'bnb' 
+                        ? 'border-blue-500 bg-blue-50' 
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
@@ -239,14 +238,11 @@ export default function Transactions() {
                     </div>
                     <span className="text-xs font-medium">BNB</span>
                   </button>
-                 
+                  
                   <button
-                    onClick={() => setSelectedMethod('mtn')}
-                    className={`p-3 border rounded-lg flex flex-col items-center justify-center transition-all ${
-                      selectedMethod === 'mtn' 
-                        ? 'border-[var(--color-accent)] bg-orange-50' 
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
+                    className="p-3 border border-gray-200 rounded-lg flex flex-col items-center justify-center opacity-50 cursor-not-allowed"
+                    disabled
+                    title="MTN is currently unavailable"
                   >
                     <div className="w-8 h-8 flex items-center justify-center mb-1">
                       <MTNIcon />
@@ -257,6 +253,7 @@ export default function Transactions() {
                   <button
                     className="p-3 border border-gray-200 rounded-lg flex flex-col items-center justify-center opacity-50 cursor-not-allowed"
                     disabled
+                    title="Orange is currently unavailable"
                   >
                     <div className="w-8 h-8 flex items-center justify-center mb-1">
                       <OrangeIcon />
@@ -267,9 +264,9 @@ export default function Transactions() {
               </div>
               
               <Button 
-                className="w-full bg-[var(--color-accent)] hover:bg-[var(--color-accent)]/90"
+                className="w-full bg-primary"
                 onClick={handleWithdraw}
-                disabled={!withdrawAmount || !selectedMethod}
+                disabled={!withdrawAmount || !withdrawMethod}
               >
                 Withdraw Funds
               </Button>
@@ -278,26 +275,26 @@ export default function Transactions() {
         </Card>
 
         {/* Available Methods */}
-        <Card className="lg:col-span-1 border-0 shadow-md">
+        <Card className="lg:col-span-1 border border-gray-200 shadow-sm">
           <CardHeader className="bg-gray-50 rounded-t-lg py-4">
-            <CardTitle className="text-lg">Available Methods</CardTitle>
+            <CardTitle className="text-lg font-semibold">Available Methods</CardTitle>
           </CardHeader>
           <CardContent className="p-5">
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-3 border rounded-lg">
+              <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
-                    <MTNIcon />
+                    <TRXIcon />
                   </div>
                   <div>
-                    <p className="font-medium">MTN Mobile Money</p>
-                    <p className="text-xs text-gray-500">Instant deposits</p>
+                    <p className="font-medium">TRX</p>
+                    <p className="text-xs text-gray-500">Fast transactions</p>
                   </div>
                 </div>
-                <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Available</span>
+                <Badge variant="success">Available</Badge>
               </div>
               
-              <div className="flex items-center justify-between p-3 border rounded-lg">
+              <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
                     <BNBIcon />
@@ -307,23 +304,23 @@ export default function Transactions() {
                     <p className="text-xs text-gray-500">Low fees</p>
                   </div>
                 </div>
-                <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Available</span>
+                <Badge variant="success">Available</Badge>
               </div>
               
-              <div className="flex items-center justify-between p-3 border rounded-lg">
+              <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg opacity-60">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                    <TRXIcon />
+                  <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
+                    <MTNIcon />
                   </div>
                   <div>
-                    <p className="font-medium">TRX</p>
-                    <p className="text-xs text-gray-500">Fast transactions</p>
+                    <p className="font-medium">MTN Mobile Money</p>
+                    <p className="text-xs text-gray-500">Instant deposits</p>
                   </div>
                 </div>
-                <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Available</span>
+                <Badge variant="secondary">Unavailable</Badge>
               </div>
               
-              <div className="flex items-center justify-between p-3 border rounded-lg opacity-60">
+              <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg opacity-60">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
                     <OrangeIcon />
@@ -333,7 +330,7 @@ export default function Transactions() {
                     <p className="text-xs text-gray-500">Coming soon</p>
                   </div>
                 </div>
-                <span className="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">Unavailable</span>
+                <Badge variant="secondary">Unavailable</Badge>
               </div>
             </div>
           </CardContent>
@@ -341,30 +338,17 @@ export default function Transactions() {
       </div>
 
       {/* Transaction History */}
-      <Card className="border-0 shadow-md">
+      <Card className="border border-gray-200 shadow-sm">
         <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-gray-50 rounded-t-lg">
-          <CardTitle>Transaction History</CardTitle>
+          <CardTitle className="text-lg font-semibold">Transaction History</CardTitle>
           <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-            <div className="flex border rounded-lg overflow-hidden">
-              <button
-                className={`py-2 px-4 ${activeTab === 'all' ? 'bg-[var(--color-primary)] text-white' : 'bg-white text-gray-700'}`}
-                onClick={() => setActiveTab('all')}
-              >
-                All
-              </button>
-              <button
-                className={`py-2 px-4 ${activeTab === 'deposit' ? 'bg-[var(--color-primary)] text-white' : 'bg-white text-gray-700'}`}
-                onClick={() => setActiveTab('deposit')}
-              >
-                Deposits
-              </button>
-              <button
-                className={`py-2 px-4 ${activeTab === 'withdrawal' ? 'bg-[var(--color-primary)] text-white' : 'bg-white text-gray-700'}`}
-                onClick={() => setActiveTab('withdrawal')}
-              >
-                Withdrawals
-              </button>
-            </div>
+            <Tabs defaultValue="all" className="w-full sm:w-auto">
+              <TabsList>
+                <TabsTrigger value="all" onClick={() => setActiveTab('all')}>All</TabsTrigger>
+                <TabsTrigger value="deposit" onClick={() => setActiveTab('deposit')}>Deposits</TabsTrigger>
+                <TabsTrigger value="withdrawal" onClick={() => setActiveTab('withdrawal')}>Withdrawals</TabsTrigger>
+              </TabsList>
+            </Tabs>
             
             <div className="flex gap-2">
               <div className="relative flex-1">
@@ -404,8 +388,8 @@ export default function Transactions() {
                       <div className="flex items-center">
                         <div className={`p-2 rounded-full ${transaction.type === 'deposit' ? 'bg-green-100' : 'bg-red-100'}`}>
                           {transaction.type === 'deposit' ? 
-                            <ArrowDown className="h-4 w-4 text-green-600" /> : 
-                            <ArrowUp className="h-4 w-4 text-red-600" />
+                            <Plus className="h-4 w-4 text-green-600" /> : 
+                            <Minus className="h-4 w-4 text-red-600" />
                           }
                         </div>
                         <div className="ml-4">
@@ -425,7 +409,7 @@ export default function Transactions() {
                       {transaction.date}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(transaction.status)} bg-opacity-20 capitalize`}>
+                      <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(transaction.status)}`}>
                         {transaction.status}
                       </span>
                     </td>
