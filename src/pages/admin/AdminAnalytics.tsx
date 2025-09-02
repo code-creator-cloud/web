@@ -141,7 +141,7 @@ export default function AdminAnalytics() {
                   dataKey="value"
                   label
                 >
-                  {platformData.map((entry, index) => (
+                  {platformData.map((_, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>

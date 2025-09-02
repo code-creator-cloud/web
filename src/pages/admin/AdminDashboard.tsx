@@ -6,10 +6,14 @@ import {
   CreditCard,
   TrendingUp,
   TrendingDown,
-  Calendar,
-  Bitcoin,
-  Coins,
-  Wallet
+  ArrowUp,
+  ArrowDown,
+  Download,
+  Filter,
+  Crown,
+  Zap,
+  Award,
+  BarChart3
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
@@ -22,99 +26,133 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  Line,
-  LineChart,
   PieChart,
   Pie,
   Cell
 } from 'recharts';
 
-// Mock data for crypto charts
-const revenueData = [
-  { month: 'Jan', deposits: 45, withdrawals: 30, trxVolume: 120 },
-  { month: 'Feb', deposits: 52, withdrawals: 38, trxVolume: 145 },
-  { month: 'Mar', deposits: 48, withdrawals: 42, trxVolume: 138 },
-  { month: 'Apr', deposits: 78, withdrawals: 35, trxVolume: 195 },
-  { month: 'May', deposits: 65, withdrawals: 48, trxVolume: 180 },
-  { month: 'Jun', deposits: 90, withdrawals: 55, trxVolume: 220 },
-  { month: 'Jul', deposits: 85, withdrawals: 60, trxVolume: 210 },
-  { month: 'Aug', deposits: 110, withdrawals: 65, trxVolume: 250 },
-  { month: 'Sep', deposits: 95, withdrawals: 70, trxVolume: 230 },
-  { month: 'Oct', deposits: 120, withdrawals: 75, trxVolume: 280 },
-  { month: 'Nov', deposits: 130, withdrawals: 80, trxVolume: 300 },
-  { month: 'Dec', deposits: 150, withdrawals: 85, trxVolume: 320 },
+// Enhanced mock data for crypto platform
+const transactionData = [
+  { month: 'Jan', deposits: 45, withdrawals: 30, revenue: 4500 },
+  { month: 'Feb', deposits: 52, withdrawals: 38, revenue: 5200 },
+  { month: 'Mar', deposits: 48, withdrawals: 42, revenue: 4800 },
+  { month: 'Apr', deposits: 78, withdrawals: 35, revenue: 7800 },
+  { month: 'May', deposits: 65, withdrawals: 48, revenue: 6500 },
+  { month: 'Jun', deposits: 90, withdrawals: 55, revenue: 9000 },
+  { month: 'Jul', deposits: 85, withdrawals: 60, revenue: 8500 },
+  { month: 'Aug', deposits: 110, withdrawals: 65, revenue: 11000 },
+  { month: 'Sep', deposits: 95, withdrawals: 70, revenue: 9500 },
+  { month: 'Oct', deposits: 120, withdrawals: 75, revenue: 12000 },
+  { month: 'Nov', deposits: 130, withdrawals: 80, revenue: 13000 },
+  { month: 'Dec', deposits: 150, withdrawals: 85, revenue: 15000 }
 ];
 
-const currencyDistributionData = [
-  { name: 'TRX', value: 45 },
-  { name: 'BNB', value: 30 },
-  { name: 'BTC', value: 15 },
-  { name: 'ETH', value: 10 },
+const currencyDistribution = [
+  { name: 'TRX', value: 45, color: '#FF6B35' },
+  { name: 'BNB', value: 30, color: '#3B82F6' },
+  { name: 'BTC', value: 15, color: '#F59E0B' },
+  { name: 'ETH', value: 10, color: '#8B5CF6' }
 ];
 
-const COLORS = ['#FF6B35', '#3B82F6', '#F59E0B', '#8B5CF6'];
+const recentTransactions = [
+  { id: 'TX001', user: 'John Doe', type: 'Deposit', currency: 'TRX', amount: 500, status: 'Completed', date: '2023-05-15', fee: 5 },
+  { id: 'TX002', user: 'Sarah Wilson', type: 'Withdrawal', currency: 'BNB', amount: 250, status: 'Processing', date: '2023-05-14', fee: 2.5 },
+  { id: 'TX003', user: 'Mike Johnson', type: 'Deposit', currency: 'TRX', amount: 1200, status: 'Completed', date: '2023-05-13', fee: 12 },
+  { id: 'TX004', user: 'Emma Davis', type: 'Deposit', currency: 'BNB', amount: 350, status: 'Completed', date: '2023-05-12', fee: 3.5 },
+  { id: 'TX005', user: 'Alex Brown', type: 'Withdrawal', currency: 'TRX', amount: 800, status: 'Completed', date: '2023-05-11', fee: 8 }
+];
 
-// Stats data for crypto platform
+const topUsers = [
+  { name: 'John Doe', totalDeposits: 12500, totalWithdrawals: 8500, tier: 'Premium', joinDate: '2023-01-15' },
+  { name: 'Sarah Wilson', totalDeposits: 8900, totalWithdrawals: 6200, tier: 'Standard', joinDate: '2023-02-20' },
+  { name: 'Mike Johnson', totalDeposits: 15600, totalWithdrawals: 11000, tier: 'Premium', joinDate: '2023-03-10' },
+  { name: 'Emma Davis', totalDeposits: 7200, totalWithdrawals: 4800, tier: 'Standard', joinDate: '2023-04-05' },
+  { name: 'Alex Brown', totalDeposits: 18900, totalWithdrawals: 12500, tier: 'Premium', joinDate: '2023-05-12' }
+];
+
+const platformStats = {
+  totalExpenses: 125430,
+  totalRevenue: 245000,
+  activeUsers: 12845,
+  successRate: 98.7
+};
+
 const statsData = [
   {
     title: 'Total Volume',
     value: '$2.45M',
     change: 12.5,
     icon: DollarSign,
-    trend: 'up'
+    trend: 'up',
+    description: 'Total transaction volume'
   },
   {
     title: 'Active Users',
     value: '12,845',
     change: 8.3,
     icon: Users,
-    trend: 'up'
+    trend: 'up',
+    description: 'Currently active users'
   },
   {
     title: 'Total Transactions',
     value: '56,278',
     change: 5.2,
     icon: CreditCard,
-    trend: 'up'
+    trend: 'up',
+    description: 'All-time transactions'
   },
   {
-    title: 'TRX Volume',
-    value: '1.2M',
-    change: 15.7,
-    icon: Coins,
-    trend: 'up'
+    title: 'Success Rate',
+    value: '98.7%',
+    change: 0.3,
+    icon: Award,
+    trend: 'up',
+    description: 'Transaction success rate'
   }
 ];
 
-// Custom tooltip for transaction chart
+// Custom tooltip components
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
+    const deposits = payload.find((p: any) => p.dataKey === "deposits");
+    const withdrawals = payload.find((p: any) => p.dataKey === "withdrawals");
+    const revenue = payload.find((p: any) => p.dataKey === "revenue");
+
     return (
-      <div className="bg-white p-4 border border-gray-200 rounded shadow-md">
-        <p className="font-medium text-gray-800">{label}</p>
-        <p className="text-sm text-blue-600">
-          Deposits: <span className="font-medium">{payload[0].value}</span>
-        </p>
-        <p className="text-sm text-orange-600">
-          Withdrawals: <span className="font-medium">{payload[1].value}</span>
-        </p>
-        <p className="text-sm text-purple-600">
-          TRX Volume: <span className="font-medium">{payload[2].value}</span>
-        </p>
+      <div className="bg-white p-4 border border-gray-200 rounded-lg shadow-lg">
+        <p className="font-semibold text-gray-800 mb-2">{label}</p>
+        <div className="space-y-1">
+          {deposits && (
+            <p className="text-sm text-blue-600">
+              Deposits: <span className="font-medium">{deposits.value}</span>
+            </p>
+          )}
+          {withdrawals && (
+            <p className="text-sm text-orange-600">
+              Withdrawals: <span className="font-medium">{withdrawals.value}</span>
+            </p>
+          )}
+          {revenue && (
+            <p className="text-sm text-green-600">
+              Revenue: <span className="font-medium">${revenue.value}</span>
+            </p>
+          )}
+        </div>
       </div>
     );
   }
   return null;
 };
 
-// Custom tooltip for pie chart
+
 const CustomPieTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white p-3 border border-gray-200 rounded shadow-md">
-        <p className="font-medium">{payload[0].name}</p>
-        <p className="text-sm">
-          {payload[0].value}% of transactions
+      <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
+        <p className="font-semibold">{payload[0].name}</p>
+        <p className="text-sm text-gray-600">
+          {payload[0].value}% of total transactions
         </p>
       </div>
     );
@@ -125,16 +163,30 @@ const CustomPieTooltip = ({ active, payload }: any) => {
 export default function AdminDashboard() {
   const [dateRange, setDateRange] = useState('30d');
 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'Completed': return 'bg-green-100 text-green-800';
+      case 'Processing': return 'bg-yellow-100 text-yellow-800';
+      case 'Failed': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getTierColor = (tier: string) => {
+    return tier === 'Premium' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800';
+  };
+
   return (
     <div className="space-y-6">
+      {/* Header Section */}
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold text-[var(--color-primary)]">Admin Dashboard</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-[var(--color-primary)]">Admin Dashboard</h1>
         <p className="text-gray-600">Monitor crypto transaction performance and user activities</p>
       </div>
 
-      {/* Date Range Filter */}
-      <div className="flex justify-between items-center">
-        <div className="flex gap-2">
+      {/* Filters and Actions */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="flex flex-wrap gap-2">
           <Button 
             variant={dateRange === '7d' ? 'default' : 'outline'} 
             size="sm"
@@ -157,20 +209,26 @@ export default function AdminDashboard() {
             Last 90 days
           </Button>
         </div>
-        <Button variant="outline" className="gap-2">
-          <Calendar className="h-4 w-4" />
-          Export Report
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" className="gap-2">
+            <Filter className="h-4 w-4" />
+            Filter
+          </Button>
+          <Button variant="outline" size="sm" className="gap-2">
+            <Download className="h-4 w-4" />
+            Export
+          </Button>
+        </div>
       </div>
 
-      {/* Stats Cards */}
+      {/* Stats Overview */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {statsData.map((stat, index) => {
           const Icon = stat.icon;
           return (
-            <Card key={index} className="border-0 shadow-md">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
+            <Card key={index} className="border-0 shadow-md hover:shadow-lg transition-shadow">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                <CardTitle className="text-sm font-medium text-gray-600">{stat.title}</CardTitle>
                 <div className={`p-2 rounded-full ${
                   stat.trend === 'up' ? 'bg-green-100' : 'bg-red-100'
                 }`}>
@@ -180,8 +238,8 @@ export default function AdminDashboard() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{stat.value}</div>
-                <div className="flex items-center text-xs text-muted-foreground mt-1">
+                <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
+                <div className="flex items-center text-xs text-gray-500 mt-1">
                   {stat.trend === 'up' ? (
                     <TrendingUp className="h-3 w-3 text-green-600 mr-1" />
                   ) : (
@@ -192,82 +250,71 @@ export default function AdminDashboard() {
                   </span>
                   <span className="ml-1">from last month</span>
                 </div>
+                <p className="text-xs text-gray-400 mt-2">{stat.description}</p>
               </CardContent>
             </Card>
           );
         })}
       </div>
 
-      {/* Charts Section */}
-      <div className="grid gap-6 lg:grid-cols-2">
-        {/* Transaction Volume Chart */}
+      {/* Platform Financials */}
+      <div className="grid gap-6 md:grid-cols-2">
         <Card className="border-0 shadow-md">
           <CardHeader>
-            <CardTitle>Transaction Volume Overview</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <DollarSign className="h-5 w-5" />
+              Platform Financials
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={revenueData}
-                  margin={{
-                    top: 5,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Legend />
-                  <Bar 
-                    dataKey="deposits" 
-                    fill="#3B82F6" 
-                    name="Deposits" 
-                    radius={[4, 4, 0, 0]}
-                  />
-                  <Bar 
-                    dataKey="withdrawals" 
-                    fill="#FF6B35" 
-                    name="Withdrawals" 
-                    radius={[4, 4, 0, 0]}
-                  />
-                  <Bar 
-                    dataKey="trxVolume" 
-                    fill="#8B5CF6" 
-                    name="TRX Volume (K)" 
-                    radius={[4, 4, 0, 0]}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
+            <div className="grid gap-4">
+              <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Total Revenue</p>
+                  <p className="text-2xl font-bold text-green-600">${platformStats.totalRevenue.toLocaleString()}</p>
+                </div>
+                <TrendingUp className="h-6 w-6 text-green-600" />
+              </div>
+              <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Total Expenses</p>
+                  <p className="text-2xl font-bold text-orange-600">${platformStats.totalExpenses.toLocaleString()}</p>
+                </div>
+                <TrendingDown className="h-6 w-6 text-orange-600" />
+              </div>
+              <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Net Profit</p>
+                  <p className="text-2xl font-bold text-blue-600">
+                    ${(platformStats.totalRevenue - platformStats.totalExpenses).toLocaleString()}
+                  </p>
+                </div>
+                <BarChart3 className="h-6 w-6 text-blue-600" />
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Currency Distribution Chart */}
+        {/* Currency Distribution */}
         <Card className="border-0 shadow-md">
           <CardHeader>
-            <CardTitle>Transaction Distribution by Currency</CardTitle>
+            <CardTitle>Currency Distribution</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
-                    data={currencyDistributionData}
+                    data={currencyDistribution}
                     cx="50%"
                     cy="50%"
-                    labelLine={false}
                     outerRadius={80}
                     innerRadius={60}
-                    fill="#8884d8"
                     dataKey="value"
                     label={({ name, percent = 0 }) => `${name} ${(percent * 100).toFixed(0)}%`}
                   >
-                    {currencyDistributionData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    {currencyDistribution.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
                   <Tooltip content={<CustomPieTooltip />} />
@@ -279,101 +326,135 @@ export default function AdminDashboard() {
         </Card>
       </div>
 
-      {/* Transaction Trends Line Chart */}
+      {/* Transaction Volume Chart */}
       <Card className="border-0 shadow-md">
         <CardHeader>
-          <CardTitle>Transaction Trends Over Time</CardTitle>
+          <CardTitle>Monthly Transaction Volume</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart
-                data={revenueData}
-                margin={{
-                  top: 5,
-                  right: 30,
-                  left: 20,
-                  bottom: 5,
-                }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
+              <BarChart data={transactionData}>
+                <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
                 <XAxis dataKey="month" />
                 <YAxis />
-                <Tooltip />
+                <Tooltip content={<CustomTooltip />} />
                 <Legend />
-                <Line 
-                  type="monotone" 
+                <Bar 
                   dataKey="deposits" 
-                  stroke="#3B82F6" 
-                  strokeWidth={2}
-                  name="Deposits"
-                  dot={{ r: 4 }}
-                  activeDot={{ r: 6 }}
+                  fill="#3B82F6" 
+                  name="Deposits" 
+                  radius={[4, 4, 0, 0]}
                 />
-                <Line 
-                  type="monotone" 
+                <Bar 
                   dataKey="withdrawals" 
-                  stroke="#FF6B35" 
-                  strokeWidth={2}
-                  name="Withdrawals"
-                  dot={{ r: 4 }}
-                  activeDot={{ r: 6 }}
+                  fill="#FF6B35" 
+                  name="Withdrawals" 
+                  radius={[4, 4, 0, 0]}
                 />
-              </LineChart>
+                
+
+              </BarChart>
             </ResponsiveContainer>
           </div>
         </CardContent>
       </Card>
 
-      {/* Recent Transactions */}
+      {/* Top Users */}
       <Card className="border-0 shadow-md">
-        <CardHeader>
-          <CardTitle>Recent Transactions</CardTitle>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle className="flex items-center gap-2">
+            <Crown className="h-5 w-5" />
+            Top Users
+          </CardTitle>
+          <Button variant="ghost" size="sm">
+            View All
+          </Button>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b">
-                  <th className="text-left py-3 px-4">User</th>
-                  <th className="text-left py-3 px-4">Type</th>
-                  <th className="text-left py-3 px-4">Currency</th>
-                  <th className="text-left py-3 px-4">Amount</th>
-                  <th className="text-left py-3 px-4">Status</th>
-                  <th className="text-left py-3 px-4">Date</th>
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">User</th>
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Tier</th>
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Total Deposits</th>
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Total Withdrawals</th>
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Join Date</th>
                 </tr>
               </thead>
               <tbody>
-                {[
-                  { user: 'John Doe', type: 'Deposit', currency: 'TRX', amount: 500, status: 'Completed', date: '2023-05-15' },
-                  { user: 'Sarah Wilson', type: 'Withdrawal', currency: 'BNB', amount: 250, status: 'Processing', date: '2023-05-14' },
-                  { user: 'Mike Johnson', type: 'Deposit', currency: 'TRX', amount: 1200, status: 'Completed', date: '2023-05-13' },
-                  { user: 'Emma Davis', type: 'Deposit', currency: 'BNB', amount: 350, status: 'Completed', date: '2023-05-12' },
-                  { user: 'Alex Brown', type: 'Withdrawal', currency: 'TRX', amount: 800, status: 'Completed', date: '2023-05-11' },
-                ].map((transaction, index) => (
-                  <tr key={index} className="border-b hover:bg-gray-50">
-                    <td className="py-3 px-4">{transaction.user}</td>
+                {topUsers.map((user, index) => (
+                  <tr key={index} className="border-b hover:bg-gray-50 transition-colors">
+                    <td className="py-3 px-4 font-medium">{user.name}</td>
                     <td className="py-3 px-4">
-                      <span className={`px-2 py-1 rounded-full text-xs ${
+                      <span className={`px-2 py-1 rounded-full text-xs ${getTierColor(user.tier)}`}>
+                        {user.tier}
+                      </span>
+                    </td>
+                    <td className="py-3 px-4 font-medium text-green-600">${user.totalDeposits.toLocaleString()}</td>
+                    <td className="py-3 px-4 font-medium text-orange-600">${user.totalWithdrawals.toLocaleString()}</td>
+                    <td className="py-3 px-4 text-sm text-gray-500">{user.joinDate}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Recent Transactions */}
+      <Card className="border-0 shadow-md">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle className="flex items-center gap-2">
+            <Zap className="h-5 w-5" />
+            Recent Transactions
+          </CardTitle>
+          <Button variant="ghost" size="sm">
+            View All
+          </Button>
+        </CardHeader>
+        <CardContent>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">ID</th>
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">User</th>
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Type</th>
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Amount</th>
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Currency</th>
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Status</th>
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentTransactions.map((transaction, index) => (
+                  <tr key={index} className="border-b hover:bg-gray-50 transition-colors">
+                    <td className="py-3 px-4 font-mono text-sm text-gray-600">{transaction.id}</td>
+                    <td className="py-3 px-4 font-medium">{transaction.user}</td>
+                    <td className="py-3 px-4">
+                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs ${
                         transaction.type === 'Deposit' 
                           ? 'bg-green-100 text-green-800' 
                           : 'bg-red-100 text-red-800'
                       }`}>
+                        {transaction.type === 'Deposit' ? (
+                          <ArrowUp className="h-3 w-3 mr-1" />
+                        ) : (
+                          <ArrowDown className="h-3 w-3 mr-1" />
+                        )}
                         {transaction.type}
                       </span>
                     </td>
+                    <td className="py-3 px-4 font-medium">${transaction.amount}</td>
                     <td className="py-3 px-4 font-medium">{transaction.currency}</td>
-                    <td className="py-3 px-4">${transaction.amount}</td>
                     <td className="py-3 px-4">
-                      <span className={`px-2 py-1 rounded-full text-xs ${
-                        transaction.status === 'Completed' 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-yellow-100 text-yellow-800'
-                      }`}>
+                      <span className={`px-2 py-1 rounded-full text-xs ${getStatusColor(transaction.status)}`}>
                         {transaction.status}
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-gray-500">{transaction.date}</td>
+                    <td className="py-3 px-4 text-sm text-gray-500">{transaction.date}</td>
                   </tr>
                 ))}
               </tbody>
