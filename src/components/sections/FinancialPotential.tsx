@@ -1,89 +1,128 @@
+
 // src/components/sections/FinancialPotential.tsx
+import { motion } from "framer-motion"
+import { CreditCard, Users, BarChart3, Shield } from "lucide-react"
 import { Button } from "../ui/button"
-import { Link } from "react-router-dom"
-import { BanknotesIcon, UserCircleIcon, SparklesIcon, CurrencyDollarIcon } from '@heroicons/react/24/solid'
 
 const FinancialPotential = () => {
   const accounts = [
     {
+      icon: BarChart3,
       title: "Brokerage Account",
-      description: "Invest and trade for your financial goals with $0 commissions for online U.S.-listed stocks, ETFs, mutual funds, options and much more - other fees may apply.¹",
-      icon: BanknotesIcon,
-      ctaPrimary: "Open an account",
-      ctaSecondary: "Learn more"
+      description: "Invest and trade for your financial goals with $0 commissions for online U.S.-listed stocks, ETFs, mutual funds, options and much more - other fees may apply.",
+      highlight: "$0 commissions"
     },
     {
+      icon: Users,
       title: "Retirement Accounts",
       description: "Build your nest egg with tax-advantaged Traditional, Roth, and Rollover IRAs, plus personalized retirement planning tools and guidance.",
-      icon: UserCircleIcon,
-      ctaPrimary: "Open an account",
-      ctaSecondary: "Learn more"
+      highlight: "Tax-advantaged growth"
     },
     {
+      icon: CreditCard,
       title: "Premium Savings Account",
-      description: "Boost your savings with 4.00% Annual Percentage Yield²",
-      icon: SparklesIcon,
-      ctaPrimary: "Open an account",
-      ctaSecondary: null
+      description: "Boost your savings with 4.00% Annual Percentage Yield. With rates 9X the national average, plus FDIC protection up to $500,000, and more.",
+      highlight: "4.00% Annual Percentage Yield",
+      subtext: "With rates 9X the national average, plus FDIC protection up to $500,000, and more.",
+      disclaimer: "Morgan Stanley Private Bank, Member FDIC."
     },
     {
+      icon: Shield,
       title: "Max-Rate Checking Account",
-      description: "Competitive yield with 3.00% Annual Percentage Yield³ and no transaction fees",
-      icon: CurrencyDollarIcon,
-      ctaPrimary: "Open an account",
-      ctaSecondary: null
+      description: "Competitive yield with Annual Percentage Yield and no transaction fees. Plus ATM and foreign transaction fee refunds worldwide.",
+      highlight: "Competitive yield with Annual Percentage Yield and no transaction fees",
+      subtext: "Plus ATM and foreign transaction fee refunds worldwide. $15 monthly account fee waived with $5,000 average monthly balance.",
+      disclaimer: "Morgan Stanley Private Bank, Member FDIC."
     }
   ]
 
   return (
     <section className="py-20 px-4 bg-gray-50">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-[#241151] mb-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
             Unlock your full financial potential
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Do more with your money at E*TRADE with our most popular accounts
           </p>
-          <div className="w-28 h-1 bg-[#FF6B35] mx-auto my-8 rounded-full"></div>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-          {accounts.map((account, index) => {
-            const Icon = account.icon
-            return (
-              <div key={index} className="bg-white rounded-2xl shadow-xl p-8 hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center text-center">
-                <Icon className="w-16 h-16 text-[#FF6B35] mb-6" />
-                <h3 className="text-2xl font-semibold text-[#241151] mb-4">{account.title}</h3>
-                <p className="text-gray-600 mb-6 leading-relaxed">{account.description}</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {accounts.map((account, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="bg-white rounded-lg p-8 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300 text-center"
+            >
+              <div className="mb-6">
+                <account.icon className="w-16 h-16 text-primary mx-auto mb-4" />
+              </div>
+              
+              <h3 className="text-2xl font-semibold text-gray-900 mb-4">
+                {account.title}
+              </h3>
+              
+              <p className="text-gray-700 mb-6 leading-relaxed">
+                {account.description}
+              </p>
 
-                <div className="flex flex-col sm:flex-row gap-3 w-full">
-                  <Button className="bg-[#241151] text-white hover:bg-[#241151]/90 flex-1" asChild>
-                    <Link to="/register">{account.ctaPrimary}</Link>
-                  </Button>
-                  {account.ctaSecondary && (
-                    <Button variant="outline" className="border-[#241151] text-[#241151] hover:bg-[#241151] hover:text-white flex-1" asChild>
-                      <Link to="/learn-more">{account.ctaSecondary}</Link>
-                    </Button>
+              {account.highlight && (
+                <div className="mb-4">
+                  <p className="font-semibold text-gray-900 text-lg mb-2">
+                    {account.highlight}
+                  </p>
+                  {account.subtext && (
+                    <p className="text-gray-600 text-sm">
+                      {account.subtext}
+                    </p>
                   )}
                 </div>
+              )}
+
+              {account.disclaimer && (
+                <p className="text-xs text-gray-500 mb-6">
+                  {account.disclaimer}
+                </p>
+              )}
+              
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Button 
+                  className="flex-1 bg-primary hover:bg-primary/90 text-white font-semibold"
+                >
+                  Open an account
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="flex-1 border-primary text-primary hover:bg-primary/5"
+                >
+                  Learn more
+                </Button>
               </div>
-            )
-          })}
+            </motion.div>
+          ))}
         </div>
 
-        <div className="mt-16 text-center text-xs text-gray-500 max-w-3xl mx-auto">
-          <p className="mb-2">
-            <sup>¹</sup>Commission-free trading applies to U.S. exchange-listed stocks, ETFs, and options. Options contracts 
-            are $0.65 per contract. Mutual funds trade with no transaction fee (NTF); funds not on the NTF list are subject to a transaction fee.
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          viewport={{ once: true }}
+          className="text-center mt-12"
+        >
+          <p className="text-sm text-gray-500">
+            Morgan Stanley Private Bank, Member FDIC. $15 monthly account fee waived with $5,000 average monthly balance.
           </p>
-          <p className="mb-2">
-            <sup>²</sup>4.00% APY as of current date. Rates subject to change.
-          </p>
-          <p>
-            <sup>³</sup>3.00% APY as of current date. Rates subject to change. Certain conditions apply.
-          </p>
-        </div>
+        </motion.div>
       </div>
     </section>
   )
