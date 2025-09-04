@@ -4,7 +4,7 @@ import { Gift, Clock, ArrowRight, Sparkles } from "lucide-react"
 
 const PromotionBanner = () => {
   return (
-    <div className="ml-8 mt-8 mr-8">
+    <div className="ml-0 mt-8 mr-0 sm:ml-8 sm:mt-8 sm:mr-8">
       <section className="relative overflow-hidden bg-gradient-to-br from-primary via-primary/95 to-primary/90 py-16 rounded-3xl shadow-2xl">
         {/* Background decorative elements */}
         <div className="absolute inset-0 rounded-3xl">
