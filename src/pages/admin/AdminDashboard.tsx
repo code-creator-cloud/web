@@ -280,32 +280,35 @@ export default function AdminDashboard() {
 
       {/* Filters and Actions */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-  <div className="flex flex-wrap gap-2">
-    <Button 
-      variant={dateRange === '7d' ? 'default' : 'outline'} 
-      size="sm"
-      onClick={() => setDateRange('7d')}
-      className="bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] text-[var(--color-primary-foreground)]"
-    >
-      Last 7 days
-    </Button>
-    <Button 
-      variant={dateRange === '30d' ? 'default' : 'outline'} 
-      size="sm"
-      onClick={() => setDateRange('30d')}
-      className="bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] text-[var(--color-primary-foreground)]"
-    >
-      Last 30 days
-    </Button>
-    <Button 
-      variant={dateRange === '90d' ? 'default' : 'outline'} 
-      size="sm"
-      onClick={() => setDateRange('90d')}
-      className="bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] text-[var(--color-primary-foreground)]"
-    >
-      Last 90 days
-    </Button>
-  </div>
+      <div className="flex flex-wrap gap-2">
+  <Button 
+    variant={dateRange === '7d' ? 'default' : 'outline'} 
+    size="sm"
+    onClick={() => setDateRange('7d')}
+    className="bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] text-[var(--color-primary-foreground)] text-xs px-2 py-1 sm:text-sm sm:px-3 sm:py-2"
+  >
+    Last 7 days
+  </Button>
+
+  <Button 
+    variant={dateRange === '30d' ? 'default' : 'outline'} 
+    size="sm"
+    onClick={() => setDateRange('30d')}
+    className="bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] text-[var(--color-primary-foreground)] text-xs px-2 py-1 sm:text-sm sm:px-3 sm:py-2"
+  >
+    Last 30 days
+  </Button>
+
+  <Button 
+    variant={dateRange === '90d' ? 'default' : 'outline'} 
+    size="sm"
+    onClick={() => setDateRange('90d')}
+    className="bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] text-[var(--color-primary-foreground)] text-xs px-2 py-1 sm:text-sm sm:px-3 sm:py-2"
+  >
+    Last 90 days
+  </Button>
+</div>
+
   <div className="flex gap-2">
     <Button 
       variant="outline" 

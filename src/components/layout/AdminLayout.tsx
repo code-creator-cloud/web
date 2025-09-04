@@ -1,6 +1,7 @@
 // src/components/layout/AdminLayout.tsx
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Home, 
   CreditCard, 
@@ -94,21 +95,36 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   };
 
   const SidebarContent = ({ isCollapsed = false }: { isCollapsed?: boolean }) => (
-    <div className={`flex flex-col h-full bg-[var(--color-primary)] text-[var(--color-primary-foreground)] transition-all duration-300 ${isCollapsed ? 'w-16' : 'w-64'}`}>
+    <motion.div 
+      className={`flex flex-col h-full bg-[var(--color-primary)] text-[var(--color-primary-foreground)] ${isCollapsed ? 'w-16' : 'w-64'}`}
+      initial={{ x: -300, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      exit={{ x: -300, opacity: 0 }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
+    >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-[#382a6b]">
         {!isCollapsed && (
-          <h1 className="text-xl font-bold transition-opacity duration-300">Admin Panel</h1>
+          <motion.h1 
+            className="text-xl font-bold"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.1 }}
+          >
+            Admin Panel
+          </motion.h1>
         )}
         <div className="flex items-center">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-white hover:bg-white/20 transition-colors"
-            onClick={toggleSidebar}
-          >
-            <Menu size={16} />
-          </Button>
+          {!isMobile && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-white hover:bg-white/20 transition-colors"
+              onClick={toggleSidebar}
+            >
+              <Menu size={16} />
+            </Button>
+          )}
           {isMobile && !isCollapsed && (
             <Button
               variant="ghost"
@@ -124,12 +140,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       
       {/* Navigation */}
       <nav className="flex-1 p-4 space-y-1 mt-4">
-        {menuItems.map((item) => {
+        {menuItems.map((item, index) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path;
           
           return (
-            <button
+            <motion.button
               key={item.name}
               onClick={() => handleNavigation(item.path)}
               className={`flex items-center rounded-lg p-3 transition-all duration-200 hover:bg-[#382a6b] w-full ${
@@ -138,24 +154,34 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   : 'text-gray-300 hover:text-white'
               } ${isCollapsed ? 'justify-center' : 'gap-3'}`}
               title={isCollapsed ? item.name : undefined}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.03 }}
             >
               <Icon size={20} className="flex-shrink-0" />
               {!isCollapsed && (
-                <span className="font-medium transition-opacity duration-300">{item.name}</span>
+                <motion.span 
+                  className="font-medium"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: index * 0.03 + 0.1 }}
+                >
+                  {item.name}
+                </motion.span>
               )}
-            </button>
+            </motion.button>
           );
         })}
       </nav>
       
       {/* Footer */}
       <div className="p-4 border-t border-[#382a6b] mt-auto">
-        <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-3 mb-4 p-3 bg-[#382a6b] rounded-lg transition-all duration-300'}`}>
+        <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-3 mb-4 p-3 bg-[#382a6b] rounded-lg'}`}>
           <div className="w-10 h-10 rounded-full bg-[var(--color-accent)] flex items-center justify-center flex-shrink-0">
             <User size={20} />
           </div>
           {!isCollapsed && (
-            <div className="flex-1 min-w-0 transition-opacity duration-300">
+            <div className="flex-1 min-w-0">
               <p className="text-sm font-medium truncate">Admin User</p>
               <p className="text-xs text-gray-400 truncate">Administrator</p>
             </div>
@@ -176,37 +202,37 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </Button>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar for desktop - Collapsible */}
-      <aside className="hidden md:flex flex-col transition-all duration-300 ease-in-out">
-        {isSidebarCollapsed ? (
-          <SidebarContent isCollapsed={true} />
-        ) : (
-          <SidebarContent isCollapsed={false} />
-        )}
+      <aside className="hidden md:block">
+        <AnimatePresence mode="wait">
+          {isSidebarCollapsed ? (
+            <SidebarContent isCollapsed={true} key="collapsed" />
+          ) : (
+            <SidebarContent isCollapsed={false} key="expanded" />
+          )}
+        </AnimatePresence>
       </aside>
 
       {/* Mobile sidebar */}
       <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
-        <div className="md:hidden fixed top-4 left-4 z-50">
-          <SheetTrigger asChild>
-            <Button 
-              variant="outline" 
-              size="icon" 
-              className="h-10 w-10 bg-white shadow-md hover:bg-gray-50 transition-colors"
-              onClick={() => setIsSidebarOpen(true)}
-            >
-              <Menu size={16} />
-            </Button>
-          </SheetTrigger>
-        </div>
+        <SheetTrigger asChild>
+          <Button 
+            variant="outline" 
+            size="icon" 
+            className="md:hidden fixed top-2 right-4 z-50 h-8 w-8 bg-white shadow-md hover:bg-gray-50 transition-colors"
+            onClick={() => setIsSidebarOpen(true)}
+          >
+            <Menu size={16} />
+          </Button>
+        </SheetTrigger>
         <SheetContent 
           side="left" 
-          className="p-0 w-64 bg-[var(--color-primary)] border-r-0 transition-transform duration-300 ease-in-out"
+          className="p-0 w-64 bg-[var(--color-primary)] border-r-0"
         >
           <SidebarContent isCollapsed={false} />
         </SheetContent>
@@ -217,14 +243,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         {/* Top header */}
         <header className="bg-white border-b border-gray-200 py-4 px-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            {!isMobile && (
-              <button 
-                onClick={toggleSidebar}
-                className="p-2 rounded-lg hover:bg-gray-100 transition-colors md:hidden"
-              >
-                <Menu size={16} />
-              </button>
-            )}
+            {/* Desktop sidebar toggle removed to prevent duplication */}
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <button 
                 onClick={() => navigate('/')}
@@ -241,9 +260,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           
           <div className="flex items-center gap-4">
             <div className="text-sm text-gray-700 font-medium hidden sm:block">Admin User</div>
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[var(--color-primary)] flex items-center justify-center text-white shadow-sm">
+            {/* <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[var(--color-primary)] flex items-center justify-center text-white shadow-sm">
               <User size={16} className="sm:size-5" />
-            </div>
+            </div> */}
           </div>
         </header>
 
