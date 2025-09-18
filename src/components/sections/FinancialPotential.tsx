@@ -1,38 +1,35 @@
 
 // src/components/sections/FinancialPotential.tsx
 import { motion } from "framer-motion"
-import { CreditCard, Users, BarChart3, Shield } from "lucide-react"
+import { BarChart4, CandlestickChart, DollarSign, HandCoins } from "lucide-react"
 import { Button } from "../ui/button"
+// import type { Description } from "@radix-ui/react-dialog"
 
 const FinancialPotential = () => {
   const accounts = [
     {
-      icon: BarChart3,
-      title: "Brokerage Account",
-      description: "Invest and trade for your financial goals with $0 commissions for online U.S.-listed stocks, ETFs, mutual funds, options and much more - other fees may apply.",
-      highlight: "$0 commissions"
+      icon: BarChart4 ,
+      title: "CPI Trades",
+      description: "Invest and trade with us using the Consumer Price Index (CPI) trading option. Get informed of low and high inflation announcements across the US stocks market",
+      highlight: "10% Commission"
     },
     {
-      icon: Users,
-      title: "Retirement Accounts",
-      description: "Build your nest egg with tax-advantaged Traditional, Roth, and Rollover IRAs, plus personalized retirement planning tools and guidance.",
-      highlight: "Tax-advantaged growth"
+      icon: DollarSign,
+      title: "NFP Trades",
+      description: "Get to know about Non-Farm Payrolls (NFP) market and its movements monthly, concerning the US economy and Dollar strength",
+      highlight: "10% Commission"
     },
     {
-      icon: CreditCard,
-      title: "Premium Savings Account",
-      description: "Boost your savings with 4.00% Annual Percentage Yield. With rates 9X the national average, plus FDIC protection up to $500,000, and more.",
-      highlight: "4.00% Annual Percentage Yield",
-      subtext: "With rates 9X the national average, plus FDIC protection up to $500,000, and more.",
-      disclaimer: "Morgan Stanley Private Bank, Member FDIC."
+      icon: CandlestickChart,
+      title: "FOMC Trades",
+      description: "Federal Open Market Committee (FOMC) happens every three months, and you shouldn't miss out on this opportunity",
+      highlight: "10% Commission"
     },
     {
-      icon: Shield,
-      title: "Max-Rate Checking Account",
-      description: "Competitive yield with Annual Percentage Yield and no transaction fees. Plus ATM and foreign transaction fee refunds worldwide.",
-      highlight: "Competitive yield with Annual Percentage Yield and no transaction fees",
-      subtext: "Plus ATM and foreign transaction fee refunds worldwide. $15 monthly account fee waived with $5,000 average monthly balance.",
-      disclaimer: "Morgan Stanley Private Bank, Member FDIC."
+      icon: HandCoins,
+      title: "PPI Trades",
+      description: "Prepare yourself further with the Producer Price Index (PPI) market, it can be used to predict the CPI market",
+      highlight: "10% Commission"
     }
   ]
 
@@ -50,7 +47,7 @@ const FinancialPotential = () => {
             Unlock your full financial potential
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Do more with your money at E*TRADE with our most popular accounts
+            Do more with your money at BLACK GEM with our most popular investment strategy
           </p>
         </motion.div>
 
@@ -81,25 +78,25 @@ const FinancialPotential = () => {
                   <p className="font-semibold text-gray-900 text-lg mb-2">
                     {account.highlight}
                   </p>
-                  {account.subtext && (
+                  {/* {account.subtext && (
                     <p className="text-gray-600 text-sm">
                       {account.subtext}
                     </p>
-                  )}
+                  )} */}
                 </div>
               )}
-
+{/* 
               {account.disclaimer && (
                 <p className="text-xs text-gray-500 mb-6">
                   {account.disclaimer}
                 </p>
-              )}
+              )} */}
               
               <div className="flex flex-col sm:flex-row gap-3">
                 <Button 
                   className="flex-1 bg-primary hover:bg-primary/90 text-white font-semibold"
                 >
-                  Open an account
+                  Choose Option
                 </Button>
                 <Button 
                   variant="outline" 
@@ -120,7 +117,7 @@ const FinancialPotential = () => {
           className="text-center mt-12"
         >
           <p className="text-sm text-gray-500">
-            Morgan Stanley Private Bank, Member FDIC. $15 monthly account fee waived with $5,000 average monthly balance.
+            BLACK GEM official community, Member BLACK GEM. $15 monthly account fee waived with $5,000 average monthly balance.
           </p>
         </motion.div>
       </div>

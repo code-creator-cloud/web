@@ -30,7 +30,7 @@ const CTASection = () => {
             className="inline-flex items-center bg-[#FF6B35]/20 backdrop-blur-sm rounded-full px-5 py-2 mb-8 border border-[#FF6B35]/30"
           >
             <Star className="w-4 h-4 text-[#FF6B35] mr-2 fill-current" />
-            <span className="text-sm font-medium">Rated 4.8/5 by 10,000+ investors</span>
+            <span className="text-sm font-medium">Rated 4.8/5 by 100+ investors</span>
           </motion.div>
           
           <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
@@ -38,8 +38,8 @@ const CTASection = () => {
           </h2>
           
           <p className="text-xl text-white/90 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Join thousands of investors who trust us with their financial future. 
-            Get started today and experience the difference of professional-grade trading tools.
+            Join hundreds of investors who trust us with their financial future. 
+            Get started today and experience the difference of professional-grade trading results.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
@@ -47,7 +47,7 @@ const CTASection = () => {
               {
                 icon: Shield,
                 title: "Secure & Protected",
-                description: "FDIC insured accounts with bank-level security",
+                description: "Secured deposits and withdrawal methods",
                 color: "from-[#241151] to-[#2d1a5c]"
               },
               {
@@ -59,7 +59,7 @@ const CTASection = () => {
               {
                 icon: Users,
                 title: "Community",
-                description: "Join 10M+ investors in our growing community",
+                description: "Join 1k+ investors in our growing community",
                 color: "from-[#241151] to-[#2d1a5c]"
               }
             ].map((item, index) => (
@@ -103,15 +103,15 @@ const CTASection = () => {
             <ul className="flex flex-col sm:flex-row justify-center gap-6 text-white/80 text-sm">
               <li className="flex items-center">
                 <div className="w-2 h-2 bg-[#FF6B35] rounded-full mr-3"></div>
-                No minimum deposit required
+                Maximize profits 
               </li>
               <li className="flex items-center">
                 <div className="w-2 h-2 bg-[#FF6B35] rounded-full mr-3"></div>
-                No account fees
+                  10% commission
               </li>
               <li className="flex items-center">
                 <div className="w-2 h-2 bg-[#FF6B35] rounded-full mr-3"></div>
-                Start with as little as $1
+                Start with as little as $10
               </li>
             </ul>
           </div>

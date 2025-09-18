@@ -23,7 +23,7 @@ const Navbar = () => {
           {/* Logo */}
           <div className="flex items-center">
             <Link to="/" className="text-2xl font-bold text-primary">
-              E*TRADE
+              BLACK GEM
             </Link>
           </div>
 

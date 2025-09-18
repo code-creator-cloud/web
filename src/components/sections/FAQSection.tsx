@@ -9,48 +9,46 @@ const FAQSection = () => {
     {
       question: "How do I qualify for the $1,000 bonus?",
       answer: [
-        "Open and fund a new brokerage account with a qualifying deposit of $25,000 or more by October 31, 2025, using promo code OFFER25 during account opening.",
-        "Maintain the qualifying deposit for at least 90 days to ensure eligibility for the bonus.",
-        "The bonus will be credited to your account within 30 days after meeting all requirements."
+        "We are sorry, this bonus is not available for the moment but we will surely notify our users once the time arrives"
       ]
     },
     {
       question: "Are there any commission fees?",
       answer: [
-        "We offer $0 commissions for online U.S.-listed stocks, ETFs, mutual funds, and options trades.",
-        "Certain transactions, such as foreign securities or broker-assisted trades, may incur additional fees like regulatory or exchange fees.",
+        "Yes, there is a 10% commision on every options you take. That is what keeps this platform running",
+        "Certain transactions, such as deposit and withdrawal using crypto option, may incur additional fees blockchain fees.",
         "Always review the fee schedule for specific transactions to understand any applicable costs."
       ]
     },
     {
-      question: "Is my money FDIC insured?",
+      question: "Is my ROI assured?",
       answer: [
-        "Yes, our Premium Savings Account is FDIC insured up to $500,000 through Morgan Stanley Private Bank, Member FDIC.",
-        "FDIC insurance covers both principal and interest but does not apply to investment products like stocks or mutual funds.",
-        "Investment products are subject to market risks and are not covered by FDIC insurance."
+        "Yes, your returns on investments are assured. This platform deals with professional traders with at least three years of experience.",
+        "Be rest assured that there maybe some inconveniences such as suspense in transction in broker. But these issues will be solved by BLACK GEM officials and you'll get you refund.",
+        "Investment returns are subject to market risks and are not covered by BLACK GEM Officials"
       ]
     },
     {
       question: "Can I open multiple accounts?",
       answer: [
-        "Yes, you can open various account types, including brokerage, retirement, and savings accounts, to suit your financial goals.",
-        "Each account can be customized for specific purposes, such as tax-advantaged retirement savings or short-term cash management.",
-        "There are no limits on the number of accounts you can open, provided you meet the eligibility criteria for each."
+        "Yes, we encourage you open multiple accounts to maximize profits made from trading options.",
+        "In as much as profits will be maximized using multiple accounts, things may go the other way aswell. Not a finacial advice.",
+        "There are no limits on the number of accounts you can open, provided they are all active."
       ]
     },
     {
       question: "What is the minimum deposit required?",
       answer: [
-        "Most accounts have no minimum deposit requirement to open, making them accessible to a wide range of investors.",
-        "Certain account types or promotional offers, like the $1,000 bonus, may require specific funding thresholds to qualify.",
-        "Always check the terms of any promotional offer or premium account for specific deposit requirements."
+        "Minimum deposit ranges from $10-$20. The more the platform improves, the higher the minimum deposits",
+        "Certain promotional offers, like the $1,000 bonus, may require specific funding thresholds to qualify.",
+        "Always check the terms of any promotional offer for specific deposit requirements."
       ]
     },
     {
       question: "How do I contact customer support?",
       answer: [
         "Our customer support is available 24/7 via phone, email, or live chat, with a comprehensive help center for self-service options.",
-        "Premium account holders receive priority support, ensuring faster response times for urgent inquiries.",
+        "Consistently active accounts receive priority support, ensuring faster response times for urgent inquiries.",
         "You can also connect with us through our social media channels for quick updates and assistance."
       ]
     }
@@ -77,7 +75,7 @@ const FAQSection = () => {
             </h2>
           </div>
           <p className="text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed">
-            Explore answers to the most common questions about our services, accounts, and more.
+            Explore answers to the most common questions about our services, options, and more.
           </p>
         </motion.div>
 

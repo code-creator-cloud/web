@@ -2,6 +2,7 @@
 import { Button } from "../../components/ui/button"
 import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
+import { CandlestickChart } from "lucide-react"
 
 const HeroSection = () => {
   return (
@@ -40,7 +41,7 @@ const HeroSection = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
             >
-              Introducing the new <span className="text-accent">Power E*TRADE Pro</span>
+              Introducing the new <span className="text-accent">BLACK GEM trading investment</span> firm
             </motion.h1>
             
             <motion.p 
@@ -49,7 +50,7 @@ const HeroSection = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
             >
-              Your ultimate downloadable desktop trading platform with nearly unlimited customization, advanced charting and more.
+              Your online Fundamental Trading firm with profesional-grade trading results, assured ROI and confidentiality
             </motion.p>
             
             {/* Decorative Diagonal Line */}
@@ -87,12 +88,11 @@ const HeroSection = () => {
               <div className="w-80 h-80 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 shadow-2xl flex items-center justify-center p-8">
                 <div className="text-center">
                   <div className="w-16 h-16 bg-accent rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <CandlestickChart className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"/>
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
                   </div>
-                  <h3 className="text-white text-xl font-semibold mb-2">Advanced Tools</h3>
-                  <p className="text-white/80">Professional-grade trading platform</p>
+                  <h3 className="text-white text-xl font-semibold mb-2">WELCOME</h3>
+                  <p className="text-white/80">To a Professional-grade trading platform</p>
                 </div>
               </div>
               

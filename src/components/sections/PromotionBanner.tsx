@@ -35,7 +35,7 @@ const PromotionBanner = () => {
               </h1>
 
               <p className="text-lg text-white/90 mb-8 leading-relaxed max-w-lg">
-                Take the first step towards your financial future. Open and fund your new brokerage account today and unlock exclusive benefits.
+                Take the first step towards your financial future. Open and fund your new investment account today and unlock exclusive benefits.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
@@ -57,7 +57,7 @@ const PromotionBanner = () => {
 
               <div className="flex items-center text-white/70 text-sm bg-black/20 rounded-full px-4 py-2 backdrop-blur-sm inline-flex">
                 <Clock className="w-4 h-4 mr-2 animate-pulse" />
-                <span>Offer expires October 31, 2025</span>
+                <span>Offer not available for now</span>
               </div>
             </motion.div>
 
@@ -82,7 +82,7 @@ const PromotionBanner = () => {
                     <div className="w-8 h-8 bg-gradient-to-br from-accent to-accent/80 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4 mt-1 flex-shrink-0 shadow-lg">1</div>
                     <div>
                       <p className="text-white font-semibold mb-1">Open Account</p>
-                      <p className="text-white/80 text-sm">Create your new brokerage account online in minutes</p>
+                      <p className="text-white/80 text-sm">Create your new investment account online in minutes</p>
                     </div>
                   </div>
 
@@ -98,16 +98,16 @@ const PromotionBanner = () => {
                     <div className="w-8 h-8 bg-gradient-to-br from-accent to-accent/80 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4 mt-1 flex-shrink-0 shadow-lg">3</div>
                     <div>
                       <p className="text-white font-semibold mb-1">Get Bonus</p>
-                      <p className="text-white/80 text-sm">Receive your welcome bonus within 30 days</p>
+                      <p className="text-white/80 text-sm">Receive your welcome bonus when available</p>
                     </div>
                   </div>
                 </div>
 
                 <div className="mt-8 p-5 bg-gradient-to-br from-accent/20 to-accent/30 rounded-2xl border border-accent/40 backdrop-blur-sm">
                   <div className="text-center">
-                    <p className="text-white/90 text-sm mb-3 font-medium">Use promotional code</p>
+                    <p className="text-white/90 text-sm mb-3 font-medium">Use promo code</p>
                     <div className="bg-white/25 rounded-xl px-6 py-3 inline-block border border-white/30 backdrop-blur-sm">
-                      <code className="text-accent font-mono font-bold text-xl tracking-wider">WELCOME25</code>
+                      <code className="text-accent font-mono font-bold text-xl tracking-wider">######</code>
                     </div>
                   </div>
                 </div>
@@ -130,7 +130,7 @@ const PromotionBanner = () => {
           >
             <p className="text-white/60 text-sm max-w-4xl mx-auto leading-relaxed">
               *Welcome bonus subject to terms and conditions. New accounts only. Minimum deposit requirements apply. 
-              Securities products are offered through E*TRADE Securities LLC, Member FINRA/SIPC. 
+              Securities products are offered through BLACK GEM community, Member BLACK GEM. 
               See full terms and conditions for complete details.
             </p>
           </motion.div>

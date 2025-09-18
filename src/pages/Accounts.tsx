@@ -11,37 +11,37 @@ export default function Accounts() {
   const accounts = [
     { 
       id: 1, 
-      name: "Main Checking", 
+      name: "Main Account", 
       number: "**** 4582", 
       balance: "$8,450.00", 
-      type: "checking", 
-      bank: "Global Bank", 
+      type: "Main", 
+      bank: " ", 
       color: "bg-blue-500" 
     },
     { 
       id: 2, 
-      name: "Savings Account", 
+      name: "NFP Account", 
       number: "**** 7821", 
       balance: "$12,300.50", 
-      type: "savings", 
+      type: "trade", 
       bank: "Global Bank", 
       color: "bg-green-500" 
     },
     { 
       id: 3, 
-      name: "Investment Portfolio", 
+      name: "CPI Account", 
       number: "**** 9354", 
       balance: "$24,800.00", 
-      type: "investment", 
+      type: "trades", 
       bank: "Wealth Management", 
       color: "bg-purple-500" 
     },
     { 
       id: 4, 
-      name: "Credit Card", 
+      name: "FOMC Account", 
       number: "**** 3678", 
       balance: "-$2,345.67", 
-      type: "credit", 
+      type: "FOMC Trades", 
       bank: "Global Bank", 
       color: "bg-orange-500" 
     },
@@ -61,7 +61,7 @@ export default function Accounts() {
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold text-[var(--color-primary)]">Accounts</h1>
-        <p className="text-gray-600">Manage your bank accounts and financial assets</p>
+        <p className="text-gray-600">Select the various investment package</p>
       </div>
 
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
