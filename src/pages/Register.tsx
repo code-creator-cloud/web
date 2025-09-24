@@ -1,32 +1,47 @@
-// src/pages/Register.tsx
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { 
   Home, User, Mail, Lock, Eye, EyeOff, ArrowRight, CheckSquare, Square 
 } from "lucide-react";
 import Navbar from "../components/layout/Navbar";
+import { AuthContext } from "../lib/contexts/AuthContext";
+import { toast } from 'sonner';
 
 const Register = () => {
+  const authContext = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
+    username: "",
     email: "",
     password: "",
     confirmPassword: ""
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => setIsLoading(false), 1500);
+
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      await authContext?.register(formData.email, formData.username, formData.password);
+      toast.success('Successfully registered!');
+    } catch (err: any) {
+      toast.error(err.message || 'An error occurred during registration');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -112,14 +127,14 @@ const Register = () => {
                   transition={{ delay: 0.5, duration: 0.5 }}
                   className="space-y-2"
                 >
-                  <Label htmlFor="name" className="text-foreground">Full Name</Label>
+                  <Label htmlFor="username" className="text-foreground">Username</Label>
                   <div className="relative">
                     <Input 
-                      id="name" 
+                      id="username" 
                       type="text" 
-                      placeholder="Enter your full name" 
+                      placeholder="Enter your username" 
                       className="w-full pl-10 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
-                      value={formData.name}
+                      value={formData.username}
                       onChange={handleChange}
                       required
                     />
@@ -234,7 +249,7 @@ const Register = () => {
                     {agreeToTerms ? (
                       <CheckSquare className="h-4 w-4 text-primary" />
                     ) : (
-                    <Square className="h-4 w-4 text-muted-foreground" />
+                      <Square className="h-4 w-4 text-muted-foreground" />
                     )}
                     <Label htmlFor="terms" className="text-sm text-muted-foreground cursor-pointer">
                       I agree to the terms and conditions

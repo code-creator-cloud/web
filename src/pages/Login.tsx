@@ -1,17 +1,19 @@
-// src/pages/Login.tsx
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { 
   Home, Mail, Lock, Eye, EyeOff, CheckSquare, Square, 
   ArrowRight, AlertCircle 
 } from "lucide-react";
 import Navbar from "../components/layout/Navbar";
+import { AuthContext } from "../lib/contexts/AuthContext";
+import { toast } from 'sonner';
 
 const Login = () => {
+  const authContext = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
@@ -20,11 +22,18 @@ const Login = () => {
     password: ""
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => setIsLoading(false), 1500);
+
+    try {
+      await authContext?.login(formData.email, formData.password);
+      toast.success('Successfully logged in!');
+    } catch (err: any) {
+      toast.error(err.message || 'An error occurred during login');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
