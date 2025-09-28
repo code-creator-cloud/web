@@ -1,13 +1,17 @@
-// src/pages/Transactions.tsx
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Download, Filter, Search, ArrowDown, ArrowUp, Calendar, Plus, Minus } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Tabs, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { AuthContext } from '../lib/contexts/AuthContext';
+import { userDashboardService } from '../lib/services/userDasboardService';
+import type { Transaction } from '../lib/types/transaction';
+import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
+import Loader from '../components/common/Loader'
 
-// SVG components for payment methods
 const MTNIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <circle cx="12" cy="12" r="12" fill="#FFC107"/>
@@ -38,19 +42,36 @@ const OrangeIcon = () => (
 );
 
 export default function Transactions() {
+  const authContext = useContext(AuthContext);
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('all');
   const [depositAmount, setDepositAmount] = useState('');
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [depositMethod, setDepositMethod] = useState('');
   const [withdrawMethod, setWithdrawMethod] = useState('');
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const transactions = [
-    { id: 1, type: 'deposit', method: 'mtn', amount: 500, date: '2023-05-15', status: 'completed' },
-    { id: 2, type: 'withdrawal', method: 'bnb', amount: 250, date: '2023-05-14', status: 'completed' },
-    { id: 3, type: 'deposit', method: 'trx', amount: 1200, date: '2023-05-13', status: 'pending' },
-    { id: 4, type: 'withdrawal', method: 'mtn', amount: 350, date: '2023-05-12', status: 'completed' },
-    { id: 5, type: 'deposit', method: 'bnb', amount: 800, date: '2023-05-11', status: 'completed' },
-  ];
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      if (!authContext?.user) {
+        navigate('/login', { replace: true });
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+        const data = await userDashboardService.getUserTransactions();
+        setTransactions(data);
+      } catch (error: any) {
+        toast.error(error.message || 'Failed to fetch transactions');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTransactions();
+  }, [authContext?.user, navigate]);
 
   const filteredTransactions = activeTab === 'all' 
     ? transactions 
@@ -70,21 +91,49 @@ export default function Transactions() {
     return status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
   };
 
-  const handleDeposit = () => {
-    if (depositAmount && depositMethod) {
-      alert(`Deposit of $${depositAmount} via ${depositMethod.toUpperCase()} requested`);
+  const handleDeposit = async () => {
+    if (!depositAmount || !depositMethod) {
+      toast.error('Please enter an amount and select a payment method');
+      return;
+    }
+
+    try {
+      await userDashboardService.createTransaction('deposit', parseFloat(depositAmount), depositMethod);
+      toast.success(`Deposit of $${depositAmount} via ${depositMethod.toUpperCase()} requested`);
       setDepositAmount('');
       setDepositMethod('');
+      const data = await userDashboardService.getUserTransactions();
+      setTransactions(data);
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to create deposit');
     }
   };
 
-  const handleWithdraw = () => {
-    if (withdrawAmount && withdrawMethod) {
-      alert(`Withdrawal of $${withdrawAmount} via ${withdrawMethod.toUpperCase()} requested`);
+  const handleWithdraw = async () => {
+    if (!withdrawAmount || !withdrawMethod) {
+      toast.error('Please enter an amount and select a withdrawal method');
+      return;
+    }
+
+    try {
+      await userDashboardService.createTransaction('withdrawal', parseFloat(withdrawAmount), withdrawMethod);
+      toast.success(`Withdrawal of $${withdrawAmount} via ${withdrawMethod.toUpperCase()} requested`);
       setWithdrawAmount('');
       setWithdrawMethod('');
+      const data = await userDashboardService.getUserTransactions();
+      setTransactions(data);
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to create withdrawal');
     }
   };
+
+  if (authContext?.loading || isLoading) {
+    return <Loader />;
+  }
+
+  if (!authContext?.user) {
+    return null; // Redirect handled in useEffect
+  }
 
   return (
     <div className="space-y-6">
@@ -94,7 +143,6 @@ export default function Transactions() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        {/* Deposit Section */}
         <Card className="lg:col-span-1 border border-gray-200 shadow-sm">
           <CardHeader className="bg-accent text-white rounded-t-lg py-4">
             <CardTitle className="flex items-center gap-2 text-lg font-semibold">
@@ -184,7 +232,6 @@ export default function Transactions() {
           </CardContent>
         </Card>
 
-        {/* Withdraw Section */}
         <Card className="lg:col-span-1 border border-gray-200 shadow-sm">
           <CardHeader className="bg-primary text-white rounded-t-lg py-4">
             <CardTitle className="flex items-center gap-2 text-lg font-semibold">
@@ -274,7 +321,6 @@ export default function Transactions() {
           </CardContent>
         </Card>
 
-        {/* Available Methods */}
         <Card className="lg:col-span-1 border border-gray-200 shadow-sm">
           <CardHeader className="bg-gray-50 rounded-t-lg py-4">
             <CardTitle className="text-lg font-semibold">Available Methods</CardTitle>
@@ -337,7 +383,6 @@ export default function Transactions() {
         </Card>
       </div>
 
-      {/* Transaction History */}
       <Card className="border border-gray-200 shadow-sm">
         <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-gray-50 rounded-t-lg">
           <CardTitle className="text-lg font-semibold">Transaction History</CardTitle>
@@ -393,20 +438,20 @@ export default function Transactions() {
                           }
                         </div>
                         <div className="ml-4">
-                          <div className="font-medium text-gray-900 capitalize">{transaction.type}</div>
+                          <div className="font-medium text-gray-900 capitalize">{transaction.notes || transaction.type}</div>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="w-6 h-6 flex-shrink-0">
-                          {getMethodIcon(transaction.method)}
+                          {getMethodIcon(transaction.wallet_address.split('-')[0] || '')}
                         </div>
-                        <div className="ml-2 font-medium uppercase">{transaction.method}</div>
+                        <div className="ml-2 font-medium uppercase">{transaction.wallet_address.split('-')[0]}</div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {transaction.date}
+                      {new Date(transaction.created_at).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(transaction.status)}`}>

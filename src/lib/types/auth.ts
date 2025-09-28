@@ -3,13 +3,14 @@ export interface UserBase {
   username: string;
 }
 
-export interface UserCreate extends UserBase {
+export interface RegisterRequest extends UserBase {
   password: string;
 }
 
-export interface UserLogin {
+export interface LoginRequest {
   email: string;
   password: string;
+  
 }
 
 export interface UserResponse extends UserBase {
@@ -23,6 +24,7 @@ export interface UserResponse extends UserBase {
 export interface Token {
   access_token: string;
   token_type: string;
+  refresh_token: string;
 }
 
 export interface AdminUser {

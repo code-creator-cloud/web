@@ -19,7 +19,7 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
-    password: ""
+    password: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -28,7 +28,7 @@ const Login = () => {
 
     try {
       await authContext?.login(formData.email, formData.password);
-      toast.success('Successfully logged in!');
+      // Toast is handled in AuthContext
     } catch (err: any) {
       toast.error(err.message || 'An error occurred during login');
     } finally {
@@ -39,7 +39,7 @@ const Login = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      [e.target.id]: e.target.value
+      [e.target.id]: e.target.value,
     });
   };
 
@@ -48,7 +48,6 @@ const Login = () => {
       <Navbar />
       
       <div className="pt-16 min-h-screen flex items-center justify-center p-4">
-        {/* Home Button */}
         <Link 
           to="/" 
           className="fixed top-24 left-6 z-50 bg-white rounded-full p-3 shadow-lg flex items-center justify-center hover:bg-gray-100 transition-all duration-200 border border-border"
@@ -58,7 +57,6 @@ const Login = () => {
         </Link>
 
         <div className="container max-w-6xl mx-auto flex flex-col lg:flex-row rounded-xl overflow-hidden shadow-xl bg-white border border-border">
-          {/* Left side - Form */}
           <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -66,7 +64,6 @@ const Login = () => {
               transition={{ duration: 0.5 }}
               className="w-full max-w-md"
             >
-              {/* Toggle Buttons */}
               <div className="flex bg-white rounded-t-lg overflow-hidden shadow-sm border border-border mb-6">
                 <Link 
                   to="/login"
@@ -229,7 +226,6 @@ const Login = () => {
             </motion.div>
           </div>
 
-          {/* Right side - Image */}
           <div className="hidden lg:block lg:w-1/2 bg-gray-100">
             <div 
               className="w-full h-full bg-cover bg-center min-h-[500px]"

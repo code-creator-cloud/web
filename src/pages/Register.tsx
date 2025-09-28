@@ -34,9 +34,15 @@ const Register = () => {
       return;
     }
 
+    if (!agreeToTerms) {
+      toast.error("You must agree to the terms and conditions");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       await authContext?.register(formData.email, formData.username, formData.password);
-      toast.success('Successfully registered!');
+      // Toast is handled in AuthContext
     } catch (err: any) {
       toast.error(err.message || 'An error occurred during registration');
     } finally {
@@ -56,7 +62,6 @@ const Register = () => {
       <Navbar />
       
       <div className="pt-16 min-h-screen flex items-center justify-center p-4">
-        {/* Home Button */}
         <Link 
           to="/" 
           className="fixed top-24 left-6 z-50 bg-white rounded-full p-3 shadow-lg flex items-center justify-center hover:bg-gray-100 transition-all duration-200 border border-border"
@@ -66,7 +71,6 @@ const Register = () => {
         </Link>
 
         <div className="container max-w-6xl mx-auto flex flex-col lg:flex-row rounded-xl overflow-hidden shadow-xl bg-white border border-border">
-          {/* Left side - Image */}
           <div className="hidden lg:block lg:w-1/2 bg-gray-100">
             <div 
               className="w-full h-full bg-cover bg-center min-h-[500px]"
@@ -76,7 +80,6 @@ const Register = () => {
             />
           </div>
 
-          {/* Right side - Form */}
           <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -84,7 +87,6 @@ const Register = () => {
               transition={{ duration: 0.5 }}
               className="w-full max-w-md"
             >
-              {/* Toggle Buttons */}
               <div className="flex bg-white rounded-t-lg overflow-hidden shadow-sm border border-border mb-6">
                 <Link 
                   to="/login"
@@ -251,8 +253,11 @@ const Register = () => {
                     ) : (
                       <Square className="h-4 w-4 text-muted-foreground" />
                     )}
-                    <Label htmlFor="terms" className="text-sm text-muted-foreground cursor-pointer">
-                      I agree to the terms and conditions
+                    <Label className="text-sm text-muted-foreground cursor-pointer">
+                      I agree to the{" "}
+                      <Link to="/terms" className="text-primary hover:underline">
+                        Terms and Conditions
+                      </Link>
                     </Label>
                   </button>
                 </motion.div>
@@ -265,16 +270,16 @@ const Register = () => {
                   <Button 
                     type="submit" 
                     className="w-full bg-primary hover:bg-primary/90 py-3 text-primary-foreground font-medium transition-all duration-300 flex items-center justify-center gap-2"
-                    disabled={isLoading || !agreeToTerms}
+                    disabled={isLoading}
                   >
                     {isLoading ? (
                       <>
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                        Creating account...
+                        Registering...
                       </>
                     ) : (
                       <>
-                        Create Account
+                        Register
                         <ArrowRight className="h-4 w-4" />
                       </>
                     )}

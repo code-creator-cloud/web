@@ -1,6 +1,6 @@
-// src/components/layout/DashboardLayout.tsx
-import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useState, useContext } from 'react';
+import { useLocation, useNavigate, Navigate } from 'react-router-dom';
+import Loader from '../common/Loader'
 import { 
   Home, 
   CreditCard, 
@@ -13,9 +13,11 @@ import {
   MessageCircle,
   X
 } from 'lucide-react';
-import { Button } from '../../components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '../../components/ui/sheet';
-import AIChatBot from '../../components/ui/ai-chatbot';
+import { Button } from '../ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
+import AIChatBot from '../ui/ai-chatbot';
+import { AuthContext } from '../../lib/contexts/AuthContext';
+import { toast } from 'sonner';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -26,6 +28,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
 
   const menuItems = [
     {
@@ -61,8 +64,36 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   const handleNavigation = (path: string) => {
     navigate(path);
-    setIsSidebarOpen(false); // Close sidebar on mobile after navigation
+    setIsSidebarOpen(false);
   };
+
+  const handleLogout = async () => {
+    try {
+      await authContext?.logout();
+    } catch (error: any) {
+      console.error('DashboardLayout: Logout error:', error);
+      toast.error(error.message || 'Failed to log out');
+    }
+  };
+
+  if (!authContext) {
+    console.error('DashboardLayout: AuthContext not available');
+    return <Navigate to="/login" replace />;
+  }
+
+  const { user, loading } = authContext;
+
+  if (loading) {
+    console.log('DashboardLayout: Loading, rendering loading state');
+    return <Loader />; // Replace with your loading component
+  }
+
+  if (!user) {
+    console.log('DashboardLayout: No user, redirecting to /login');
+    return <Navigate to="/login" replace state={{ from: location.pathname }} />;
+  }
+
+  console.log('DashboardLayout: Rendering layout for user:', user.email);
 
   const SidebarContent = () => (
     <div className="flex flex-col h-full bg-[var(--color-primary)] text-[var(--color-primary-foreground)]">
@@ -108,7 +139,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             <User size={20} />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate">John Doe</p>
+            <p className="text-sm font-medium truncate">{user.username || 'User'}</p>
             <p className="text-xs text-gray-400 truncate">Premium Account</p>
           </div>
           <ChevronDown size={16} className="text-gray-400" />
@@ -117,7 +148,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         <Button 
           variant="ghost" 
           className="w-full justify-start gap-2 text-gray-300 hover:text-white hover:bg-[#382a6b]"
-          onClick={() => console.log('Logout clicked')}
+          onClick={handleLogout}
         >
           <LogOut size={16} />
           <span>Logout</span>
@@ -128,12 +159,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   return (
     <div className="flex h-screen bg-gray-50">
-      {/* Sidebar for desktop */}
       <aside className="hidden md:flex flex-col w-64 bg-[var(--color-primary)] text-[var(--color-primary-foreground)]">
         <SidebarContent />
       </aside>
 
-      {/* Mobile sidebar */}
       <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
         <div className="md:hidden fixed top-4 left-4 z-50">
           <SheetTrigger asChild>
@@ -152,12 +181,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </SheetContent>
       </Sheet>
 
-      {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Top header - Fixed for mobile */}
         <header className="bg-white border-b border-gray-200 py-4 px-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            {/* Mobile hamburger and home link side by side */}
             <div className="flex items-center gap-4 md:gap-2">
               <div className="md:hidden flex items-center gap-4">
                 <span className="text-lg font-bold text-[var(--color-primary)]">FinTrack</span>
@@ -176,19 +202,17 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
           
           <div className="flex items-center gap-4">
-            <div className="text-sm text-gray-700 font-medium hidden sm:block">John Doe</div>
+            <div className="text-sm text-gray-700 font-medium hidden sm:block">{user.username || 'User'}</div>
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[var(--color-primary)] flex items-center justify-center text-white">
               <User size={16} className="sm:size-5" />
             </div>
           </div>
         </header>
 
-        {/* Page content */}
         <main className="flex-1 overflow-auto p-4 sm:p-6">
           {children}
         </main>
 
-        {/* AI Chat Bot Button */}
         <button
           onClick={() => setIsChatOpen(true)}
           className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-[var(--color-accent)] text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-all z-40"
@@ -196,11 +220,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           <MessageCircle size={24} />
         </button>
 
-        {/* AI Chat Bot Modal */}
         {isChatOpen && (
           <AIChatBot onClose={() => setIsChatOpen(false)} />
         )}
       </div>
     </div>
   );
-}
+}                                                                                                       
