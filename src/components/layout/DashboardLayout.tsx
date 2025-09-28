@@ -11,14 +11,15 @@ import {
   ChevronDown,
   Wallet,
   MessageCircle,
-  X
+  X,
+  Calendar
 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
 import AIChatBot from '../ui/ai-chatbot';
 import { AuthContext } from '../../lib/contexts/AuthContext';
 import { toast } from 'sonner';
-
+import CalendlyModal from "../ui/CalendlyModal";
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
@@ -29,6 +30,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
+  const [isCalendlyOpen, setIsCalendlyOpen] = useState(false);
 
   const menuItems = [
     {
@@ -131,7 +133,16 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </button>
           );
         })}
+        <Button 
+    variant="secondary" 
+    className="w-full justify-start gap-2 mb-2 bg-[var(--color-accent)] hover:bg-[var(--color-accent)]/90 text-white border-0"
+    onClick={() => setIsCalendlyOpen(true)}
+  >
+    <Calendar className="w-4 h-4" />
+    <span>Book a Call</span>
+  </Button>
       </nav>
+      
       
       <div className="p-4 border-t border-[#382a6b] mt-auto">
         <div className="flex items-center gap-3 mb-4 p-3 bg-[#382a6b] rounded-lg">
@@ -144,6 +155,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
           <ChevronDown size={16} className="text-gray-400" />
         </div>
+  
         
         <Button 
           variant="ghost" 
@@ -224,6 +236,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           <AIChatBot onClose={() => setIsChatOpen(false)} />
         )}
       </div>
+      <CalendlyModal 
+  open={isCalendlyOpen} 
+  onClose={() => setIsCalendlyOpen(false)} 
+/>
+
     </div>
   );
 }                                                                                                       
