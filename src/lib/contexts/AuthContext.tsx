@@ -141,8 +141,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const userData = await authService.login({ email, password });
       console.log('Login successful, user data:', userData);
       setUser(userData);
-      toast.success('Successfully logged in!');
-      navigate('/dashboard', { replace: true });
+      
+      // Check if this is an admin login by checking localStorage
+      const adminToken = localStorage.getItem('adminToken');
+      const adminUser = localStorage.getItem('adminUser');
+      
+      if (adminToken && adminUser) {
+        // This is an admin login, redirect to admin dashboard
+        toast.success('Admin login successful!');
+        navigate('/admin', { replace: true });
+      } else {
+        // Regular user login
+        toast.success('Successfully logged in!');
+        navigate('/dashboard', { replace: true });
+      }
     } catch (error: any) {
       console.error('Login error:', error);
       toast.error(error.message || 'Login failed');
@@ -155,6 +167,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       await authService.logout();
       setUser(null);
       setAccessToken(null);
+      
+      // Clear admin tokens as well
+      localStorage.removeItem('adminToken');
+      localStorage.removeItem('adminUser');
+      
       toast.success('Logged out successfully');
       navigate('/login', { replace: true });
     } catch (error: any) {

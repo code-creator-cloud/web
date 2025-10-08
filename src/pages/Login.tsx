@@ -222,6 +222,12 @@ const Login = () => {
                     Sign up
                   </Link>
                 </p>
+                <div className="border-t pt-3">
+                  <p className="text-sm text-muted-foreground mb-2">Administrator Access</p>
+                  <p className="text-xs text-gray-500">
+                    Admins can use the same login form above
+                  </p>
+                </div>
               </motion.div>
             </motion.div>
           </div>

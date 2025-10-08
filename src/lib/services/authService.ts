@@ -1,25 +1,46 @@
 import { authApi, publicApi } from '../api';
-import type { LoginRequest, RegisterRequest, UserResponse, Token } from '../types/auth';
+import type { LoginRequest, RegisterRequest, UserResponse, Token, UnifiedLoginResponse, AdminResponse } from '../types/auth';
 import { setAccessToken } from '../api';
 
 export const authService = {
   async login(credentials: LoginRequest): Promise<UserResponse> {
     try {
-      console.log('Sending login request with:', credentials);
+      console.log('Sending unified login request with:', credentials);
       const loginResponse = await publicApi.post('/api/users/login', credentials, {
         withCredentials: true,
       });
-      const { access_token, token_type } = loginResponse.data as Token;
-      console.log('Login response:', { access_token, token_type });
-      if (token_type !== 'bearer') {
+      const response = loginResponse.data as UnifiedLoginResponse;
+      console.log('Unified login response:', response);
+      
+      if (response.token_type !== 'bearer') {
         throw new Error('Invalid token type');
       }
-      setAccessToken(access_token);
-      const userResponse = await authApi.get('/api/users/me');
-      console.log('User data from /me:', userResponse.data);
-      return userResponse.data as UserResponse;
+      
+      setAccessToken(response.access_token);
+      
+      // Handle different user types
+      if (response.user_type === 'admin') {
+        // For admin users, we need to redirect to admin dashboard
+        // Store admin data in localStorage for admin context
+        localStorage.setItem('adminToken', response.access_token);
+        localStorage.setItem('adminUser', JSON.stringify(response.user_data));
+        
+        // Return a user-like object for compatibility, but the frontend should handle admin redirect
+        return {
+          id: response.user_data.id,
+          email: response.user_data.email,
+          username: response.user_data.email, // Use email as username for admins
+          balance: 0, // Admins don't have balance
+          wallet_address: null,
+          created_at: response.user_data.created_at,
+          updated_at: response.user_data.updated_at
+        } as UserResponse;
+      } else {
+        // Regular user login
+        return response.user_data as UserResponse;
+      }
     } catch (error: any) {
-      console.error('Login error:', error);
+      console.error('Unified login error:', error);
       setAccessToken(null);
       throw new Error(error.response?.data?.detail?.message || 'Email or password is incorrect');
     }
@@ -83,9 +104,18 @@ export const authService = {
     try {
       await authApi.post('/api/users/logout', {}, { withCredentials: true });
       setAccessToken(null);
+      
+      // Clear admin tokens as well
+      localStorage.removeItem('adminToken');
+      localStorage.removeItem('adminUser');
     } catch (error: any) {
       console.error('Logout error:', error);
       setAccessToken(null);
+      
+      // Clear admin tokens even if logout fails
+      localStorage.removeItem('adminToken');
+      localStorage.removeItem('adminUser');
+      
       throw new Error(error.response?.data?.detail?.message || 'Failed to log out');
     }
   },

@@ -1,6 +1,6 @@
 // src/pages/admin/AdminTransactions.tsx
-import { useState } from 'react';
-import { Search, Filter, Download, MoreVertical, ArrowUp, ArrowDown, BarChart3, DollarSign, Calendar, Users, UserCheck,  TrendingUp } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Search, Filter, Download, MoreVertical, ArrowUp, ArrowDown, BarChart3, DollarSign, Calendar, Users, UserCheck, TrendingUp, AlertCircle, Activity } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
@@ -18,35 +18,12 @@ import {
   PieChart,
   Pie,
   Cell,
-  // LineChart,
-  // Line
 } from 'recharts';
+import { adminService } from '../../lib/services/adminService';
+import type { AdminTransaction, AdminTransactionList, RevenueAnalytics, UserGrowthAnalytics } from '../../lib/types/admin';
 
-interface Transaction {
-  id: string;
-  user: string;
-  type: 'Deposit' | 'Withdrawal';
-  currency: string;
-  amount: number;
-  status: 'Completed' | 'Processing' | 'Failed';
-  date: string;
-  fee: number;
-  avatar?: string;
-}
-
-const transactionsData: Transaction[] = [
-  { id: 'TX001', user: 'John Doe', type: 'Deposit', currency: 'TRX', amount: 500, status: 'Completed', date: '2023-05-15', fee: 5, avatar: '/images/avatar1.png' },
-  { id: 'TX002', user: 'Sarah Wilson', type: 'Withdrawal', currency: 'BNB', amount: 250, status: 'Processing', date: '2023-05-14', fee: 2.5, avatar: '/images/avatar2.png' },
-  { id: 'TX003', user: 'Mike Johnson', type: 'Deposit', currency: 'TRX', amount: 1200, status: 'Completed', date: '2023-05-13', fee: 12, avatar: '/images/avatar3.png' },
-  { id: 'TX004', user: 'Emma Davis', type: 'Deposit', currency: 'BNB', amount: 350, status: 'Completed', date: '2023-05-12', fee: 3.5, avatar: '/images/avatar4.png' },
-  { id: 'TX005', user: 'Alex Brown', type: 'Withdrawal', currency: 'TRX', amount: 800, status: 'Failed', date: '2023-05-11', fee: 8, avatar: '/images/avatar1.png' },
-  { id: 'TX006', user: 'Lisa Anderson', type: 'Deposit', currency: 'BTC', amount: 1500, status: 'Completed', date: '2023-05-10', fee: 15, avatar: '/images/avatar2.png' },
-  { id: 'TX007', user: 'David Wilson', type: 'Withdrawal', currency: 'ETH', amount: 900, status: 'Completed', date: '2023-05-09', fee: 9, avatar: '/images/avatar3.png' },
-  { id: 'TX008', user: 'Sophia Martinez', type: 'Deposit', currency: 'TRX', amount: 600, status: 'Processing', date: '2023-05-08', fee: 6, avatar: '/images/avatar4.png' },
-];
-
-// User-focused data
-const userActivityData = [
+// Mock data for charts (will be replaced with real data from analytics endpoints)
+const mockUserActivityData = [
   { month: 'Jan', activeUsers: 1250, newUsers: 250, churnedUsers: 45 },
   { month: 'Feb', activeUsers: 1420, newUsers: 320, churnedUsers: 38 },
   { month: 'Mar', activeUsers: 1560, newUsers: 280, churnedUsers: 42 },
@@ -55,53 +32,9 @@ const userActivityData = [
   { month: 'Jun', activeUsers: 2450, newUsers: 420, churnedUsers: 55 },
 ];
 
-const userTierDistribution = [
-  { name: 'Premium', value: 35, color: '#241151' }, // Using primary color
-  { name: 'Standard', value: 65, color: '#FF6B35' } // Using accent color
-];
-
-// const userEngagementData = [
-//   { month: 'Jan', avgTransactions: 2.8, retentionRate: 85 },
-//   { month: 'Feb', avgTransactions: 3.2, retentionRate: 87 },
-//   { month: 'Mar', avgTransactions: 3.5, retentionRate: 89 },
-//   { month: 'Apr', avgTransactions: 4.1, retentionRate: 91 },
-//   { month: 'May', avgTransactions: 4.3, retentionRate: 92 },
-//   { month: 'Jun', avgTransactions: 4.6, retentionRate: 94 },
-// ];
-
-const statsData = [
-  {
-    title: 'Active Users',
-    value: '2,450',
-    change: 12.5,
-    icon: Users,
-    trend: 'up',
-    description: 'Currently active users'
-  },
-  {
-    title: 'New Users',
-    value: '420',
-    change: 10.5,
-    icon: UserCheck,
-    trend: 'up',
-    description: 'New users this month'
-  },
-  {
-    title: 'Retention Rate',
-    value: '94%',
-    change: 2.1,
-    icon: TrendingUp,
-    trend: 'up',
-    description: 'User retention rate'
-  },
-  {
-    title: 'Avg. Transactions',
-    value: '4.6',
-    change: 6.8,
-    icon: BarChart3,
-    trend: 'up',
-    description: 'Per user this month'
-  }
+const mockUserTierDistribution = [
+  { name: 'Active', value: 75, color: '#241151' },
+  { name: 'Inactive', value: 25, color: '#FF6B35' }
 ];
 
 const CustomTooltip = ({ active, payload, label }: any) => {
@@ -139,39 +72,116 @@ const CustomPieTooltip = ({ active, payload }: any) => {
 export default function AdminTransactions() {
   const [searchTerm, setSearchTerm] = useState('');
   const [dateRange, setDateRange] = useState('30d');
+  const [transactions, setTransactions] = useState<AdminTransaction[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const [revenueAnalytics, setRevenueAnalytics] = useState<RevenueAnalytics | null>(null);
+  const [userGrowthAnalytics, setUserGrowthAnalytics] = useState<UserGrowthAnalytics | null>(null);
+  const pageSize = 20;
 
-  const filteredTransactions = transactionsData.filter(tx =>
-    tx.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    tx.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    tx.currency.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  useEffect(() => {
+    loadTransactionData();
+  }, [currentPage, searchTerm, dateRange]);
 
-  const getStatusColor = (status: Transaction['status']) => {
-    switch (status) {
-      case 'Completed': return 'bg-green-100 text-green-800 border-green-200';
-      case 'Processing': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'Failed': return 'bg-red-100 text-red-800 border-red-200';
+  const loadTransactionData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Load transactions
+      const params = {
+        page: currentPage,
+        page_size: pageSize,
+        search: searchTerm || undefined,
+      };
+
+      const transactionsResponse = await adminService.getTransactions(params);
+      setTransactions(transactionsResponse.transactions);
+      setTotalCount(transactionsResponse.total_count);
+
+      // Load analytics
+      const revenue = await adminService.getRevenueAnalytics(dateRange);
+      setRevenueAnalytics(revenue);
+
+      const userGrowth = await adminService.getUserGrowthAnalytics(dateRange);
+      setUserGrowthAnalytics(userGrowth);
+
+    } catch (err: any) {
+      setError(err.message);
+      console.error('Failed to load transaction data:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSearch = (value: string) => {
+    setSearchTerm(value);
+    setCurrentPage(1);
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'completed': return 'bg-green-100 text-green-800 border-green-200';
+      case 'processing': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'pending': return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'failed': return 'bg-red-100 text-red-800 border-red-200';
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
-  const getInitials = (name: string) => {
-    return name
-      .split(' ')
-      .map(part => part[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
+  const getInitials = (email: string) => {
+    return email
+      .split('@')[0]
+      .slice(0, 2)
+      .toUpperCase();
   };
 
-  const totalVolume = transactionsData.reduce((sum, tx) => sum + tx.amount, 0);
-  // const totalFees = transactionsData.reduce((sum, tx) => sum + tx.fee, 0);
-  const successRate = (transactionsData.filter(tx => tx.status === 'Completed').length / transactionsData.length) * 100;
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2,
+    }).format(amount);
+  };
 
-  // Calculate user metrics
-  const uniqueUsers = new Set(transactionsData.map(tx => tx.user)).size;
-  // const activeUsers = userActivityData[userActivityData.length - 1].activeUsers;
-  // const newUsers = userActivityData[userActivityData.length - 1].newUsers;
+  const formatNumber = (num: number) => {
+    return new Intl.NumberFormat('en-US').format(num);
+  };
+
+  // Calculate stats from real data
+  const totalVolume = transactions.reduce((sum, tx) => sum + tx.amount, 0);
+  const successRate = transactions.length > 0 
+    ? (transactions.filter(tx => tx.status.toLowerCase() === 'completed').length / transactions.length) * 100 
+    : 0;
+  const uniqueUsers = new Set(transactions.map(tx => tx.user_id)).size;
+
+  if (loading && transactions.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <Activity className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
+          <p className="text-gray-600">Loading transaction data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && transactions.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <AlertCircle className="h-8 w-8 mx-auto mb-4 text-red-500" />
+          <p className="text-red-600 mb-4">Failed to load transaction data</p>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <Button onClick={loadTransactionData} variant="outline">
+            Try Again
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 p-6 bg-gray-50 min-h-screen">
@@ -222,38 +232,57 @@ export default function AdminTransactions() {
 
       {/* Stats Overview */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {statsData.map((stat, index) => {
-          const Icon = stat.icon;
-          return (
-            <Card key={index} className="border-0 shadow-lg rounded-xl overflow-hidden">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-                <CardTitle className="text-sm font-medium text-gray-600">{stat.title}</CardTitle>
-                <div className={`p-2 rounded-full ${
-                  stat.trend === 'up' ? 'bg-green-100' : 'bg-red-100'
-                }`}>
-                  <Icon className={`h-4 w-4 ${
-                    stat.trend === 'up' ? 'text-green-600' : 'text-red-600'
-                  }`} />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
-                <div className="flex items-center text-xs text-gray-500 mt-1">
-                  {stat.trend === 'up' ? (
-                    <ArrowUp className="h-3 w-3 text-green-600 mr-1" />
-                  ) : (
-                    <ArrowDown className="h-3 w-3 text-red-600 mr-1" />
-                  )}
-                  <span className={stat.trend === 'up' ? 'text-green-600 font-medium' : 'text-red-600 font-medium'}>
-                    {stat.change}%
-                  </span>
-                  <span className="ml-1">from last month</span>
-                </div>
-                <p className="text-xs text-gray-400 mt-2">{stat.description}</p>
-              </CardContent>
-            </Card>
-          );
-        })}
+        <Card className="border-0 shadow-lg rounded-xl overflow-hidden">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+            <CardTitle className="text-sm font-medium text-gray-600">Total Transactions</CardTitle>
+            <div className="p-2 rounded-full bg-blue-100">
+              <BarChart3 className="h-4 w-4 text-blue-600" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-gray-900">{formatNumber(totalCount)}</div>
+            <p className="text-xs text-gray-400 mt-2">All transactions</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-0 shadow-lg rounded-xl overflow-hidden">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+            <CardTitle className="text-sm font-medium text-gray-600">Total Volume</CardTitle>
+            <div className="p-2 rounded-full bg-green-100">
+              <DollarSign className="h-4 w-4 text-green-600" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-gray-900">{formatCurrency(totalVolume)}</div>
+            <p className="text-xs text-gray-400 mt-2">Transaction volume</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-0 shadow-lg rounded-xl overflow-hidden">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+            <CardTitle className="text-sm font-medium text-gray-600">Success Rate</CardTitle>
+            <div className="p-2 rounded-full bg-purple-100">
+              <TrendingUp className="h-4 w-4 text-purple-600" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-gray-900">{successRate.toFixed(1)}%</div>
+            <p className="text-xs text-gray-400 mt-2">Completed transactions</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-0 shadow-lg rounded-xl overflow-hidden">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+            <CardTitle className="text-sm font-medium text-gray-600">Unique Users</CardTitle>
+            <div className="p-2 rounded-full bg-orange-100">
+              <Users className="h-4 w-4 text-orange-600" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-gray-900">{formatNumber(uniqueUsers)}</div>
+            <p className="text-xs text-gray-400 mt-2">Active users</p>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Charts Section */}
@@ -266,7 +295,7 @@ export default function AdminTransactions() {
           <CardContent className="pt-6">
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={userActivityData}>
+                <BarChart data={mockUserActivityData}>
                   <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
                   <XAxis dataKey="month" />
                   <YAxis />
@@ -300,7 +329,7 @@ export default function AdminTransactions() {
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
-                    data={userTierDistribution}
+                    data={mockUserTierDistribution}
                     cx="50%"
                     cy="50%"
                     outerRadius={80}
@@ -308,7 +337,7 @@ export default function AdminTransactions() {
                     dataKey="value"
                     label={({ name, percent = 0 }) => `${name} ${(percent * 100).toFixed(0)}%`}
                   >
-                    {userTierDistribution.map((entry, index) => (
+                    {mockUserTierDistribution.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
@@ -366,7 +395,7 @@ export default function AdminTransactions() {
           placeholder="Search transactions by ID, user, or currency..."
           className="pl-10 h-11 rounded-lg border-gray-300 focus:border-[var(--color-primary)]"
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) => handleSearch(e.target.value)}
         />
       </div>
 
@@ -375,7 +404,7 @@ export default function AdminTransactions() {
         <CardHeader className="flex flex-row items-center justify-between bg-gradient-to-r from-[var(--color-primary)]/10 to-[var(--color-accent)]/10">
           <CardTitle className="flex items-center gap-2 text-lg">
             <DollarSign className="h-5 w-5 text-[var(--color-primary)]" />
-            All Transactions ({filteredTransactions.length})
+            All Transactions ({totalCount})
           </CardTitle>
           <div className="text-sm text-gray-600">
             Unique Users: {uniqueUsers} • Total: ${totalVolume.toLocaleString()} • Success: {successRate.toFixed(1)}%
@@ -398,27 +427,29 @@ export default function AdminTransactions() {
                 </tr>
               </thead>
               <tbody>
-                {filteredTransactions.map((tx) => (
+                {transactions.map((tx) => (
                   <tr key={tx.id} className="border-b hover:bg-gray-50 transition-colors even:bg-gray-50/30">
-                    <td className="py-4 px-6 font-mono text-sm text-gray-600">{tx.id}</td>
+                    <td className="py-4 px-6 font-mono text-sm text-gray-600">#{tx.id}</td>
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-3">
                         <Avatar className="h-8 w-8 border-2 border-white shadow-sm">
-                          <AvatarImage src={tx.avatar} alt={tx.user} />
                           <AvatarFallback className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] text-white">
-                            {getInitials(tx.user)}
+                            {getInitials(tx.user_email)}
                           </AvatarFallback>
                         </Avatar>
-                        <span className="font-medium">{tx.user}</span>
+                        <div>
+                          <p className="font-medium">{tx.user_email}</p>
+                          <p className="text-xs text-gray-500">ID: {tx.user_id}</p>
+                        </div>
                       </div>
                     </td>
                     <td className="py-4 px-6">
                       <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium ${
-                        tx.type === 'Deposit' 
+                        tx.type === 'deposit' 
                           ? 'bg-green-100 text-green-800' 
                           : 'bg-red-100 text-red-800'
                       }`}>
-                        {tx.type === 'Deposit' ? (
+                        {tx.type === 'deposit' ? (
                           <ArrowUp className="h-3 w-3 mr-1" />
                         ) : (
                           <ArrowDown className="h-3 w-3 mr-1" />
@@ -427,8 +458,8 @@ export default function AdminTransactions() {
                       </span>
                     </td>
                     <td className="py-4 px-6 font-medium">{tx.currency}</td>
-                    <td className="py-4 px-6 font-semibold">${tx.amount}</td>
-                    <td className="py-4 px-6 text-gray-500">${tx.fee}</td>
+                    <td className="py-4 px-6 font-semibold">{formatCurrency(tx.amount)}</td>
+                    <td className="py-4 px-6 text-gray-500">-</td>
                     <td className="py-4 px-6">
                       <Badge 
                         variant="outline" 
@@ -440,7 +471,7 @@ export default function AdminTransactions() {
                     <td className="py-4 px-6 text-sm text-gray-500">
                       <div className="flex items-center gap-1">
                         <Calendar className="h-4 w-4" />
-                        {new Date(tx.date).toLocaleDateString()}
+                        {new Date(tx.created_at).toLocaleDateString()}
                       </div>
                     </td>
                     <td className="py-4 px-6">

@@ -1,157 +1,141 @@
 // src/pages/admin/AdminUsers.tsx
-import { useState } from 'react';
-import { Search, Edit, Trash2, UserPlus, Mail, User, Shield, DollarSign, Calendar } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Search, Edit, Trash2, UserPlus, Mail, User, Shield, DollarSign, Calendar, AlertCircle, Activity } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Badge } from '../../components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '../../components/ui/avatar';
+import { Avatar, AvatarFallback } from '../../components/ui/avatar';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../../components/ui/dialog';
 import AddUserForm from '../../components/_components/AddUserForm';
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  status: 'Active' | 'Inactive' | 'Suspended';
-  joinDate: string;
-  tier: 'Premium' | 'Standard';
-  balance: number;
-  avatar?: string;
-}
-
-const usersData: User[] = [
-  { 
-    id: 1, 
-    name: 'John Doe', 
-    email: 'john@example.com', 
-    status: 'Active', 
-    joinDate: '2023-01-15', 
-    tier: 'Premium', 
-    balance: 2500,
-    avatar: '/images/avatar1.png'
-  },
-  { 
-    id: 2, 
-    name: 'Sarah Wilson', 
-    email: 'sarah@example.com', 
-    status: 'Active', 
-    joinDate: '2023-02-20', 
-    tier: 'Standard', 
-    balance: 1200,
-    avatar: '/images/avatar2.png'
-  },
-  { 
-    id: 3, 
-    name: 'Mike Johnson', 
-    email: 'mike@example.com', 
-    status: 'Inactive', 
-    joinDate: '2023-03-10', 
-    tier: 'Premium', 
-    balance: 3500,
-    avatar: '/images/avatar3.png'
-  },
-  { 
-    id: 4, 
-    name: 'Emma Davis', 
-    email: 'emma@example.com', 
-    status: 'Active', 
-    joinDate: '2023-04-05', 
-    tier: 'Standard', 
-    balance: 800,
-    avatar: '/images/avatar4.png'
-  },
-  { 
-    id: 5, 
-    name: 'Alex Brown', 
-    email: 'alex@example.com', 
-    status: 'Suspended', 
-    joinDate: '2023-05-12', 
-    tier: 'Premium', 
-    balance: 4200,
-    avatar: '/images/avatar1.png'
-  },
-  { 
-    id: 6, 
-    name: 'Lisa Anderson', 
-    email: 'lisa@example.com', 
-    status: 'Active', 
-    joinDate: '2023-06-18', 
-    tier: 'Standard', 
-    balance: 1500,
-    avatar: '/images/avatar2.png'
-  },
-  { 
-    id: 7, 
-    name: 'David Wilson', 
-    email: 'david@example.com', 
-    status: 'Active', 
-    joinDate: '2023-07-22', 
-    tier: 'Premium', 
-    balance: 3200,
-    avatar: '/images/avatar3.png'
-  },
-  { 
-    id: 8, 
-    name: 'Sophia Martinez', 
-    email: 'sophia@example.com', 
-    status: 'Inactive', 
-    joinDate: '2023-08-30', 
-    tier: 'Standard', 
-    balance: 900,
-    avatar: '/images/avatar4.png'
-  },
-];
+import { adminService } from '../../lib/services/adminService';
+import type { AdminUser } from '../../lib/types/admin';
 
 export default function AdminUsers() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [users, setUsers] = useState<User[]>(usersData);
+  const [users, setUsers] = useState<AdminUser[]>([]);
   const [isAddUserOpen, setIsAddUserOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const pageSize = 20;
 
-  const filteredUsers = users.filter(user =>
-    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  useEffect(() => {
+    loadUsers();
+  }, [currentPage, searchTerm]);
 
-  const toggleUserStatus = (userId: number, newStatus: User['status']) => {
-    setUsers(users.map(user => 
-      user.id === userId ? { ...user, status: newStatus } : user
-    ));
+  const loadUsers = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const params = {
+        page: currentPage,
+        page_size: pageSize,
+        search: searchTerm || undefined,
+      };
+
+      const response = await adminService.getUsers(params);
+      setUsers(response.users);
+      setTotalCount(response.total_count);
+    } catch (err: any) {
+      setError(err.message);
+      console.error('Failed to load users:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const deleteUser = (userId: number) => {
-    setUsers(users.filter(user => user.id !== userId));
+  const handleSearch = (value: string) => {
+    setSearchTerm(value);
+    setCurrentPage(1); // Reset to first page when searching
   };
 
-  const addUser = (newUser: Omit<User, 'id'>) => {
-    const nextId = Math.max(...users.map(u => u.id)) + 1;
-    setUsers([...users, { ...newUser, id: nextId }]);
-    setIsAddUserOpen(false);
+  const toggleUserStatus = async (userId: number, newStatus: string) => {
+    try {
+      await adminService.updateUser(userId, { status: newStatus });
+      // Reload users to reflect changes
+      loadUsers();
+    } catch (err: any) {
+      console.error('Failed to update user status:', err);
+    }
   };
 
-  const getInitials = (name: string) => {
-    return name
-      .split(' ')
-      .map(part => part[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
+  const deleteUser = async (userId: number) => {
+    try {
+      await adminService.updateUser(userId, { status: 'inactive' });
+      // Reload users to reflect changes
+      loadUsers();
+    } catch (err: any) {
+      console.error('Failed to delete user:', err);
+    }
   };
 
-  const getStatusColor = (status: User['status']) => {
-    switch (status) {
-      case 'Active': return 'bg-green-100 text-green-800 border-green-200';
-      case 'Inactive': return 'bg-gray-100 text-gray-800 border-gray-200';
-      case 'Suspended': return 'bg-red-100 text-red-800 border-red-200';
+  const addUser = async (newUser: Omit<AdminUser, 'id'>) => {
+    try {
+      // For now, we'll create a user with minimal required fields
+      // The backend should handle user creation
+      console.log('Add user functionality needs backend implementation', newUser);
+      setIsAddUserOpen(false);
+    } catch (err: any) {
+      console.error('Failed to add user:', err);
+    }
+  };
+
+  const getInitials = (email: string) => {
+    return email
+      .split('@')[0]
+      .slice(0, 2)
+      .toUpperCase();
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'active': return 'bg-green-100 text-green-800 border-green-200';
+      case 'inactive': return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'suspended': return 'bg-red-100 text-red-800 border-red-200';
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
-  const getTierColor = (tier: User['tier']) => {
-    return tier === 'Premium'
-      ? 'bg-[var(--color-primary)] text-[var(--color-primary-foreground)] border-[var(--color-primary)]'
-      : 'bg-[var(--color-accent)] text-[var(--color-accent-foreground)] border-[var(--color-accent)]';
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2,
+    }).format(amount);
   };
+
+  const formatNumber = (num: number) => {
+    return new Intl.NumberFormat('en-US').format(num);
+  };
+
+  if (loading && users.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <Activity className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
+          <p className="text-gray-600">Loading users...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && users.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <AlertCircle className="h-8 w-8 mx-auto mb-4 text-red-500" />
+          <p className="text-red-600 mb-4">Failed to load users</p>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <Button onClick={loadUsers} variant="outline">
+            Try Again
+          </Button>
+        </div>
+      </div>
+    );
+  }
   
   return (
     <div className="space-y-6 p-6 bg-gray-50 min-h-screen">
@@ -165,10 +149,10 @@ export default function AdminUsers() {
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
           <Input
             type="search"
-            placeholder="Search users by name or email..."
+            placeholder="Search users by email..."
             className="pl-10 h-11 rounded-lg border-gray-300 focus:border-purple-500"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => handleSearch(e.target.value)}
           />
         </div>
         <div className="flex gap-2 w-full sm:w-auto">
@@ -200,7 +184,7 @@ export default function AdminUsers() {
         <CardHeader className="bg-gradient-to-r from-purple-50 to-indigo-50">
           <CardTitle className="flex items-center gap-2 text-lg">
             <User className="h-5 w-5 text-accent" />
-            All Users ({filteredUsers.length})
+            All Users ({totalCount})
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
@@ -210,28 +194,27 @@ export default function AdminUsers() {
                 <tr className="border-b bg-gray-50">
                   <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">User</th>
                   <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Status</th>
-                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Tier</th>
                   <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Balance</th>
+                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Transactions</th>
                   <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Join Date</th>
                   <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredUsers.map((user) => (
+                {users.map((user) => (
                   <tr key={user.id} className="border-b hover:bg-gray-50 transition-colors even:bg-gray-50/30">
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-3">
                         <Avatar className="h-10 w-10 border-2 border-white shadow-sm">
-                          <AvatarImage src={user.avatar} alt={user.name} />
                           <AvatarFallback className="bg-gradient-to-r from-blue-400 to-purple-500 text-white">
-                            {getInitials(user.name)}
+                            {getInitials(user.email)}
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="font-medium text-gray-900">{user.name}</p>
+                          <p className="font-medium text-gray-900">{user.email}</p>
                           <p className="text-sm text-gray-500 flex items-center gap-1">
                             <Mail className="h-3 w-3" />
-                            {user.email}
+                            ID: {user.id}
                           </p>
                         </div>
                       </div>
@@ -244,24 +227,27 @@ export default function AdminUsers() {
                         {user.status}
                       </Badge>
                     </td>
-                    <td className="py-4 px-6">
-                      <Badge 
-                        variant="outline" 
-                        className={`rounded-full px-3 py-1.5 text-xs font-medium border ${getTierColor(user.tier)}`}
-                      >
-                        {user.tier}
-                      </Badge>
-                    </td>
                     <td className="py-4 px-6 font-semibold text-green-600">
                       <div className="flex items-center gap-1">
                         <DollarSign className="h-4 w-4" />
-                        {user.balance.toLocaleString()}
+                        {formatCurrency(user.balance)}
+                      </div>
+                    </td>
+                    <td className="py-4 px-6">
+                      <div className="text-sm">
+                        <p className="font-medium">{formatNumber(user.transaction_count)}</p>
+                        <p className="text-xs text-gray-500">
+                          Deposits: {formatCurrency(user.total_deposits)}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          Withdrawals: {formatCurrency(user.total_withdrawals)}
+                        </p>
                       </div>
                     </td>
                     <td className="py-4 px-6 text-sm text-gray-500">
                       <div className="flex items-center gap-1">
                         <Calendar className="h-4 w-4" />
-                        {new Date(user.joinDate).toLocaleDateString()}
+                        {new Date(user.created_at).toLocaleDateString()}
                       </div>
                     </td>
                     <td className="py-4 px-6">
@@ -281,12 +267,12 @@ export default function AdminUsers() {
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
-                        {user.status === 'Active' ? (
+                        {user.status === 'active' ? (
                           <Button 
                             variant="ghost" 
                             size="icon" 
                             className="h-8 w-8 rounded-lg text-orange-600 hover:text-orange-700 hover:bg-orange-50"
-                            onClick={() => toggleUserStatus(user.id, 'Suspended')}
+                            onClick={() => toggleUserStatus(user.id, 'suspended')}
                           >
                             <Shield className="h-4 w-4" />
                           </Button>
@@ -295,7 +281,7 @@ export default function AdminUsers() {
                             variant="ghost" 
                             size="icon" 
                             className="h-8 w-8 rounded-lg text-green-600 hover:text-green-700 hover:bg-green-50"
-                            onClick={() => toggleUserStatus(user.id, 'Active')}
+                            onClick={() => toggleUserStatus(user.id, 'active')}
                           >
                             <User className="h-4 w-4" />
                           </Button>

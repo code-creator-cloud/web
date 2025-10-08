@@ -1,5 +1,5 @@
 // src/components/layout/AdminLayout.tsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -20,6 +20,7 @@ import {
 import { Button } from '../../components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '../../components/ui/sheet';
 import AIChatBot from '../../components/ui/ai-chatbot';
+import { AdminAuthContext } from '../../lib/contexts/AdminAuthContext';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -32,6 +33,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const location = useLocation();
   const navigate = useNavigate();
+  const adminAuthContext = useContext(AdminAuthContext);
 
   useEffect(() => {
     const handleResize = () => {
@@ -195,7 +197,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           <Button 
             variant="ghost" 
             className="w-full justify-start gap-2 text-gray-300 hover:text-white hover:bg-[#382a6b] transition-colors duration-200"
-            onClick={() => console.log('Logout clicked')}
+            onClick={() => adminAuthContext?.adminLogout()}
           >
             <LogOut size={16} />
             <span>Logout</span>

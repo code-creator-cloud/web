@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from './lib/contexts/AuthContext';
+import { AdminAuthProvider, AdminAuthContext } from './lib/contexts/AdminAuthContext';
 import DashboardLayout from './components/layout/DashboardLayout';
 import AdminLayout from './components/layout/AdminLayout';
 import Dashboard from './pages/Dashboard';
@@ -14,6 +15,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminUsers from './pages/admin/AdminUser';
 import AdminTransactions from './pages/admin/AdminTransactions';
 import AdminAnalytics from './pages/admin/AdminAnalytics';
+import AdminLogin from './pages/AdminLogin';
 import AdminSettings from './pages/admin/AdminSettings';
 import { Toaster } from 'sonner';
 import './App.css';
@@ -31,7 +33,7 @@ function ProtectedRoute({ children }: { children: JSX.Element }) {
 
   if (loading) {
     console.log('ProtectedRoute: Loading, rendering loading state');
-    return <Loader /> // Replace with your loading component
+    return <Loader />;
   }
 
   if (!user) {
@@ -43,6 +45,30 @@ function ProtectedRoute({ children }: { children: JSX.Element }) {
   return children;
 }
 
+function ProtectedAdminRoute({ children }: { children: JSX.Element }) {
+  const adminAuthContext = useContext(AdminAuthContext);
+
+  if (!adminAuthContext) {
+    console.error('ProtectedAdminRoute: AdminAuthContext not available');
+    return <Navigate to="/admin/login" replace />;
+  }
+
+  const { admin, loading } = adminAuthContext;
+
+  if (loading) {
+    console.log('ProtectedAdminRoute: Loading, rendering loading state');
+    return <Loader />;
+  }
+
+  if (!admin) {
+    console.log('ProtectedAdminRoute: No admin, redirecting to /admin/login');
+    return <Navigate to="/admin/login" replace />;
+  }
+
+  console.log('ProtectedAdminRoute: Admin authenticated, rendering children:', admin.email);
+  return children;
+}
+
 function App() {
   return (
     <>
@@ -51,6 +77,11 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/admin/login" element={
+          <AdminAuthProvider>
+            <AdminLogin />
+          </AdminAuthProvider>
+        } />
 
         <Route
           path="/dashboard"
@@ -67,51 +98,61 @@ function App() {
         <Route
           path="/admin"
           element={
-            <ProtectedRoute>
-              <AdminLayout>
-                <AdminDashboard />
-              </AdminLayout>
-            </ProtectedRoute>
+            <AdminAuthProvider>
+              <ProtectedAdminRoute>
+                <AdminLayout>
+                  <AdminDashboard />
+                </AdminLayout>
+              </ProtectedAdminRoute>
+            </AdminAuthProvider>
           }
         />
         <Route
           path="/admin/users"
           element={
-            <ProtectedRoute>
-              <AdminLayout>
-                <AdminUsers />
-              </AdminLayout>
-            </ProtectedRoute>
+            <AdminAuthProvider>
+              <ProtectedAdminRoute>
+                <AdminLayout>
+                  <AdminUsers />
+                </AdminLayout>
+              </ProtectedAdminRoute>
+            </AdminAuthProvider>
           }
         />
         <Route
           path="/admin/transactions"
           element={
-            <ProtectedRoute>
-              <AdminLayout>
-                <AdminTransactions />
-              </AdminLayout>
-            </ProtectedRoute>
+            <AdminAuthProvider>
+              <ProtectedAdminRoute>
+                <AdminLayout>
+                  <AdminTransactions />
+                </AdminLayout>
+              </ProtectedAdminRoute>
+            </AdminAuthProvider>
           }
         />
         <Route
           path="/admin/analytics"
           element={
-            <ProtectedRoute>
-              <AdminLayout>
-                <AdminAnalytics />
-              </AdminLayout>
-            </ProtectedRoute>
+            <AdminAuthProvider>
+              <ProtectedAdminRoute>
+                <AdminLayout>
+                  <AdminAnalytics />
+                </AdminLayout>
+              </ProtectedAdminRoute>
+            </AdminAuthProvider>
           }
         />
         <Route
           path="/admin/settings"
           element={
-            <ProtectedRoute>
-              <AdminLayout>
-                <AdminSettings />
-              </AdminLayout>
-            </ProtectedRoute>
+            <AdminAuthProvider>
+              <ProtectedAdminRoute>
+                <AdminLayout>
+                  <AdminSettings />
+                </AdminLayout>
+              </ProtectedAdminRoute>
+            </AdminAuthProvider>
           }
         />
         {/* End Admin Routes */}

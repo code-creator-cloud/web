@@ -120,6 +120,38 @@ body {
   animation: float 6s ease-in-out infinite;
 }
 
+/* Logo styling */
+.navbar-logo {
+  height: 3rem; /* 48px - increased from 2.5rem */
+  width: auto;
+  object-fit: contain;
+  transition: transform 0.2s ease-in-out;
+}
+
+.navbar-logo:hover {
+  transform: scale(1.05);
+}
+
+/* Responsive logo sizing */
+@media (max-width: 768px) {
+  .navbar-logo {
+    height: 2.5rem; /* 40px for mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-logo {
+    height: 2rem; /* 32px for small mobile */
+  }
+}
+
+/* Ensure navbar maintains proper height */
+.navbar-container {
+  min-height: 4rem; /* 64px */
+  display: flex;
+  align-items: center;
+}
+
 .loader-container {
   position: fixed;
   top: 0;

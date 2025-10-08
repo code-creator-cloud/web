@@ -1,5 +1,5 @@
 // src/pages/AdminDashboard.tsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   DollarSign,
   Users,
@@ -13,7 +13,9 @@ import {
   Zap,
   Award,
   BarChart3,
-  User
+  User,
+  AlertCircle,
+  Activity
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
@@ -31,171 +33,24 @@ import {
   Pie,
   Cell
 } from 'recharts';
+import { adminService } from '../../lib/services/adminService';
+import type { AdminDashboardStats, AdminUser, AdminTransaction, RevenueAnalytics, UserGrowthAnalytics } from '../../lib/types/admin';
 
-// Enhanced mock data for crypto platform
-const transactionData = [
+// Mock data for charts (will be replaced with real data from analytics endpoints)
+const mockTransactionData = [
   { month: 'Jan', deposits: 45, withdrawals: 30, revenue: 4500 },
   { month: 'Feb', deposits: 52, withdrawals: 38, revenue: 5200 },
   { month: 'Mar', deposits: 48, withdrawals: 42, revenue: 4800 },
   { month: 'Apr', deposits: 78, withdrawals: 35, revenue: 7800 },
   { month: 'May', deposits: 65, withdrawals: 48, revenue: 6500 },
   { month: 'Jun', deposits: 90, withdrawals: 55, revenue: 9000 },
-  { month: 'Jul', deposits: 85, withdrawals: 60, revenue: 8500 },
-  { month: 'Aug', deposits: 110, withdrawals: 65, revenue: 11000 },
-  { month: 'Sep', deposits: 95, withdrawals: 70, revenue: 9500 },
-  { month: 'Oct', deposits: 120, withdrawals: 75, revenue: 12000 },
-  { month: 'Nov', deposits: 130, withdrawals: 80, revenue: 13000 },
-  { month: 'Dec', deposits: 150, withdrawals: 85, revenue: 15000 }
 ];
 
-const currencyDistribution = [
-  { name: 'TRX', value: 45, color: '#FF6B35' },
-  { name: 'BNB', value: 30, color: '#3B82F6' },
-  { name: 'BTC', value: 15, color: '#F59E0B' },
-  { name: 'ETH', value: 10, color: '#8B5CF6' }
-];
-
-const recentTransactions = [
-  { 
-    id: 'TX001', 
-    user: 'John Doe', 
-    type: 'Deposit', 
-    currency: 'TRX', 
-    amount: 500, 
-    status: 'Completed', 
-    date: '2023-05-15', 
-    fee: 5,
-    avatar: '/images/avatar1.png'
-  },
-  { 
-    id: 'TX002', 
-    user: 'Sarah Wilson', 
-    type: 'Withdrawal', 
-    currency: 'BNB', 
-    amount: 250, 
-    status: 'Processing', 
-    date: '2023-05-14', 
-    fee: 2.5,
-    avatar: '/images/avatar2.png'
-  },
-  { 
-    id: 'TX003', 
-    user: 'Mike Johnson', 
-    type: 'Deposit', 
-    currency: 'TRX', 
-    amount: 1200, 
-    status: 'Completed', 
-    date: '2023-05-13', 
-    fee: 12,
-    avatar: '/images/avatar3.png'
-  },
-  { 
-    id: 'TX004', 
-    user: 'Emma Davis', 
-    type: 'Deposit', 
-    currency: 'BNB', 
-    amount: 350, 
-    status: 'Completed', 
-    date: '2023-05-12', 
-    fee: 3.5,
-    avatar: '/images/avatar4.png'
-  },
-  { 
-    id: 'TX005', 
-    user: 'Alex Brown', 
-    type: 'Withdrawal', 
-    currency: 'TRX', 
-    amount: 800, 
-    status: 'Completed', 
-    date: '2023-05-11', 
-    fee: 8,
-    avatar: '/images/avatar1.png'
-  }
-];
-
-const topUsers = [
-  { 
-    name: 'John Doe', 
-    totalDeposits: 12500, 
-    totalWithdrawals: 8500, 
-    tier: 'Premium', 
-    joinDate: '2023-01-15',
-    avatar: '/images/avatar1.png'
-  },
-  { 
-    name: 'Sarah Wilson', 
-    totalDeposits: 8900, 
-    totalWithdrawals: 6200, 
-    tier: 'Standard', 
-    joinDate: '2023-02-20',
-    avatar: '/images/avatar2.png'
-  },
-  { 
-    name: 'Mike Johnson', 
-    totalDeposits: 15600, 
-    totalWithdrawals: 11000, 
-    tier: 'Premium', 
-    joinDate: '2023-03-10',
-    avatar: '/images/avatar3.png'
-  },
-  { 
-    name: 'Emma Davis', 
-    totalDeposits: 7200, 
-    totalWithdrawals: 4800, 
-    tier: 'Standard', 
-    joinDate: '2023-04-05',
-    avatar: '/images/avatar4.png'
-  },
-  { 
-    name: 'Alex Brown', 
-    totalDeposits: 18900, 
-    totalWithdrawals: 12500, 
-    tier: 'Premium', 
-    joinDate: '2023-05-12',
-    avatar: '/images/avatar1.png'
-  }
-];
-
-const platformStats = {
-  totalExpenses: 125430,
-  totalRevenue: 245000,
-  activeUsers: 12845,
-  successRate: 98.7
-};
-
-const statsData = [
-  {
-    title: 'Total Volume',
-    value: '$2.45M',
-    change: 12.5,
-    icon: DollarSign,
-    trend: 'up',
-    description: 'Total transaction volume'
-  },
-  {
-    title: 'Active Users',
-    value: '12,845',
-    change: 8.3,
-    icon: Users,
-    trend: 'up',
-    description: 'Currently active users'
-  },
-  {
-    title: 'Total Transactions',
-    value: '56,278',
-    change: 5.2,
-    icon: CreditCard,
-    trend: 'up',
-    description: 'All-time transactions'
-  },
-  {
-    title: 'Success Rate',
-    value: '98.7%',
-    change: 0.3,
-    icon: Award,
-    trend: 'up',
-    description: 'Transaction success rate'
-  }
+const mockCurrencyDistribution = [
+  { name: 'USDT', value: 60, color: '#26a17b' },
+  { name: 'BTC', value: 20, color: '#f7931a' },
+  { name: 'ETH', value: 15, color: '#627eea' },
+  { name: 'Others', value: 5, color: '#8b5cf6' }
 ];
 
 // Custom tooltip components
@@ -247,28 +102,104 @@ const CustomPieTooltip = ({ active, payload }: any) => {
 
 export default function AdminDashboard() {
   const [dateRange, setDateRange] = useState('30d');
+  const [dashboardStats, setDashboardStats] = useState<AdminDashboardStats | null>(null);
+  const [recentTransactions, setRecentTransactions] = useState<AdminTransaction[]>([]);
+  const [topUsers, setTopUsers] = useState<AdminUser[]>([]);
+  const [revenueAnalytics, setRevenueAnalytics] = useState<RevenueAnalytics | null>(null);
+  const [userGrowthAnalytics, setUserGrowthAnalytics] = useState<UserGrowthAnalytics | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    loadDashboardData();
+  }, [dateRange]);
+
+  const loadDashboardData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Load dashboard stats
+      const stats = await adminService.getDashboardStats();
+      setDashboardStats(stats);
+
+      // Load recent transactions
+      const transactions = await adminService.getTransactions({ page: 1, page_size: 5 });
+      setRecentTransactions(transactions.transactions);
+
+      // Load top users
+      const users = await adminService.getUsers({ page: 1, page_size: 5 });
+      setTopUsers(users.users);
+
+      // Load analytics
+      const revenue = await adminService.getRevenueAnalytics(dateRange);
+      setRevenueAnalytics(revenue);
+
+      const userGrowth = await adminService.getUserGrowthAnalytics(dateRange);
+      setUserGrowthAnalytics(userGrowth);
+
+    } catch (err: any) {
+      setError(err.message);
+      console.error('Failed to load dashboard data:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'Completed': return 'bg-green-100 text-green-800';
-      case 'Processing': return 'bg-yellow-100 text-yellow-800';
-      case 'Failed': return 'bg-red-100 text-red-800';
+    switch (status.toLowerCase()) {
+      case 'completed': return 'bg-green-100 text-green-800';
+      case 'processing': return 'bg-yellow-100 text-yellow-800';
+      case 'pending': return 'bg-blue-100 text-blue-800';
+      case 'failed': return 'bg-red-100 text-red-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
 
-  const getTierColor = (tier: string) => {
-    return tier === 'Premium' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800';
+  const getInitials = (email: string) => {
+    return email
+      .split('@')[0]
+      .slice(0, 2)
+      .toUpperCase();
   };
 
-  const getInitials = (name: string) => {
-    return name
-      .split(' ')
-      .map(part => part[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2,
+    }).format(amount);
   };
+
+  const formatNumber = (num: number) => {
+    return new Intl.NumberFormat('en-US').format(num);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <Activity className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
+          <p className="text-gray-600">Loading dashboard data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <AlertCircle className="h-8 w-8 mx-auto mb-4 text-red-500" />
+          <p className="text-red-600 mb-4">Failed to load dashboard data</p>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <Button onClick={loadDashboardData} variant="outline">
+            Try Again
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 p-6 bg-gray-50 min-h-screen">
@@ -332,38 +263,57 @@ export default function AdminDashboard() {
 
       {/* Stats Overview */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {statsData.map((stat, index) => {
-          const Icon = stat.icon;
-          return (
-            <Card key={index} className="border-0 shadow-lg rounded-xl overflow-hidden">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-                <CardTitle className="text-sm font-medium text-gray-600">{stat.title}</CardTitle>
-                <div className={`p-2 rounded-full ${
-                  stat.trend === 'up' ? 'bg-green-100' : 'bg-red-100'
-                }`}>
-                  <Icon className={`h-4 w-4 ${
-                    stat.trend === 'up' ? 'text-green-600' : 'text-red-600'
-                  }`} />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
-                <div className="flex items-center text-xs text-gray-500 mt-1">
-                  {stat.trend === 'up' ? (
-                    <TrendingUp className="h-3 w-3 text-green-600 mr-1" />
-                  ) : (
-                    <TrendingDown className="h-3 w-3 text-red-600 mr-1" />
-                  )}
-                  <span className={stat.trend === 'up' ? 'text-green-600 font-medium' : 'text-red-600 font-medium'}>
-                    {stat.change}%
-                  </span>
-                  <span className="ml-1">from last month</span>
-                </div>
-                <p className="text-xs text-gray-400 mt-2">{stat.description}</p>
-              </CardContent>
-            </Card>
-          );
-        })}
+        <Card className="border-0 shadow-lg rounded-xl overflow-hidden">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+            <CardTitle className="text-sm font-medium text-gray-600">Total Users</CardTitle>
+            <div className="p-2 rounded-full bg-blue-100">
+              <Users className="h-4 w-4 text-blue-600" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-gray-900">{formatNumber(dashboardStats?.total_users || 0)}</div>
+            <p className="text-xs text-gray-400 mt-2">Registered users</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-0 shadow-lg rounded-xl overflow-hidden">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+            <CardTitle className="text-sm font-medium text-gray-600">Total Balance</CardTitle>
+            <div className="p-2 rounded-full bg-green-100">
+              <DollarSign className="h-4 w-4 text-green-600" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-gray-900">{formatCurrency(dashboardStats?.total_balance || 0)}</div>
+            <p className="text-xs text-gray-400 mt-2">Platform balance</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-0 shadow-lg rounded-xl overflow-hidden">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+            <CardTitle className="text-sm font-medium text-gray-600">Today's Transactions</CardTitle>
+            <div className="p-2 rounded-full bg-purple-100">
+              <CreditCard className="h-4 w-4 text-purple-600" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-gray-900">{formatNumber(dashboardStats?.today_transactions || 0)}</div>
+            <p className="text-xs text-gray-400 mt-2">Transactions today</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-0 shadow-lg rounded-xl overflow-hidden">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+            <CardTitle className="text-sm font-medium text-gray-600">Platform Revenue</CardTitle>
+            <div className="p-2 rounded-full bg-orange-100">
+              <TrendingUp className="h-4 w-4 text-orange-600" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-gray-900">{formatCurrency(dashboardStats?.platform_revenue || 0)}</div>
+            <p className="text-xs text-gray-400 mt-2">Total revenue</p>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Platform Financials */}
@@ -379,26 +329,24 @@ export default function AdminDashboard() {
             <div className="grid gap-4">
               <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg border border-gray-100">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Total Revenue</p>
-                  <p className="text-2xl font-bold text-green-600">${platformStats.totalRevenue.toLocaleString()}</p>
+                  <p className="text-sm font-medium text-gray-600">Platform Revenue</p>
+                  <p className="text-2xl font-bold text-green-600">{formatCurrency(dashboardStats?.platform_revenue || 0)}</p>
                 </div>
                 <TrendingUp className="h-6 w-6 text-green-600" />
               </div>
               <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg border border-gray-100">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Total Expenses</p>
-                  <p className="text-2xl font-bold text-orange-600">${platformStats.totalExpenses.toLocaleString()}</p>
+                  <p className="text-sm font-medium text-gray-600">Daily Revenue</p>
+                  <p className="text-2xl font-bold text-blue-600">{formatCurrency(dashboardStats?.daily_revenue || 0)}</p>
                 </div>
-                <TrendingDown className="h-6 w-6 text-orange-600" />
+                <BarChart3 className="h-6 w-6 text-blue-600" />
               </div>
               <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg border border-gray-100">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Net Profit</p>
-                  <p className="text-2xl font-bold text-blue-600">
-                    ${(platformStats.totalRevenue - platformStats.totalExpenses).toLocaleString()}
-                  </p>
+                  <p className="text-sm font-medium text-gray-600">Monthly Revenue</p>
+                  <p className="text-2xl font-bold text-purple-600">{formatCurrency(dashboardStats?.monthly_revenue || 0)}</p>
                 </div>
-                <BarChart3 className="h-6 w-6 text-blue-600" />
+                <TrendingUp className="h-6 w-6 text-purple-600" />
               </div>
             </div>
           </CardContent>
@@ -414,7 +362,7 @@ export default function AdminDashboard() {
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
-                    data={currencyDistribution}
+                    data={mockCurrencyDistribution}
                     cx="50%"
                     cy="50%"
                     outerRadius={80}
@@ -422,7 +370,7 @@ export default function AdminDashboard() {
                     dataKey="value"
                     label={({ name, percent = 0 }) => `${name} ${(percent * 100).toFixed(0)}%`}
                   >
-                    {currencyDistribution.map((entry, index) => (
+                    {mockCurrencyDistribution.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
@@ -443,7 +391,7 @@ export default function AdminDashboard() {
         <CardContent className="pt-6">
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={transactionData}>
+              <BarChart data={mockTransactionData}>
                 <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
                 <XAxis dataKey="month" />
                 <YAxis />
@@ -484,42 +432,50 @@ export default function AdminDashboard() {
               <thead>
                 <tr className="border-b bg-gray-50">
                   <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">User</th>
-                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Tier</th>
+                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Status</th>
+                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Balance</th>
                   <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Total Deposits</th>
                   <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Total Withdrawals</th>
                   <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Join Date</th>
                 </tr>
               </thead>
               <tbody>
-                {topUsers.map((user, index) => (
+                {topUsers.map((user) => (
                   <tr 
-                    key={index} 
+                    key={user.id} 
                     className="border-b hover:bg-gray-50 transition-colors even:bg-gray-50/30"
                   >
                     <td className="py-4 px-6 font-medium">
                       <div className="flex items-center gap-3">
                         <Avatar className="h-9 w-9 border-2 border-white shadow-sm">
-                          <AvatarImage src={user.avatar} alt={user.name} />
                           <AvatarFallback className="bg-gradient-to-r from-blue-400 to-purple-500 text-white">
-                            {getInitials(user.name)}
+                            {getInitials(user.email)}
                           </AvatarFallback>
                         </Avatar>
-                        <span>{user.name}</span>
+                        <div>
+                          <p className="font-medium">{user.email}</p>
+                          <p className="text-xs text-gray-500">ID: {user.id}</p>
+                        </div>
                       </div>
                     </td>
                     <td className="py-4 px-6">
-                      <span className={`px-3 py-1.5 rounded-full text-xs font-medium ${getTierColor(user.tier)}`}>
-                        {user.tier}
+                      <span className={`px-3 py-1.5 rounded-full text-xs font-medium ${
+                        user.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                      }`}>
+                        {user.status}
                       </span>
                     </td>
+                    <td className="py-4 px-6 font-semibold text-blue-600">
+                      {formatCurrency(user.balance)}
+                    </td>
                     <td className="py-4 px-6 font-semibold text-green-600">
-                      ${user.totalDeposits.toLocaleString()}
+                      {formatCurrency(user.total_deposits)}
                     </td>
                     <td className="py-4 px-6 font-semibold text-orange-600">
-                      ${user.totalWithdrawals.toLocaleString()}
+                      {formatCurrency(user.total_withdrawals)}
                     </td>
                     <td className="py-4 px-6 text-sm text-gray-500">
-                      {new Date(user.joinDate).toLocaleDateString()}
+                      {new Date(user.created_at).toLocaleDateString()}
                     </td>
                   </tr>
                 ))}
@@ -555,30 +511,32 @@ export default function AdminDashboard() {
                 </tr>
               </thead>
               <tbody>
-                {recentTransactions.map((transaction, index) => (
+                {recentTransactions.map((transaction) => (
                   <tr 
-                    key={index} 
+                    key={transaction.id} 
                     className="border-b hover:bg-gray-50 transition-colors even:bg-gray-50/30"
                   >
-                    <td className="py-4 px-6 font-mono text-sm text-gray-600">{transaction.id}</td>
+                    <td className="py-4 px-6 font-mono text-sm text-gray-600">#{transaction.id}</td>
                     <td className="py-4 px-6 font-medium">
                       <div className="flex items-center gap-3">
                         <Avatar className="h-8 w-8 border-2 border-white shadow-sm">
-                          <AvatarImage src={transaction.avatar} alt={transaction.user} />
                           <AvatarFallback className="bg-gradient-to-r from-blue-400 to-purple-500 text-white">
-                            {getInitials(transaction.user)}
+                            {getInitials(transaction.user_email)}
                           </AvatarFallback>
                         </Avatar>
-                        <span>{transaction.user}</span>
+                        <div>
+                          <p className="font-medium">{transaction.user_email}</p>
+                          <p className="text-xs text-gray-500">ID: {transaction.user_id}</p>
+                        </div>
                       </div>
                     </td>
                     <td className="py-4 px-6">
                       <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium ${
-                        transaction.type === 'Deposit' 
+                        transaction.type === 'deposit' 
                           ? 'bg-green-100 text-green-800' 
                           : 'bg-red-100 text-red-800'
                       }`}>
-                        {transaction.type === 'Deposit' ? (
+                        {transaction.type === 'deposit' ? (
                           <ArrowUp className="h-3 w-3 mr-1" />
                         ) : (
                           <ArrowDown className="h-3 w-3 mr-1" />
@@ -586,14 +544,16 @@ export default function AdminDashboard() {
                         {transaction.type}
                       </span>
                     </td>
-                    <td className="py-4 px-6 font-medium">${transaction.amount}</td>
+                    <td className="py-4 px-6 font-medium">{formatCurrency(transaction.amount)}</td>
                     <td className="py-4 px-6 font-medium">{transaction.currency}</td>
                     <td className="py-4 px-6">
                       <span className={`px-3 py-1.5 rounded-full text-xs font-medium ${getStatusColor(transaction.status)}`}>
                         {transaction.status}
                       </span>
                     </td>
-                    <td className="py-4 px-6 text-sm text-gray-500">{transaction.date}</td>
+                    <td className="py-4 px-6 text-sm text-gray-500">
+                      {new Date(transaction.created_at).toLocaleDateString()}
+                    </td>
                   </tr>
                 ))}
               </tbody>

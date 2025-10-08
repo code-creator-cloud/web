@@ -3,30 +3,22 @@ import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
+import type { AdminUser } from '../../lib/types/admin';
 
 interface AddUserFormProps {
-  onSubmit: (user: Omit<User, 'id'>) => void;
+  onSubmit: (user: Omit<AdminUser, 'id'>) => void;
   onCancel: () => void;
-}
-
-interface User {
-  name: string;
-  email: string;
-  status: 'Active' | 'Inactive' | 'Suspended';
-  tier: 'Premium' | 'Standard';
-  balance: number;
-  joinDate: string;
-  avatar?: string;
 }
 
 export default function AddUserForm({ onSubmit, onCancel }: AddUserFormProps) {
   const [formData, setFormData] = useState({
-    name: '',
     email: '',
-    status: 'Active' as User['status'],
-    tier: 'Standard' as User['tier'],
+    status: 'active' as AdminUser['status'],
     balance: 0,
-    joinDate: new Date().toISOString().split('T')[0]
+    created_at: new Date().toISOString(),
+    transaction_count: 0,
+    total_deposits: 0,
+    total_withdrawals: 0
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -40,56 +32,30 @@ export default function AddUserForm({ onSubmit, onCancel }: AddUserFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 py-4">
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="name">Full Name</Label>
-          <Input
-            id="name"
-            placeholder="Enter full name"
-            value={formData.name}
-            onChange={(e) => handleChange('name', e.target.value)}
-            required
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="email">Email Address</Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="Enter email address"
-            value={formData.email}
-            onChange={(e) => handleChange('email', e.target.value)}
-            required
-          />
-        </div>
+      <div className="space-y-2">
+        <Label htmlFor="email">Email Address</Label>
+        <Input
+          id="email"
+          type="email"
+          placeholder="Enter email address"
+          value={formData.email}
+          onChange={(e) => handleChange('email', e.target.value)}
+          required
+        />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="status">Status</Label>
-          <Select value={formData.status} onValueChange={(value) => handleChange('status', value as User['status'])}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Active">Active</SelectItem>
-              <SelectItem value="Inactive">Inactive</SelectItem>
-              <SelectItem value="Suspended">Suspended</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="tier">Tier</Label>
-          <Select value={formData.tier} onValueChange={(value) => handleChange('tier', value as User['tier'])}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select tier" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Standard">Standard</SelectItem>
-              <SelectItem value="Premium">Premium</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+      <div className="space-y-2">
+        <Label htmlFor="status">Status</Label>
+        <Select value={formData.status} onValueChange={(value) => handleChange('status', value as AdminUser['status'])}>
+          <SelectTrigger>
+            <SelectValue placeholder="Select status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="active">Active</SelectItem>
+            <SelectItem value="inactive">Inactive</SelectItem>
+            <SelectItem value="suspended">Suspended</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="space-y-2">
@@ -101,17 +67,6 @@ export default function AddUserForm({ onSubmit, onCancel }: AddUserFormProps) {
           value={formData.balance}
           onChange={(e) => handleChange('balance', Number(e.target.value))}
           min="0"
-          required
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="joinDate">Join Date</Label>
-        <Input
-          id="joinDate"
-          type="date"
-          value={formData.joinDate}
-          onChange={(e) => handleChange('joinDate', e.target.value)}
           required
         />
       </div>
