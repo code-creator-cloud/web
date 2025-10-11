@@ -59,7 +59,7 @@ const FAQSection = () => {
   }
 
   return (
-    <section className="py-24 px-6 bg-gray-100">
+    <section className="py-24 px-6 bg-gem">
       <div className="max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -69,12 +69,12 @@ const FAQSection = () => {
           className="text-center mb-16"
         >
           <div className="flex items-center justify-center mb-6">
-            <HelpCircle className="w-10 h-10 text-blue-600 mr-4" />
-            <h2 className="text-5xl font-extrabold text-gray-900 tracking-tight">
+            <HelpCircle className="w-10 h-10 text-gold mr-4" />
+            <h2 className="text-5xl font-extrabold text-gold tracking-tight">
               Frequently Asked Questions
             </h2>
           </div>
-          <p className="text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
             Explore answers to the most common questions about our services, options, and more.
           </p>
         </motion.div>
@@ -87,17 +87,17 @@ const FAQSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.15, ease: "easeOut" }}
               viewport={{ once: true }}
-              className="border border-gray-200 rounded-2xl shadow-sm bg-white hover:shadow-md transition-shadow duration-300"
+              className="border-none rounded-2xl shadow-sm bg-gem hover:shadow-md transition-shadow duration-300"
             >
               <button
                 onClick={() => toggleFAQ(index)}
-                className="w-full px-8 py-5 text-left flex items-center justify-between bg-white hover:bg-blue-50 transition-colors duration-200 rounded-t-2xl"
+                className="w-full px-8 py-5 text-left flex items-center justify-between bg-gold hover:bg-gold-50 transition-colors duration-200 rounded-t-2xl"
               >
-                <span className="text-xl font-semibold text-gray-900">
+                <span className="text-xl font-semibold text-bin">
                   {`${index + 1}. ${faq.question}`}
                 </span>
                 <ChevronDown
-                  className={`w-6 h-6 text-blue-600 transition-transform duration-300 ${
+                  className={`w-6 h-6 text-bin transition-transform duration-300 ${
                     expandedIndex === index ? "rotate-180" : ""
                   }`}
                 />
@@ -109,13 +109,13 @@ const FAQSection = () => {
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.4, ease: "easeInOut" }}
+                    transition={{ duration: 0.5, ease: "easeInOut" }}
                     className="overflow-hidden"
                   >
-                    <div className="px-8 py-6 bg-white rounded-b-2xl">
+                    <div className="px-8 py-6 bg-gold rounded-b-2xl">
                       {faq.answer.map((ans, ansIndex) => (
-                        <p key={ansIndex} className="text-gray-600 leading-relaxed mb-3 flex items-start">
-                          <span className="font-medium text-blue-600 mr-2">{String.fromCharCode(97 + ansIndex)}.</span>
+                        <p key={ansIndex} className="text-bin leading-relaxed mb-3 flex items-start">
+                          <span className="font-medium text-gem mr-2">{String.fromCharCode(97 + ansIndex)}.</span>
                           {ans}
                         </p>
                       ))}

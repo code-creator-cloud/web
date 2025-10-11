@@ -16,7 +16,7 @@ const FinancialPotential = () => {
     {
       icon: DollarSign,
       title: "NFP Trades",
-      description: "Get to know about Non-Farm Payrolls (NFP) market and its movements monthly, concerning the US economy and Dollar strength",
+      description: "Get to know about Non-Farm Payrolls (NFP) market and its movements monthly, concerning the US economy and Dollar strength with other updates on postponment",
       highlight: "10% Commission"
     },
     {
@@ -34,7 +34,7 @@ const FinancialPotential = () => {
   ]
 
   return (
-    <section className="py-20 px-4 bg-gray-50">
+    <section className="py-20 px-4 bg-lighter">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -43,10 +43,10 @@ const FinancialPotential = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-4xl md:text-5xl font-bold text-gold mb-6">
             Unlock your full financial potential
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-white/50 max-w-3xl mx-auto">
             Do more with your money at BLACK GEM with our most popular investment strategy
           </p>
         </motion.div>
@@ -59,23 +59,24 @@ const FinancialPotential = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="bg-white rounded-lg p-8 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300 text-center"
+              className="bg-gem rounded-lg p-8 shadow-sm border-no hover:shadow-md transition-all duration-300 text-center"
             >
+              {/*DO NOT FORGET THE COLOR OF EACH GRID */}
               <div className="mb-6">
-                <account.icon className="w-16 h-16 text-primary mx-auto mb-4" />
+                <account.icon className="w-16 h-16 text-gold mx-auto mb-4" />
               </div>
               
-              <h3 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h3 className="text-2xl font-semibold text-gold mb-4">
                 {account.title}
               </h3>
               
-              <p className="text-gray-700 mb-6 leading-relaxed">
+              <p className="text-gray-500 mb-6 leading-relaxed">
                 {account.description}
               </p>
 
               {account.highlight && (
                 <div className="mb-4">
-                  <p className="font-semibold text-gray-900 text-lg mb-2">
+                  <p className="font-semibold text-white/50 text-lg mb-2">
                     {account.highlight}
                   </p>
                   {/* {account.subtext && (
@@ -94,13 +95,13 @@ const FinancialPotential = () => {
               
               <div className="flex flex-col sm:flex-row gap-3">
                 <Button 
-                  className="flex-1 bg-primary hover:bg-primary/90 text-white font-semibold"
+                  className="flex-1 bg-gold hover:bg-primary/90 text-lighter font-semibold"
                 >
                   Choose Option
                 </Button>
                 <Button 
                   variant="outline" 
-                  className="flex-1 border-primary text-primary hover:bg-primary/5"
+                  className="flex-1 border-none bg-bin text-white hover:bg-white hover:text-bin transition-colors duration-300"
                 >
                   Learn more
                 </Button>

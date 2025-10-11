@@ -44,19 +44,19 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#241151]/5 to-[#FF6B35]/10">
+    <div className="min-h-screen bg-lighter">
       <Navbar />
       
       <div className="pt-16 min-h-screen flex items-center justify-center p-4">
         <Link 
           to="/" 
-          className="fixed top-24 left-6 z-50 bg-white rounded-full p-3 shadow-lg flex items-center justify-center hover:bg-gray-100 transition-all duration-200 border border-border"
+          className="fixed top-24 left-6 z-50 bg-gold rounded-full p-3 shadow-lg flex items-center justify-center hover:bg-hover transition-all duration-200 "
           aria-label="Home"
         >
-          <Home className="h-6 w-6 text-primary" />
+          <Home className="h-6 w-6 text-bin" />
         </Link>
 
-        <div className="container max-w-6xl mx-auto flex flex-col lg:flex-row rounded-xl overflow-hidden shadow-xl bg-white border border-border">
+        <div className="container max-w-6xl mx-auto flex flex-col lg:flex-row rounded-xl overflow-hidden shadow-xl bg-gem">
           <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -64,17 +64,18 @@ const Login = () => {
               transition={{ duration: 0.5 }}
               className="w-full max-w-md"
             >
-              <div className="flex bg-white rounded-t-lg overflow-hidden shadow-sm border border-border mb-6">
+              {/* WE ARE COMING BACK TO THIS BELOW */}
+              <div className="flex bg-bin rounded-t-lg overflow-hidden shadow-sm mb-6">
                 <Link 
                   to="/login"
-                  className="flex-1 py-3 font-medium text-white bg-primary text-center flex items-center justify-center gap-2"
+                  className="flex-1 py-3 font-medium text-bin bg-gold text-center flex items-center justify-center gap-2"
                 >
                   <ArrowRight className="h-4 w-4" />
                   Login
                 </Link>
                 <Link 
                   to="/register"
-                  className="flex-1 py-3 font-medium text-primary bg-white text-center"
+                  className="flex-1 py-3 font-medium text-gold bg-gem text-center"
                 >
                   Register
                 </Link>
@@ -85,7 +86,7 @@ const Login = () => {
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3, duration: 0.5 }}
-                  className="text-3xl font-bold text-primary"
+                  className="text-3xl font-bold text-gold"
                 >
                   Welcome Back
                 </motion.h1>
@@ -93,7 +94,7 @@ const Login = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.4, duration: 0.5 }}
-                  className="text-muted-foreground mt-2"
+                  className="text-white/50 mt-2"
                 >
                   Sign in to your account
                 </motion.p>
@@ -106,19 +107,19 @@ const Login = () => {
                   transition={{ delay: 0.5, duration: 0.5 }}
                   className="space-y-2"
                 >
-                  <Label htmlFor="email" className="text-foreground">Email Address</Label>
+                  <Label htmlFor="email" className="text-gold/80">Email Address</Label>
                   <div className="relative">
                     <Input 
                       id="email" 
                       type="email" 
                       placeholder="Enter your email" 
-                      className="w-full pl-10 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
+                      className="w-full pl-10 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 bg-lighter border-none "
                       value={formData.email}
                       onChange={handleChange}
                       required
                     />
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Mail className="h-5 w-5 text-muted-foreground" />
+                      <Mail className="h-5 w-5 text-gold/50" />
                     </div>
                   </div>
                 </motion.div>
@@ -129,19 +130,19 @@ const Login = () => {
                   transition={{ delay: 0.6, duration: 0.5 }}
                   className="space-y-2"
                 >
-                  <Label htmlFor="password" className="text-foreground">Password</Label>
+                  <Label htmlFor="password" className="text-gold/80">Password</Label>
                   <div className="relative">
                     <Input 
                       id="password" 
                       type={showPassword ? "text" : "password"} 
                       placeholder="Enter your password" 
-                      className="w-full pl-10 pr-10 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
+                      className="w-full pl-10 pr-10 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 bg-lighter border-none"
                       value={formData.password}
                       onChange={handleChange}
                       required
                     />
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Lock className="h-5 w-5 text-muted-foreground" />
+                      <Lock className="h-5 w-5 text-gold/50" />
                     </div>
                     <button
                       type="button"
@@ -149,9 +150,9 @@ const Login = () => {
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (
-                        <EyeOff className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors" />
+                        <EyeOff className="h-5 w-5 text-gold/50 hover:text-gold transition-colors" />
                       ) : (
-                        <Eye className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors" />
+                        <Eye className="h-5 w-5 text-gold hover:text-gold transition-colors" />
                       )}
                     </button>
                   </div>
@@ -170,7 +171,7 @@ const Login = () => {
                       className="flex items-center space-x-2"
                     >
                       {rememberMe ? (
-                        <CheckSquare className="h-4 w-4 text-primary" />
+                        <CheckSquare className="h-4 w-4 text-gold" />
                       ) : (
                         <Square className="h-4 w-4 text-muted-foreground" />
                       )}
@@ -179,7 +180,7 @@ const Login = () => {
                       </Label>
                     </button>
                   </div>
-                  <Link to="/forgot-password" className="text-sm text-primary hover:underline flex items-center">
+                  <Link to="/forgot-password" className="text-sm text-gold hover:underline flex items-center">
                     <AlertCircle className="h-4 w-4 mr-1" />
                     Forgot password?
                   </Link>
@@ -192,7 +193,7 @@ const Login = () => {
                 >
                   <Button 
                     type="submit" 
-                    className="w-full bg-primary hover:bg-primary/90 py-3 text-primary-foreground font-medium transition-all duration-300 flex items-center justify-center gap-2"
+                    className="w-full bg-gold hover:bg-gold/90 py-3 text-bin font-medium transition-all duration-300 flex items-center justify-center gap-2"
                     disabled={isLoading}
                   >
                     {isLoading ? (
@@ -218,7 +219,7 @@ const Login = () => {
               >
                 <p className="text-muted-foreground">
                   Don't have an account?{" "}
-                  <Link to="/register" className="text-primary hover:underline font-medium">
+                  <Link to="/register" className="text-gold hover:underline font-medium">
                     Sign up
                   </Link>
                 </p>

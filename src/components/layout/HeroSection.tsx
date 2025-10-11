@@ -6,17 +6,18 @@ import { CandlestickChart } from "lucide-react"
 
 const HeroSection = () => {
   return (
+    
     <section className="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
       {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
         style={{
-          backgroundImage: "url('/images/hero_image.jpg')",
+          backgroundImage: "url('/images/replace.jpg')",
         }}
       />
       
       {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/80 to-transparent z-1"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-gem via-bin/90  z-1"></div> {/* DO NOT FORGET TO CHANGE THE HERO IMAGE */}
       
       {/* Diagonal Separator */}
       <div className="absolute right-0 top-0 bottom-0 w-1/2 z-2">
@@ -41,7 +42,7 @@ const HeroSection = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
             >
-              Introducing the new <span className="text-accent">BLACK GEM trading investment</span> firm
+              Introducing the new <span className="text-gold">BLACK GEM </span> trading investment firm
             </motion.h1>
             
             <motion.p 
@@ -55,7 +56,7 @@ const HeroSection = () => {
             
             {/* Decorative Diagonal Line */}
             <motion.div 
-              className="w-32 h-1 bg-gradient-to-r from-accent to-transparent mb-10 transform -skew-x-45"
+              className="w-32 h-1 bg-gradient-to-r from-gold to-transparent mb-10 transform -skew-x-45"
               initial={{ width: 0 }}
               animate={{ width: "8rem" }}
               transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
@@ -68,7 +69,7 @@ const HeroSection = () => {
             >
               <Button 
                 size="lg" 
-                className="bg-accent text-white hover:bg-accent/90 text-lg px-8 py-6 font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                className="bg-gold text-bin hover:bg-gold text-lg px-8 py-6 font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
                 asChild
               >
                 <Link to="/register">Get started</Link>
@@ -85,10 +86,10 @@ const HeroSection = () => {
           >
             <div className="relative">
               {/* Abstract Graphic */}
-              <div className="w-80 h-80 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 shadow-2xl flex items-center justify-center p-8">
+              <div className="w-80 h-80 bg-gem/10 backdrop-blur-sm rounded-2xl border border-gold shadow-2xl flex items-center justify-center p-8">
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-accent rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <CandlestickChart className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"/>
+                  <div className="w-16 h-16 bg-gold rounded-full mx-auto mb-4 flex items-center justify-center">
+                    <CandlestickChart className="w-8 h-8 text-gem/70" fill="none" stroke="currentColor" viewBox="0 0 24 24"/>
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </div>
                   <h3 className="text-white text-xl font-semibold mb-2">WELCOME</h3>
@@ -98,12 +99,12 @@ const HeroSection = () => {
               
               {/* Floating elements */}
               <motion.div 
-                className="absolute -top-6 -left-6 w-14 h-14 bg-accent/30 rounded-full backdrop-blur-sm border border-white/20"
+                className="absolute -top-6 -left-6 w-14 h-14 bg-gold/50 rounded-full backdrop-blur-sm border border-gold/20"
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               />
               <motion.div 
-                className="absolute -bottom-8 -right-8 w-20 h-20 bg-primary/40 rounded-full backdrop-blur-sm border border-white/20"
+                className="absolute -bottom-8 -right-8 w-20 h-20 bg-gem/20 rounded-full backdrop-blur-sm border border-bin/20"
                 animate={{ y: [0, 10, 0] }}
                 transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
               />

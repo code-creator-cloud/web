@@ -5,7 +5,7 @@ import { ArrowRight, Shield, Clock, Users, Star, ChevronRight } from "lucide-rea
 
 const CTASection = () => {
   return (
-    <section className="py-16 px-4 bg-gradient-to-br from-[#241151] to-[#1a0c38] relative overflow-hidden">
+    <section className="py-16 px-4 bg-gem overflow-hidden">
       {/* Background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-20 -left-20 w-64 h-64 bg-[#FF6B35]/10 rounded-full blur-3xl"></div>
@@ -19,7 +19,7 @@ const CTASection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-center text-white"
+          className="text-center text-white "
         >
           {/* Badge */}
           <motion.div 
@@ -27,14 +27,14 @@ const CTASection = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             viewport={{ once: true }}
-            className="inline-flex items-center bg-[#FF6B35]/20 backdrop-blur-sm rounded-full px-5 py-2 mb-8 border border-[#FF6B35]/30"
+            className="inline-flex items-center bg-gold/20 backdrop-blur-sm rounded-full px-5 py-2 mb-8 border border-none"
           >
-            <Star className="w-4 h-4 text-[#FF6B35] mr-2 fill-current" />
+            <Star className="w-4 h-4 text-gold mr-2 fill-current" />
             <span className="text-sm font-medium">Rated 4.8/5 by 100+ investors</span>
           </motion.div>
           
           <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-            Ready to Start Your <span className="bg-gradient-to-r from-[#FF6B35] to-[#FF8B35] bg-clip-text text-transparent">Financial Journey</span>?
+            Ready to Start Your <span className="text-gold">Financial Journey </span>?
           </h2>
           
           <p className="text-xl text-white/90 mb-12 max-w-3xl mx-auto leading-relaxed">
@@ -71,8 +71,8 @@ const CTASection = () => {
                 viewport={{ once: true }}
                 className="group text-center"
               >
-                <div className={`w-20 h-20 bg-gradient-to-br ${item.color} rounded-2xl flex items-center justify-center mx-auto mb-6 transition-all duration-300 group-hover:scale-110 border border-[#FF6B35]/30 shadow-lg`}>
-                  <item.icon className="w-8 h-8 text-[#FF6B35]" />
+                <div className={`w-20 h-20 bg-gold  ${item.color} rounded-2xl flex items-center justify-center mx-auto mb-6 transition-all duration-300 group-hover:scale-110 border-none shadow-lg`}>
+                  <item.icon className="w-8 h-8 text-gem" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-white">{item.title}</h3>
                 <p className="text-white/80 leading-relaxed">{item.description}</p>
@@ -83,8 +83,9 @@ const CTASection = () => {
           <div className="flex flex-col sm:flex-row gap-5 justify-center mb-10">
             <Button 
               size="lg" 
-              className="bg-gradient-to-r from-[#FF6B35] to-[#FF8B35] text-white hover:from-[#FF8B35] hover:to-[#FF6B35] px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-[#FF6B35]/25 transition-all duration-300 group"
+              className="bg-gold text-gem hover:bg-gold px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-hover/25 transition-all duration-300 group"
             >
+              
               Open an Account
               <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
@@ -92,25 +93,25 @@ const CTASection = () => {
             <Button 
               size="lg" 
               variant="outline" 
-              className="border-2 border-[#FF6B35]/50 bg-primary text-white hover:bg-[#FF6B35]/10 px-8 py-4 text-lg font-semibold rounded-full backdrop-blur-sm transition-all duration-300 group"
+              className="border-none bg-gold text-gem hover:bg-gold hover:text-gem px-8 py-4 text-lg font-semibold rounded-full backdrop-blur-sm shadow-lg hover:shadow-hover/25 transition-all duration-300 group"
             >
               Schedule a Consultation
               <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
           </div>
 
-          <div className="bg-[#241151]/50 backdrop-blur-sm rounded-2xl p-6 border border-[#FF6B35]/20 max-w-2xl mx-auto">
+          <div className="bg-gold/50 backdrop-blur-sm rounded-2xl p-6  border-none max-w-2xl mx-auto">
             <ul className="flex flex-col sm:flex-row justify-center gap-6 text-white/80 text-sm">
               <li className="flex items-center">
-                <div className="w-2 h-2 bg-[#FF6B35] rounded-full mr-3"></div>
+                <div className="w-2 h-2 bg-gold rounded-full mr-3"></div>
                 Maximize profits 
               </li>
               <li className="flex items-center">
-                <div className="w-2 h-2 bg-[#FF6B35] rounded-full mr-3"></div>
+                <div className="w-2 h-2 bg-gold rounded-full mr-3"></div>
                   10% commission
               </li>
               <li className="flex items-center">
-                <div className="w-2 h-2 bg-[#FF6B35] rounded-full mr-3"></div>
+                <div className="w-2 h-2 bg-gold rounded-full mr-3"></div>
                 Start with as little as $10
               </li>
             </ul>

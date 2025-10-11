@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, type JSX } from 'react';
 import { AuthContext } from './lib/contexts/AuthContext';
 import { AdminAuthProvider, AdminAuthContext } from './lib/contexts/AdminAuthContext';
 import DashboardLayout from './components/layout/DashboardLayout';

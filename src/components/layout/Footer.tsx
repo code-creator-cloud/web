@@ -6,7 +6,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="bg-gray-900 text-white py-16 px-4">
+    <footer className="bg-gem text-foot py-16 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Company Info */}
@@ -16,17 +16,17 @@ const Footer = () => {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h3 className="text-2xl font-bold text-accent mb-4">BLACK GEM</h3>
+            <h3 className="text-2xl font-bold text-gold mb-4">BLACK GEM</h3>
             <p className="text-gray-400 mb-4 leading-relaxed">
               Empowering investors with professional-grade trading results from us to achieve their financial goals.
             </p>
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 text-gold">
               {[Facebook, Twitter, Instagram, Linkedin].map((Icon, index) => (
                 <motion.button
                   key={index}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
-                  className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-accent transition-colors"
+                  className="w-10 h-10 bg-gem rounded-lg flex items-center justify-center hover:bg-gold hover:text-gem transition-colors"
                 >
                   <Icon className="w-5 h-5" />
                 </motion.button>
@@ -44,7 +44,7 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-4">Options</h4>
             <ul className="space-y-2 text-gray-400">
               {['FOMC Trades', 'CPI Trades', 'NFP Trades', 'PPI Trades'].map((item, index) => (
-                <li key={index} className="hover:text-accent transition-colors cursor-pointer">
+                <li key={index} className="hover:text-gold transition-colors cursor-pointer">
                   {item}
                 </li>
               ))}
@@ -61,7 +61,7 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-4">Resources</h4>
             <ul className="space-y-2 text-gray-400">
               {['Learning Center', 'Market Analysis', 'Research Tools', 'Live Meetings', 'Blog', 'Help Center'].map((item, index) => (
-                <li key={index} className="hover:text-accent transition-colors cursor-pointer">
+                <li key={index} className="hover:text-gold transition-colors cursor-pointer">
                   {item}
                 </li>
               ))}
@@ -78,15 +78,15 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-4">Contact Us</h4>
             <div className="space-y-3 text-gray-400">
               <div className="flex items-center">
-                <Phone className="w-5 h-5 mr-3 text-accent" />
+                <Phone className="w-5 h-5 mr-3 text-gold" />
                 <span>+237 679-205-413</span>
               </div>
               <div className="flex items-center">
-                <Mail className="w-5 h-5 mr-3 text-accent" />
+                <Mail className="w-5 h-5 mr-3 text-gold" />
                 <span>support@blackgem.com</span>
               </div>
               <div className="flex items-start">
-                <MapPin className="w-5 h-5 mr-3 text-accent mt-1" />
+                <MapPin className="w-5 h-5 mr-3 text-gold mt-1" />
                 <span>Checkpoint Street<br />Buea, Cameroon</span>
               </div>
             </div>
