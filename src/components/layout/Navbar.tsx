@@ -27,7 +27,7 @@ const Navbar = () => {
           <div className="flex items-center flex-shrink-0">
             <Link to="/" className="gap- flex items-center ">
               <img
-                src="/images/logo.png"
+                src="/images/logo.webp"
                 alt="Black Gem Logo"
                 className="h-12 w-20 object-contain transition-transform hover:scale-105"
                 

@@ -237,7 +237,7 @@ const Login = () => {
             <div 
               className="w-full h-full bg-cover bg-center min-h-[500px]"
               style={{
-                backgroundImage: "url('/images/login.jpg')",
+                backgroundImage: "url('/images/login.webp')",
               }}
             />
           </div>

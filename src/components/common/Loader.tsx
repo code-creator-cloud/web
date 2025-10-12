@@ -57,7 +57,7 @@ const Loader: React.FC<LoaderProps> = ({
           className="absolute inset-8 flex items-center justify-center"
         >
           <img
-            src="/images/logo.png"
+            src="/images/logo.webp"
             alt="Logo"
             className={`${currentSize.logo} object-contain`}
           />
