@@ -127,7 +127,7 @@ const Register = () => {
                       id="username" 
                       type="text" 
                       placeholder="Enter your username" 
-                      className="w-full pl-10 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 bg-lighter border-none"
+                      className="w-full pl-10 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 bg-lighter border-none text-white placeholder-white/50"
                       value={formData.username}
                       onChange={handleChange}
                       required
@@ -150,7 +150,7 @@ const Register = () => {
                       id="email" 
                       type="email" 
                       placeholder="Enter your email" 
-                      className="w-full pl-10 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 bg-lighter border-none"
+                      className="w-full pl-10 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 bg-lighter border-none text-white placeholder-white/50"
                       value={formData.email}
                       onChange={handleChange}
                       required
@@ -173,7 +173,7 @@ const Register = () => {
                       id="password" 
                       type={showPassword ? "text" : "password"} 
                       placeholder="Create a password" 
-                      className="w-full pl-10 pr-10 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 bg-lighter border-none"
+                      className="w-full pl-10 pr-10 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 bg-lighter border-none text-white placeholder-white/50"
                       value={formData.password}
                       onChange={handleChange}
                       required
@@ -207,7 +207,7 @@ const Register = () => {
                       id="confirmPassword" 
                       type={showConfirmPassword ? "text" : "password"} 
                       placeholder="Confirm your password" 
-                      className="w-full pl-10 pr-10 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 bg-lighter border-none"
+                      className="w-full pl-10 pr-10 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 bg-lighter border-none text-white placeholder-white/50"
                       value={formData.confirmPassword}
                       onChange={handleChange}
                       required

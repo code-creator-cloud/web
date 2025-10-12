@@ -113,7 +113,7 @@ const Login = () => {
                       id="email" 
                       type="email" 
                       placeholder="Enter your email" 
-                      className="w-full pl-10 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 bg-lighter border-none "
+                      className="w-full pl-10 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 bg-lighter border-none text-white placeholder-white/50"
                       value={formData.email}
                       onChange={handleChange}
                       required
@@ -136,7 +136,7 @@ const Login = () => {
                       id="password" 
                       type={showPassword ? "text" : "password"} 
                       placeholder="Enter your password" 
-                      className="w-full pl-10 pr-10 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 bg-lighter border-none"
+                      className="w-full pl-10 pr-10 focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 bg-lighter border-none text-white placeholder-white/50"
                       value={formData.password}
                       onChange={handleChange}
                       required
