@@ -37,7 +37,7 @@ export default function Dashboard() {
       try {
         console.log('Dashboard: Fetching data for user:', authContext.user.email);
         setIsLoading(true);
-        const userData = await userDashboardService.getUserDashboard();
+        await userDashboardService.getUserDashboard();
         const transactionData = await userDashboardService.getUserTransactions();
         console.log('Dashboard: Transactions fetched:', transactionData);
         setTransactions(transactionData.slice(0, 4)); // Limit to 4 for recent transactions

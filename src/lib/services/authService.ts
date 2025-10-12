@@ -1,5 +1,5 @@
 import { authApi, publicApi } from '../api';
-import type { LoginRequest, RegisterRequest, UserResponse, Token, UnifiedLoginResponse, AdminResponse } from '../types/auth';
+import type { LoginRequest, RegisterRequest, UserResponse, Token, UnifiedLoginResponse } from '../types/auth';
 import { setAccessToken } from '../api';
 
 export const authService = {
@@ -31,7 +31,7 @@ export const authService = {
           email: response.user_data.email,
           username: response.user_data.email, // Use email as username for admins
           balance: 0, // Admins don't have balance
-          wallet_address: null,
+          wallet_address: undefined,
           created_at: response.user_data.created_at,
           updated_at: response.user_data.updated_at
         } as UserResponse;

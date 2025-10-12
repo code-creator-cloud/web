@@ -7,7 +7,6 @@ import type {
   AdminUser,
   AdminUserList,
   AdminUserUpdate,
-  AdminTransaction,
   AdminTransactionList,
   AdminTransactionUpdate,
   AdminSystemHealth,
@@ -22,7 +21,6 @@ import type {
   BulkUserActionRequest,
   ExportUsersRequest,
   ExportUsersResponse,
-  ValidationError,
 } from '../types/admin';
 
 export const adminService = {

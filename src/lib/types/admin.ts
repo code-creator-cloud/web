@@ -1,4 +1,6 @@
 // src/lib/types/admin.ts
+import type { AdminResponse } from './auth';
+
 export interface AdminUser {
   id: number;
   email: string;
@@ -111,6 +113,7 @@ export interface AdminLoginResponse {
   access_token: string;
   token_type: string;
   role: string;
+  admin: AdminResponse;
 }
 
 export interface RevenueAnalytics {

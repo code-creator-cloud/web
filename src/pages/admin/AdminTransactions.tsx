@@ -1,11 +1,11 @@
 // src/pages/admin/AdminTransactions.tsx
 import { useState, useEffect } from 'react';
-import { Search, Filter, Download, MoreVertical, ArrowUp, ArrowDown, BarChart3, DollarSign, Calendar, Users, UserCheck, TrendingUp, AlertCircle, Activity } from 'lucide-react';
+import { Search, Filter, Download, MoreVertical, ArrowUp, ArrowDown, BarChart3, DollarSign, Calendar, Users, TrendingUp, AlertCircle, Activity } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Badge } from '../../components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '../../components/ui/avatar';
+import { Avatar, AvatarFallback } from '../../components/ui/avatar';
 import {
   BarChart,
   Bar,
@@ -20,7 +20,7 @@ import {
   Cell,
 } from 'recharts';
 import { adminService } from '../../lib/services/adminService';
-import type { AdminTransaction, AdminTransactionList, RevenueAnalytics, UserGrowthAnalytics } from '../../lib/types/admin';
+import type { AdminTransaction } from '../../lib/types/admin';
 
 // Mock data for charts (will be replaced with real data from analytics endpoints)
 const mockUserActivityData = [
@@ -77,8 +77,6 @@ export default function AdminTransactions() {
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
-  const [revenueAnalytics, setRevenueAnalytics] = useState<RevenueAnalytics | null>(null);
-  const [userGrowthAnalytics, setUserGrowthAnalytics] = useState<UserGrowthAnalytics | null>(null);
   const pageSize = 20;
 
   useEffect(() => {
@@ -102,11 +100,8 @@ export default function AdminTransactions() {
       setTotalCount(transactionsResponse.total_count);
 
       // Load analytics
-      const revenue = await adminService.getRevenueAnalytics(dateRange);
-      setRevenueAnalytics(revenue);
-
-      const userGrowth = await adminService.getUserGrowthAnalytics(dateRange);
-      setUserGrowthAnalytics(userGrowth);
+      await adminService.getRevenueAnalytics(dateRange);
+      await adminService.getUserGrowthAnalytics(dateRange);
 
     } catch (err: any) {
       setError(err.message);
