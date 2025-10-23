@@ -184,9 +184,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const userData = await authService.register({ email, username, password });
       console.log('Register successful, user data:', userData);
-      setUser(userData);
-      toast.success('Successfully registered!');
-      navigate('/dashboard', { replace: true });
+      
+      // Check if we have a valid user with ID (meaning we got a token and user data)
+      if (userData.id && userData.id > 0) {
+        setUser(userData);
+        toast.success('Successfully registered and logged in!');
+        navigate('/dashboard', { replace: true });
+      } else {
+        // Registration successful but no automatic login - redirect to login page
+        toast.success('Registration successful! Please log in to continue.');
+        navigate('/login', { replace: true });
+      }
     } catch (error: any) {
       console.error('Register error:', error);
       toast.error(error.message || 'Registration failed');

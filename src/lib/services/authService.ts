@@ -52,19 +52,65 @@ export const authService = {
       const registerResponse = await publicApi.post('/api/users/register', data, {
         withCredentials: true,
       });
-      const { access_token, token_type } = registerResponse.data as Token;
-      console.log('Register response:', { access_token, token_type });
-      if (token_type !== 'bearer') {
-        throw new Error('Invalid token type');
+      console.log('Register response:', registerResponse.data);
+      
+      // Handle different response formats from backend
+      let access_token: string | null = null;
+      let token_type: string | null = null;
+      
+      if (registerResponse.data.access_token && registerResponse.data.token_type) {
+        // Standard Token format
+        access_token = registerResponse.data.access_token;
+        token_type = registerResponse.data.token_type;
+      } else if (registerResponse.data.token && registerResponse.data.type) {
+        // Alternative format
+        access_token = registerResponse.data.token;
+        token_type = registerResponse.data.type;
+      } else if (registerResponse.data.accessToken && registerResponse.data.tokenType) {
+        // Camel case format
+        access_token = registerResponse.data.accessToken;
+        token_type = registerResponse.data.tokenType;
       }
-      setAccessToken(access_token);
-      const userResponse = await authApi.get('/api/users/me');
-      console.log('User data from /me:', userResponse.data);
-      return userResponse.data as UserResponse;
+      
+      // If we have a token, validate and set it
+      if (access_token && token_type) {
+        console.log('Extracted token info:', { access_token, token_type });
+        
+        if (token_type.toLowerCase() !== 'bearer') {
+          throw new Error('Invalid token type');
+        }
+        
+        setAccessToken(access_token);
+        const userResponse = await authApi.get('/api/users/me');
+        console.log('User data from /me:', userResponse.data);
+        return userResponse.data as UserResponse;
+      } else {
+        // No token provided - this is normal for registration
+        console.log('No token found in response, checking if user data is included');
+        
+        // Try to get user data directly from response
+        if (registerResponse.data.user || registerResponse.data.user_data) {
+          const userData = registerResponse.data.user || registerResponse.data.user_data;
+          console.log('User data from register response:', userData);
+          return userData as UserResponse;
+        }
+        
+        // If no user data in response, return a success message and let the user login
+        console.log('Registration successful, no user data returned - user should login');
+        return {
+          id: 0, // Temporary ID
+          email: data.email,
+          username: data.username,
+          balance: 0,
+          wallet_address: undefined,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        } as UserResponse;
+      }
     } catch (error: any) {
       console.error('Register error:', error);
       setAccessToken(null);
-      throw new Error(error.response?.data?.detail?.message || 'Registration failed');
+      throw new Error(error.response?.data?.detail?.message || error.message || 'Registration failed');
     }
   },
 
