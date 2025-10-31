@@ -20,17 +20,31 @@ const Footer = () => {
             <p className="text-gray-400 mb-4 leading-relaxed">
               Empowering investors with professional-grade trading results from us to achieve their financial goals.
             </p>
-            <div className="flex space-x-4 text-gold">
-              {[Facebook, Twitter, Instagram, Linkedin].map((Icon, index) => (
-                <motion.button
-                  key={index}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="w-10 h-10 bg-gem rounded-lg flex items-center justify-center hover:bg-gold hover:text-gem transition-colors"
-                >
-                  <Icon className="w-5 h-5" />
-                </motion.button>
-              ))}
+            <div className="space-y-3">
+              <h5 className="text-sm font-semibold text-gray-300 mb-3">Follow Us</h5>
+              <div className="flex flex-wrap gap-3">
+                {[
+                  { Icon: Facebook, label: 'Facebook', url: 'https://facebook.com/blackgem' },
+                  { Icon: Twitter, label: 'Twitter', url: 'https://twitter.com/blackgem' },
+                  { Icon: Instagram, label: 'Instagram', url: 'https://instagram.com/blackgem' },
+                  { Icon: Linkedin, label: 'LinkedIn', url: 'https://linkedin.com/company/blackgem' },
+                ].map((social, index) => (
+                  <motion.a
+                    key={index}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="flex items-center gap-2 px-3 py-2 bg-gray-800/50 rounded-lg hover:bg-gold hover:text-gem transition-colors group"
+                  >
+                    <social.Icon className="w-4 h-4 text-gold group-hover:text-gem transition-colors" />
+                    <span className="text-sm text-gray-400 group-hover:text-gem transition-colors">
+                      {social.label}
+                    </span>
+                  </motion.a>
+                ))}
+              </div>
             </div>
           </motion.div>
 
