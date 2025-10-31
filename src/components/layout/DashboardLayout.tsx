@@ -78,24 +78,25 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     }
   };
 
-  if (!authContext) {
-    console.error('DashboardLayout: AuthContext not available');
-    return <Navigate to="/login" replace />;
-  }
+  // COMMENTED OUT: Disable authentication checks for development
+  // if (!authContext) {
+  //   console.error('DashboardLayout: AuthContext not available');
+  //   return <Navigate to="/login" replace />;
+  // }
 
-  const { user, loading } = authContext;
+  const { user, loading } = authContext || { user: null, loading: false };
 
-  if (loading) {
-    console.log('DashboardLayout: Loading, rendering loading state');
-    return <Loader />; // Replace with your loading component
-  }
+  // if (loading) {
+  //   console.log('DashboardLayout: Loading, rendering loading state');
+  //   return <Loader />; // Replace with your loading component
+  // }
 
-  if (!user) {
-    console.log('DashboardLayout: No user, redirecting to /login');
-    return <Navigate to="/login" replace state={{ from: location.pathname }} />;
-  }
+  // if (!user) {
+  //   console.log('DashboardLayout: No user, redirecting to /login');
+  //   return <Navigate to="/login" replace state={{ from: location.pathname }} />;
+  // }
 
-  console.log('DashboardLayout: Rendering layout for user:', user.email);
+  // console.log('DashboardLayout: Rendering layout for user:', user?.email);
 
   const SidebarContent = () => (
     <div className="flex flex-col h-full bg-[var(--color-primary)] text-[var(--color-primary-foreground)]">
@@ -150,7 +151,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             <User size={20} />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate">{user.username || 'User'}</p>
+            <p className="text-sm font-medium truncate">{user?.username || 'User'}</p>
             <p className="text-xs text-gray-400 truncate">Premium Account</p>
           </div>
           <ChevronDown size={16} className="text-gray-400" />
@@ -214,7 +215,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
           
           <div className="flex items-center gap-4">
-            <div className="text-sm text-gray-700 font-medium hidden sm:block">{user.username || 'User'}</div>
+            <div className="text-sm text-gray-700 font-medium hidden sm:block">{user?.username || 'User'}</div>
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[var(--color-primary)] flex items-center justify-center text-white">
               <User size={16} className="sm:size-5" />
             </div>

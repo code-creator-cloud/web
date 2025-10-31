@@ -17,30 +17,32 @@ export default function Dashboard() {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!authContext) {
-        console.error('Dashboard: AuthContext not available');
-        navigate('/login', { replace: true });
-        return;
-      }
+      // COMMENTED OUT: Disable auth checks for development
+      // if (!authContext) {
+      //   console.error('Dashboard: AuthContext not available');
+      //   navigate('/login', { replace: true });
+      //   return;
+      // }
 
-      if (authContext.loading) {
-        console.log('Dashboard: AuthContext still loading, waiting');
-        return;
-      }
+      // if (authContext.loading) {
+      //   console.log('Dashboard: AuthContext still loading, waiting');
+      //   return;
+      // }
 
-      if (!authContext.user) {
-        console.log('Dashboard: No user, redirecting to /login');
-        navigate('/login', { replace: true });
-        return;
-      }
+      // if (!authContext.user) {
+      //   console.log('Dashboard: No user, redirecting to /login');
+      //   navigate('/login', { replace: true });
+      //   return;
+      // }
 
       try {
-        console.log('Dashboard: Fetching data for user:', authContext.user.email);
+        // console.log('Dashboard: Fetching data for user:', authContext.user.email);
         setIsLoading(true);
-        await userDashboardService.getUserDashboard();
-        const transactionData = await userDashboardService.getUserTransactions();
-        console.log('Dashboard: Transactions fetched:', transactionData);
-        setTransactions(transactionData.slice(0, 4)); // Limit to 4 for recent transactions
+        // COMMENTED OUT: Disable API calls when backend not connected
+        // await userDashboardService.getUserDashboard();
+        // const transactionData = await userDashboardService.getUserTransactions();
+        // console.log('Dashboard: Transactions fetched:', transactionData);
+        // setTransactions(transactionData.slice(0, 4)); // Limit to 4 for recent transactions
       } catch (error: any) {
         console.error('Dashboard: Failed to fetch dashboard data:', error);
         toast.error(error.message || 'Failed to fetch dashboard data');
@@ -55,7 +57,7 @@ export default function Dashboard() {
   const stats = [
     {
       title: 'Total Balance',
-      value: authContext?.user?.balance ? `$${authContext.user.balance.toFixed(2)}` : '$0.00',
+      value: authContext?.user?.balance ? `$${authContext?.user?.balance?.toFixed(2)}` : '$0.00',
       icon: DollarSign,
       description: '+$345 from last month',
       trend: 'up',
@@ -87,27 +89,33 @@ export default function Dashboard() {
   ];
 
   const accounts = [
-    { name: 'Main Wallet', balance: authContext?.user?.balance ? `$${authContext.user.balance.toFixed(2)}` : '$0.00', type: 'wallet', color: 'bg-blue-500' },
+    { name: 'Main Wallet', balance: authContext?.user?.balance ? `$${authContext?.user?.balance?.toFixed(2)}` : '$0.00', type: 'wallet', color: 'bg-blue-500' },
     { name: 'Savings Account', balance: '$3,200.50', type: 'savings', color: 'bg-green-500' }, // Replace with real data
     { name: 'Investment Portfolio', balance: '$5,200.00', type: 'investment', color: 'bg-purple-500' }, // Replace with real data
   ];
 
-  if (authContext?.loading || isLoading) {
+  // COMMENTED OUT: Disable auth checks for development
+  // if (authContext?.loading || isLoading) {
+  //   console.log('Dashboard: Rendering loading state');
+  //   return <Loader />;
+  // }
+
+  // if (!authContext?.user) {
+  //   console.log('Dashboard: No user in render, redirect handled in useEffect');
+  //   return null; // Redirect handled in useEffect
+  // }
+
+  // console.log('Dashboard: Rendering for user:', authContext?.user?.email);
+
+  if (isLoading) {
     console.log('Dashboard: Rendering loading state');
     return <Loader />;
   }
-
-  if (!authContext?.user) {
-    console.log('Dashboard: No user in render, redirect handled in useEffect');
-    return null; // Redirect handled in useEffect
-  }
-
-  console.log('Dashboard: Rendering for user:', authContext.user.email);
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold text-[var(--color-primary)]">Dashboard</h1>
-        <p className="text-gray-600">Welcome back, {authContext.user.username}!</p>
+        <p className="text-gray-600">Welcome back, {authContext?.user?.username || 'User'}!</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

@@ -58,82 +58,86 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    const initializeAuth = async () => {
-      if (isInitializing.current) {
-        console.log('Already initializing, skipping');
-        return;
-      }
-      isInitializing.current = true;
+    // COMMENTED OUT: Disable auth initialization for development
+    // const initializeAuth = async () => {
+    //   if (isInitializing.current) {
+    //     console.log('Already initializing, skipping');
+    //     return;
+    //   }
+    //   isInitializing.current = true;
 
-      const publicRoutes = ['/login', '/register', '/', '/forgot-password'];
-      if (publicRoutes.includes(location.pathname)) {
-        console.log('On public route, skipping auth:', location.pathname);
-        setLoading(false);
-        isInitializing.current = false;
-        return;
-      }
+    //   const publicRoutes = ['/login', '/register', '/', '/forgot-password'];
+    //   if (publicRoutes.includes(location.pathname)) {
+    //     console.log('On public route, skipping auth:', location.pathname);
+    //     setLoading(false);
+    //     isInitializing.current = false;
+    //     return;
+    //   }
 
-      try {
-        console.log('Attempting to initialize auth for:', location.pathname);
-        const token = getAccessToken();
-        if (token && isTokenValid(token)) {
-          console.log('Using existing valid access token');
-          const userData = await authService.getCurrentUser();
-          console.log('User data fetched:', userData);
-          setUser(userData);
-        } else {
-          console.log('No valid access token, attempting refresh');
-          const tokens = await authService.refreshToken();
-          console.log('Refresh tokens:', tokens);
-          setAccessToken(tokens.access_token);
-          const decoded = parseJwt(tokens.access_token);
-          console.log('Decoded JWT:', decoded);
-          if (decoded && decoded.sub) {
-            const userData = await authService.getCurrentUser();
-            console.log('User data fetched after refresh:', userData);
-            setUser(userData);
-            // Navigate to dashboard if not on a protected route
-            const protectedRoutes = [
-              '/dashboard',
-              '/transactions',
-              '/accounts',
-              '/settings',
-              '/admin',
-              '/admin/users',
-              '/admin/transactions',
-              '/admin/analytics',
-              '/admin/settings',
-            ];
-            if (!protectedRoutes.includes(location.pathname)) {
-              console.log('Navigating to dashboard after successful refresh');
-              navigate('/dashboard', { replace: true });
-            }
-          } else {
-            throw new Error('Invalid token');
-          }
-        }
-      } catch (error: any) {
-        console.error('Initialize auth error:', {
-          message: error.message,
-          stack: error.stack,
-          response: error.response?.data,
-          status: error.response?.status,
-        });
-        setUser(null);
-        setAccessToken(null);
-        if (!publicRoutes.includes(location.pathname)) {
-          console.log('Redirecting to login due to error');
-          toast.error(error.message || 'Please log in to continue');
-          navigate('/login', { replace: true });
-        }
-      } finally {
-        setLoading(false);
-        isInitializing.current = false;
-        console.log('Initialization complete, loading:', false, 'user:', user);
-      }
-    };
+    //   try {
+    //     console.log('Attempting to initialize auth for:', location.pathname);
+    //     const token = getAccessToken();
+    //     if (token && isTokenValid(token)) {
+    //       console.log('Using existing valid access token');
+    //       const userData = await authService.getCurrentUser();
+    //       console.log('User data fetched:', userData);
+    //       setUser(userData);
+    //     } else {
+    //       console.log('No valid access token, attempting refresh');
+    //       const tokens = await authService.refreshToken();
+    //       console.log('Refresh tokens:', tokens);
+    //       setAccessToken(tokens.access_token);
+    //       const decoded = parseJwt(tokens.access_token);
+    //       console.log('Decoded JWT:', decoded);
+    //       if (decoded && decoded.sub) {
+    //         const userData = await authService.getCurrentUser();
+    //         console.log('User data fetched after refresh:', userData);
+    //         setUser(userData);
+    //         // Navigate to dashboard if not on a protected route
+    //         const protectedRoutes = [
+    //           '/dashboard',
+    //           '/transactions',
+    //           '/accounts',
+    //           '/settings',
+    //           '/admin',
+    //           '/admin/users',
+    //           '/admin/transactions',
+    //           '/admin/analytics',
+    //           '/admin/settings',
+    //         ];
+    //         if (!protectedRoutes.includes(location.pathname)) {
+    //           console.log('Navigating to dashboard after successful refresh');
+    //           navigate('/dashboard', { replace: true });
+    //         }
+    //       } else {
+    //         throw new Error('Invalid token');
+    //       }
+    //     }
+    //   } catch (error: any) {
+    //     console.error('Initialize auth error:', {
+    //       message: error.message,
+    //       stack: error.stack,
+    //       response: error.response?.data,
+    //       status: error.response?.status,
+    //     });
+    //     setUser(null);
+    //     setAccessToken(null);
+    //     if (!publicRoutes.includes(location.pathname)) {
+    //       console.log('Redirecting to login due to error');
+    //       toast.error(error.message || 'Please log in to continue');
+    //       navigate('/login', { replace: true });
+    //     }
+    //   } finally {
+    //     setLoading(false);
+    //     isInitializing.current = false;
+    //     console.log('Initialization complete, loading:', false, 'user:', user);
+    //   }
+    // };
 
-    initializeAuth();
+    // initializeAuth();
+    // Skip initialization - allow access without auth
+    setLoading(false);
+    isInitializing.current = false;
   }, [navigate, location.pathname]);
 
   const login = async (email: string, password: string) => {

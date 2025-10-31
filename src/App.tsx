@@ -22,50 +22,52 @@ import './App.css';
 import Loader from './components/common/Loader'
 
 function ProtectedRoute({ children }: { children: JSX.Element }) {
-  const authContext = useContext(AuthContext);
+  // COMMENTED OUT: Authentication checks disabled for development
+  // const authContext = useContext(AuthContext);
 
-  if (!authContext) {
-    console.error('ProtectedRoute: AuthContext not available');
-    return <Navigate to="/login" replace />;
-  }
+  // if (!authContext) {
+  //   console.error('ProtectedRoute: AuthContext not available');
+  //   return <Navigate to="/login" replace />;
+  // }
 
-  const { user, loading } = authContext;
+  // const { user, loading } = authContext;
 
-  if (loading) {
-    console.log('ProtectedRoute: Loading, rendering loading state');
-    return <Loader />;
-  }
+  // if (loading) {
+  //   console.log('ProtectedRoute: Loading, rendering loading state');
+  //   return <Loader />;
+  // }
 
-  if (!user) {
-    console.log('ProtectedRoute: No user, redirecting to /login');
-    return <Navigate to="/login" replace />;
-  }
+  // if (!user) {
+  //   console.log('ProtectedRoute: No user, redirecting to /login');
+  //   return <Navigate to="/login" replace />;
+  // }
 
-  console.log('ProtectedRoute: User authenticated, rendering children:', user.email);
+  // console.log('ProtectedRoute: User authenticated, rendering children:', user.email);
   return children;
 }
 
 function ProtectedAdminRoute({ children }: { children: JSX.Element }) {
-  const adminAuthContext = useContext(AdminAuthContext);
+  // COMMENTED OUT: Authentication checks disabled for development
+  // const adminAuthContext = useContext(AdminAuthContext);
 
-  if (!adminAuthContext) {
-    console.error('ProtectedAdminRoute: AdminAuthContext not available');
-    return <Navigate to="/admin/login" replace />;
-  }
+  // if (!adminAuthContext) {
+  //   console.error('ProtectedAdminRoute: AdminAuthContext not available');
+  //   return <Navigate to="/admin/login" replace />;
+  // }
 
-  const { admin, loading } = adminAuthContext;
+  // const { admin, loading } = adminAuthContext;
 
-  if (loading) {
-    console.log('ProtectedAdminRoute: Loading, rendering loading state');
-    return <Loader />;
-  }
+  // if (loading) {
+  //   console.log('ProtectedAdminRoute: Loading, rendering loading state');
+  //   return <Loader />;
+  // }
 
-  if (!admin) {
-    console.log('ProtectedAdminRoute: No admin, redirecting to /admin/login');
-    return <Navigate to="/admin/login" replace />;
-  }
+  // if (!admin) {
+  //   console.log('ProtectedAdminRoute: No admin, redirecting to /admin/login');
+  //   return <Navigate to="/admin/login" replace />;
+  // }
 
-  console.log('ProtectedAdminRoute: Admin authenticated, rendering children:', admin.email);
+  // console.log('ProtectedAdminRoute: Admin authenticated, rendering children:', admin.email);
   return children;
 }
 

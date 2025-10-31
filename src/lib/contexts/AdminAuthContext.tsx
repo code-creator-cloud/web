@@ -54,61 +54,65 @@ export const AdminAuthProvider: React.FC<AdminAuthProviderProps> = ({ children }
   };
 
   useEffect(() => {
-    const initializeAdminAuth = async () => {
-      if (isInitializing.current) {
-        return;
-      }
-      isInitializing.current = true;
+    // COMMENTED OUT: Disable admin auth initialization for development
+    // const initializeAdminAuth = async () => {
+    //   if (isInitializing.current) {
+    //     return;
+    //   }
+    //   isInitializing.current = true;
 
-      const publicRoutes = ['/login', '/register', '/', '/admin/login'];
-      if (publicRoutes.includes(location.pathname)) {
-        setLoading(false);
-        isInitializing.current = false;
-        return;
-      }
+    //   const publicRoutes = ['/login', '/register', '/', '/admin/login'];
+    //   if (publicRoutes.includes(location.pathname)) {
+    //     setLoading(false);
+    //     isInitializing.current = false;
+    //     return;
+    //   }
 
-      // Only check admin auth for admin routes
-      if (!location.pathname.startsWith('/admin')) {
-        setLoading(false);
-        isInitializing.current = false;
-        return;
-      }
+    //   // Only check admin auth for admin routes
+    //   if (!location.pathname.startsWith('/admin')) {
+    //     setLoading(false);
+    //     isInitializing.current = false;
+    //     return;
+    //   }
 
-      try {
-        const token = localStorage.getItem('adminToken');
-        const adminData = localStorage.getItem('adminUser');
+    //   try {
+    //     const token = localStorage.getItem('adminToken');
+    //     const adminData = localStorage.getItem('adminUser');
         
-        if (token && adminData && isTokenValid(token)) {
-          setAdminToken(token);
-          setAdmin(JSON.parse(adminData));
-        } else {
-          // Clear invalid tokens
-          localStorage.removeItem('adminToken');
-          localStorage.removeItem('adminUser');
-          setAdminToken(null);
-          setAdmin(null);
-          
-          if (location.pathname.startsWith('/admin')) {
-            navigate('/admin/login', { replace: true });
-          }
-        }
-      } catch (error: any) {
-        console.error('Initialize admin auth error:', error);
-        localStorage.removeItem('adminToken');
-        localStorage.removeItem('adminUser');
-        setAdminToken(null);
-        setAdmin(null);
+    //     if (token && adminData && isTokenValid(token)) {
+    //       setAdminToken(token);
+    //       setAdmin(JSON.parse(adminData));
+    //     } else {
+    //       // Clear invalid tokens
+    //       localStorage.removeItem('adminToken');
+    //       localStorage.removeItem('adminUser');
+    //       setAdminToken(null);
+    //       setAdmin(null);
         
-        if (location.pathname.startsWith('/admin')) {
-          navigate('/admin/login', { replace: true });
-        }
-      } finally {
-        setLoading(false);
-        isInitializing.current = false;
-      }
-    };
+    //       if (location.pathname.startsWith('/admin')) {
+    //         navigate('/admin/login', { replace: true });
+    //       }
+    //     }
+    //   } catch (error: any) {
+    //     console.error('Initialize admin auth error:', error);
+    //     localStorage.removeItem('adminToken');
+    //     localStorage.removeItem('adminUser');
+    //     setAdminToken(null);
+    //     setAdmin(null);
+        
+    //     if (location.pathname.startsWith('/admin')) {
+    //       navigate('/admin/login', { replace: true });
+    //     }
+    //   } finally {
+    //     setLoading(false);
+    //     isInitializing.current = false;
+    //   }
+    // };
 
-    initializeAdminAuth();
+    // initializeAdminAuth();
+    // Skip initialization - allow access without auth
+    setLoading(false);
+    isInitializing.current = false;
   }, [navigate, location.pathname]);
 
   const adminLogin = async (email: string, password: string) => {

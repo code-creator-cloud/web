@@ -54,15 +54,17 @@ export default function Transactions() {
 
   useEffect(() => {
     const fetchTransactions = async () => {
-      if (!authContext?.user) {
-        navigate('/login', { replace: true });
-        return;
-      }
+      // COMMENTED OUT: Disable auth checks for development
+      // if (!authContext?.user) {
+      //   navigate('/login', { replace: true });
+      //   return;
+      // }
 
       try {
         setIsLoading(true);
-        const data = await userDashboardService.getUserTransactions();
-        setTransactions(data);
+        // COMMENTED OUT: Disable API calls when backend not connected
+        // const data = await userDashboardService.getUserTransactions();
+        // setTransactions(data);
       } catch (error: any) {
         toast.error(error.message || 'Failed to fetch transactions');
       } finally {
@@ -127,12 +129,17 @@ export default function Transactions() {
     }
   };
 
-  if (authContext?.loading || isLoading) {
-    return <Loader />;
-  }
+  // COMMENTED OUT: Disable auth checks for development
+  // if (authContext?.loading || isLoading) {
+  //   return <Loader />;
+  // }
 
-  if (!authContext?.user) {
-    return null; // Redirect handled in useEffect
+  // if (!authContext?.user) {
+  //   return null; // Redirect handled in useEffect
+  // }
+
+  if (isLoading) {
+    return <Loader />;
   }
 
   return (

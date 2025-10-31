@@ -115,21 +115,22 @@ export default function AdminDashboard() {
       setLoading(true);
       setError(null);
 
-      // Load dashboard stats
-      const stats = await adminService.getDashboardStats();
-      setDashboardStats(stats);
+      // COMMENTED OUT: Disable API calls when backend not connected
+      // // Load dashboard stats
+      // const stats = await adminService.getDashboardStats();
+      // setDashboardStats(stats);
 
-      // Load recent transactions
-      const transactions = await adminService.getTransactions({ page: 1, page_size: 5 });
-      setRecentTransactions(transactions.transactions);
+      // // Load recent transactions
+      // const transactions = await adminService.getTransactions({ page: 1, page_size: 5 });
+      // setRecentTransactions(transactions.transactions);
 
-      // Load top users
-      const users = await adminService.getUsers({ page: 1, page_size: 5 });
-      setTopUsers(users.users);
+      // // Load top users
+      // const users = await adminService.getUsers({ page: 1, page_size: 5 });
+      // setTopUsers(users.users);
 
-      // Load analytics
-      await adminService.getRevenueAnalytics(dateRange);
-      await adminService.getUserGrowthAnalytics(dateRange);
+      // // Load analytics
+      // await adminService.getRevenueAnalytics(dateRange);
+      // await adminService.getUserGrowthAnalytics(dateRange);
 
     } catch (err: any) {
       setError(err.message);
