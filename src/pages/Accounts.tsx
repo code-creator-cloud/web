@@ -36,6 +36,24 @@ export default function Accounts() {
       bank: "Global Bank", 
        color: "bg-hover/90" 
     },
+    {
+      id: 5,
+      name: "Japan News Account",
+      number: "**** 1234",
+      balance: "$8,750.25",
+      type: "investment",
+      bank: "Investment Corp",
+      color: "bg-hover/80"
+    },
+    {
+      id: 6,
+      name: "Eurozone Account",
+      number: "**** 5678",
+      balance: "$15,600.00",
+      type: "savings",
+      bank: "Euro Bank",
+      color: "bg-hover/90"
+    }
   ];
 
   const getAccountIcon = (type: string) => {
@@ -131,15 +149,33 @@ export default function Accounts() {
         {/* Add New Account Card */}
          <Card className="border-2 border-dashed border-gray-300 bg-lighter text-gold hover:border-[var(--color-accent)] transition-colors">
           <CardTitle className='p-3 text-gold'>Investment Packages</CardTitle>
-          <CardContent className="flex flex-col items-center justify-center h-64 p-6 text-center">
-            <p className="text-sm text-gray-500 mb-4">This is a special package designed according to your risk you can take. the options are below and feel free to explore the different packages.</p>
+           <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm text-gray-500">This is a special package designed according to your risk you can take. the options are below and feel free to explore the different packages.</p>
+                </div>
+                
+                <div className="flex gap-2 p-2">
+                  <Button variant="outline" className="flex-1 border-0 text-gem bg-hover/70 hover:bg-hover/90">Safe Packge</Button>
+                  <Button className="flex-1 bg-bin hover:bg-bin/90 text-hover/90">
+                    Risky Package
+                  </Button>
+                </div>
+                
+                <div className="pt-3 border-t text-hover">
+                  <p className="text-sm text-gray-600">Select your package above</p>
+                </div>
+              </div>
+            </CardContent>
+          {/* <CardContent className="flex flex-col items-center justify-center h-64 p-6 text-center">
+            <p className="text-sm text-gray-500 mb-4"></p>
             <div className="flex gap-2 border-b p-3">
                   <Button variant="outline" className=" border-0 text-gem bg-hover/70 hover:bg-hover/90">Details</Button>
                   <Button className="flex-1 bg-bin hover:bg-bin/90 text-hover/90">
                     Transfer
                   </Button>
                 </div>
-          </CardContent>
+          </CardContent> */}
         </Card> 
       </div>
     </div>
