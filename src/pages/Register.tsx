@@ -82,13 +82,13 @@ const Register = () => {
               <div className="flex bg-bin rounded-t-lg overflow-hidden shadow-sm mb-6">
                 <Link 
                   to="/login"
-                  className="flex-1 py-3 font-medium text-bin bg-gold text-center"
+                  className="flex-1 py-3 font-medium text-gold bg-gem text-center"
                 >
                   Login
                 </Link>
                 <Link 
                   to="/register"
-                  className="flex-1 py-3 font-medium text-gold bg-gem text-center flex items-center justify-center gap-2"
+                  className="flex-1 py-3 font-medium text-bin bg-gold text-center flex items-center justify-center gap-2"
                 >
                   <ArrowRight className="h-4 w-4" />
                   Register
@@ -300,7 +300,7 @@ const Register = () => {
             <div 
               className="w-full h-full bg-cover bg-center min-h-[500px]"
               style={{
-                backgroundImage: "url('/images/register.webp')",
+                backgroundImage: "url('/images/register.jpg')",
               }}
             />
           </div>

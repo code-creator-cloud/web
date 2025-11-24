@@ -46,8 +46,8 @@ const mockTransactionData = [
 
 const mockCurrencyDistribution = [
   { name: 'USDT', value: 60, color: '#26a17b' },
-  { name: 'BTC', value: 20, color: '#f7931a' },
-  { name: 'ETH', value: 15, color: '#627eea' },
+  { name: 'BNB', value: 20, color: '#f7931a' },
+  { name: 'TRX', value: 15, color: '#f04343ff' },
   { name: 'Others', value: 5, color: '#8b5cf6' }
 ];
 
@@ -196,49 +196,49 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="space-y-6 p-6 bg-gray-50 min-h-screen">
+    <div className="space-y-6 p-6 bg-lighter min-h-screen">
       {/* Header Section */}
       <div className="flex flex-col gap-2">
-        <h1 className="text-2xl md:text-3xl font-bold text-primary">Admin Dashboard</h1>
-        <p className="text-gray-600">Monitor crypto transaction performance and user activities</p>
+        <h1 className="text-2xl md:text-3xl font-bold text-gold">Admin Dashboard</h1>
+        <p className="text-gray-500">Monitor crypto transaction performance and user activities</p>
       </div>
 
       {/* Filters and Actions */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
       <div className="flex flex-wrap gap-2">
-  <Button 
-    variant={dateRange === '7d' ? 'default' : 'outline'} 
-    size="sm"
-    onClick={() => setDateRange('7d')}
-    className="bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] text-[var(--color-primary-foreground)] text-xs px-2 py-1 sm:text-sm sm:px-3 sm:py-2"
-  >
-    Last 7 days
-  </Button>
+      <Button 
+        variant={dateRange === '7d' ? 'default' : 'outline'} 
+        size="sm"
+        onClick={() => setDateRange('7d')}
+        className="bg-bin hover:bg-bin/70 text-gold text-xs px-2 py-1 sm:text-sm sm:px-3 sm:py-2 border-none"
+      >
+        Last 7 days
+      </Button>
 
-  <Button 
-    variant={dateRange === '30d' ? 'default' : 'outline'} 
-    size="sm"
-    onClick={() => setDateRange('30d')}
-    className="bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] text-[var(--color-primary-foreground)] text-xs px-2 py-1 sm:text-sm sm:px-3 sm:py-2"
-  >
-    Last 30 days
-  </Button>
+      <Button 
+        variant={dateRange === '30d' ? 'default' : 'outline'} 
+        size="sm"
+        onClick={() => setDateRange('30d')}
+        className="bg-bin hover:bg-bin/70 text-gold text-xs px-2 py-1 sm:text-sm sm:px-3 sm:py-2 border-none"
+      >
+        Last 30 days
+      </Button>
 
-  <Button 
-    variant={dateRange === '90d' ? 'default' : 'outline'} 
-    size="sm"
-    onClick={() => setDateRange('90d')}
-    className="bg-[var(--color-primary)] hover:bg-[var(--color-secondary)] text-[var(--color-primary-foreground)] text-xs px-2 py-1 sm:text-sm sm:px-3 sm:py-2"
-  >
-    Last 90 days
-  </Button>
+      <Button 
+        variant={dateRange === '90d' ? 'default' : 'outline'} 
+        size="sm"
+        onClick={() => setDateRange('90d')}
+        className="bg-bin hover:bg-bin/70 text-gold text-xs px-2 py-1 sm:text-sm sm:px-3 sm:py-2"
+      >
+        Last 90 days
+      </Button>
 </div>
 
   <div className="flex gap-2">
     <Button 
       variant="outline" 
       size="sm" 
-      className="gap-2 border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-primary-foreground)]"
+      className="gap-2 border-none text-hover hover:bg-bin/80 hover:text-hover/80"
     >
       <Filter className="h-4 w-4" />
       Filter
@@ -246,7 +246,7 @@ export default function AdminDashboard() {
     <Button 
       variant="outline" 
       size="sm" 
-      className="gap-2 border-[var(--color-secondary)] text-[var(--color-secondary)] hover:bg-[var(--color-secondary)] hover:text-[var(--color-secondary-foreground)]"
+      className="gap-2 border-none text-gold hover:bg-gold/70 hover:text-[var(--color-secondary-foreground)]"
     >
       <Download className="h-4 w-4" />
       Export
@@ -257,99 +257,99 @@ export default function AdminDashboard() {
 
       {/* Stats Overview */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="border-0 shadow-lg rounded-xl overflow-hidden">
+        <Card className="border-0 shadow-lg rounded-xl overflow-hidden bg-gem">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-medium text-gray-600">Total Users</CardTitle>
-            <div className="p-2 rounded-full bg-blue-100">
-              <Users className="h-4 w-4 text-blue-600" />
+            <CardTitle className="text-sm font-medium text-gold">Total Users</CardTitle>
+            <div className="p-2 rounded-full">
+              <Users className="h-5 w-5 text-gold" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-900">{formatNumber(dashboardStats?.total_users || 0)}</div>
-            <p className="text-xs text-gray-400 mt-2">Registered users</p>
+            <div className="text-2xl font-bold text-gold/50">{formatNumber(dashboardStats?.total_users || 0)}</div>
+            <p className="text-xs text-gray-500 mt-2">Registered users</p>
           </CardContent>
         </Card>
 
-        <Card className="border-0 shadow-lg rounded-xl overflow-hidden">
+        <Card className="border-0 shadow-lg rounded-xl overflow-hidden bg-gem">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-medium text-gray-600">Total Balance</CardTitle>
-            <div className="p-2 rounded-full bg-green-100">
-              <DollarSign className="h-4 w-4 text-green-600" />
+            <CardTitle className="text-sm font-medium text-gold">Total Balance</CardTitle>
+            <div className="p-2 rounded-full">
+              <DollarSign className="h-5 w-5 text-gold" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-900">{formatCurrency(dashboardStats?.total_balance || 0)}</div>
-            <p className="text-xs text-gray-400 mt-2">Platform balance</p>
+            <div className="text-2xl font-bold text-gold/50">{formatCurrency(dashboardStats?.total_balance || 0)}</div>
+            <p className="text-xs text-gray-500 mt-2">Platform balance</p>
           </CardContent>
         </Card>
 
-        <Card className="border-0 shadow-lg rounded-xl overflow-hidden">
+        <Card className="border-0 shadow-lg rounded-xl overflow-hidden bg-gem">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-medium text-gray-600">Today's Transactions</CardTitle>
-            <div className="p-2 rounded-full bg-purple-100">
-              <CreditCard className="h-4 w-4 text-purple-600" />
+            <CardTitle className="text-sm font-medium text-gold">Today's Transactions</CardTitle>
+            <div className="p-2 rounded-full">
+              <CreditCard className="h-5 w-5 text-gold" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-900">{formatNumber(dashboardStats?.today_transactions || 0)}</div>
-            <p className="text-xs text-gray-400 mt-2">Transactions today</p>
+            <div className="text-2xl font-bold text-gold/50">{formatNumber(dashboardStats?.today_transactions || 0)}</div>
+            <p className="text-xs text-gray-500 mt-2">Transactions today</p>
           </CardContent>
         </Card>
 
-        <Card className="border-0 shadow-lg rounded-xl overflow-hidden">
+        <Card className="border-0 shadow-lg rounded-xl overflow-hidden bg-gem">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-medium text-gray-600">Platform Revenue</CardTitle>
-            <div className="p-2 rounded-full bg-orange-100">
-              <TrendingUp className="h-4 w-4 text-orange-600" />
+            <CardTitle className="text-sm font-medium text-gold">Platform Revenue</CardTitle>
+            <div className="p-2 rounded-full">
+              <TrendingUp className="h-5 w-5 text-green-400" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-900">{formatCurrency(dashboardStats?.platform_revenue || 0)}</div>
-            <p className="text-xs text-gray-400 mt-2">Total revenue</p>
+            <div className="text-2xl font-bold text-gold/50">{formatCurrency(dashboardStats?.platform_revenue || 0)}</div>
+            <p className="text-xs text-gray-500 mt-2">Total revenue</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Platform Financials */}
       <div className="grid gap-6 md:grid-cols-2">
-        <Card className="border-0 shadow-lg rounded-xl overflow-hidden">
-          <CardHeader className="bg-gradient-to-r from-purple-50 to-indigo-50">
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <DollarSign className="h-5 w-5 text-purple-600" />
+        <Card className="border-0 shadow-lg rounded-xl overflow-hidden bg-gem">
+          <CardHeader className="bg-bin/60">
+            <CardTitle className="flex items-center gap-2 text-lg text-gold">
+              <DollarSign className="h-5 w-5 text-gold" />
               Platform Financials
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-6">
             <div className="grid gap-4">
-              <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg border border-gray-100">
+              <div className="flex justify-between items-center p-4 bg-bin/60 rounded-lg ">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Platform Revenue</p>
-                  <p className="text-2xl font-bold text-green-600">{formatCurrency(dashboardStats?.platform_revenue || 0)}</p>
+                  <p className="text-sm font-medium text-gold">Platform Revenue</p>
+                  <p className="text-2xl font-bold text-gold/50">{formatCurrency(dashboardStats?.platform_revenue || 0)}</p>
                 </div>
                 <TrendingUp className="h-6 w-6 text-green-600" />
               </div>
-              <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg border border-gray-100">
+              <div className="flex justify-between items-center p-4 bg-bin/60 rounded-lg">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Daily Revenue</p>
-                  <p className="text-2xl font-bold text-blue-600">{formatCurrency(dashboardStats?.daily_revenue || 0)}</p>
+                  <p className="text-sm font-medium text-gold">Daily Revenue</p>
+                  <p className="text-2xl font-bold text-gold/60">{formatCurrency(dashboardStats?.daily_revenue || 0)}</p>
                 </div>
-                <BarChart3 className="h-6 w-6 text-blue-600" />
+                <BarChart3 className="h-6 w-6 text-hover" />
               </div>
-              <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg border border-gray-100">
+              <div className="flex justify-between items-center p-4 bg-bin/60 rounded-lg">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Monthly Revenue</p>
-                  <p className="text-2xl font-bold text-purple-600">{formatCurrency(dashboardStats?.monthly_revenue || 0)}</p>
+                  <p className="text-sm font-medium text-gold">Monthly Revenue</p>
+                  <p className="text-2xl font-bold text-gold/50">{formatCurrency(dashboardStats?.monthly_revenue || 0)}</p>
                 </div>
-                <TrendingUp className="h-6 w-6 text-purple-600" />
+                <TrendingUp className="h-6 w-6 text-green-600" />
               </div>
             </div>
           </CardContent>
         </Card>
 
         {/* Currency Distribution */}
-        <Card className="border-0 shadow-lg rounded-xl overflow-hidden">
-          <CardHeader className="bg-gradient-to-r from-purple-50 to-indigo-50">
-            <CardTitle className="text-lg">Currency Distribution</CardTitle>
+        <Card className="border-0 shadow-lg rounded-xl overflow-hidden bg-gem">
+          <CardHeader className="bg-bin/60">
+            <CardTitle className="text-lg text-gold">Currency Distribution</CardTitle>
           </CardHeader>
           <CardContent className="pt-6">
             <div className="h-80">
@@ -378,9 +378,9 @@ export default function AdminDashboard() {
       </div>
 
       {/* Transaction Volume Chart */}
-      <Card className="border-0 shadow-lg rounded-xl overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-purple-50 to-indigo-50">
-          <CardTitle className="text-lg">Monthly Transaction Volume</CardTitle>
+      <Card className="border-0 shadow-lg rounded-xl overflow-hidden bg-gem">
+        <CardHeader className="bg-bin/60">
+          <CardTitle className="text-lg text-gold">Monthly Transaction Volume</CardTitle>
         </CardHeader>
         <CardContent className="pt-6">
           <div className="h-80">
@@ -410,13 +410,13 @@ export default function AdminDashboard() {
       </Card>
 
       {/* Top Users */}
-      <Card className="border-0 shadow-lg rounded-xl overflow-hidden">
-        <CardHeader className="flex flex-row items-center justify-between bg-gradient-to-r from-purple-50 to-indigo-50">
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <User className="h-5 w-5 text-purple-600" />
+      <Card className="border-0 shadow-lg rounded-xl overflow-hidden bg-gem">
+        <CardHeader className="flex flex-row items-center justify-between bg-bin/60">
+          <CardTitle className="flex items-center gap-2 text-lg text-gold">
+            <User className="h-5 w-5" />
             Top Users
           </CardTitle>
-          <Button variant="ghost" size="sm" className="text-purple-600 hover:text-purple-700 hover:bg-purple-100">
+          <Button variant="ghost" size="sm" className="text-hover/80 hover:text-hover hover:bg-bin">
             View All
           </Button>
         </CardHeader>
@@ -424,13 +424,13 @@ export default function AdminDashboard() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b bg-gray-50">
-                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">User</th>
-                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Status</th>
-                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Balance</th>
-                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Total Deposits</th>
-                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Total Withdrawals</th>
-                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Join Date</th>
+                <tr className="border-b text-gold">
+                  <th className="text-left py-4 px-6 text-sm font-semibold text-hover">User</th>
+                  <th className="text-left py-4 px-6 text-sm font-semibold text-hover">Status</th>
+                  <th className="text-left py-4 px-6 text-sm font-semibold text-hover">Balance</th>
+                  <th className="text-left py-4 px-6 text-sm font-semibold text-hover">Total Deposits</th>
+                  <th className="text-left py-4 px-6 text-sm font-semibold text-hover">Total Withdrawals</th>
+                  <th className="text-left py-4 px-6 text-sm font-semibold text-hover">Join Date</th>
                 </tr>
               </thead>
               <tbody>
@@ -480,13 +480,13 @@ export default function AdminDashboard() {
       </Card>
 
       {/* Recent Transactions */}
-      <Card className="border-0 shadow-lg rounded-xl overflow-hidden">
-        <CardHeader className="flex flex-row items-center justify-between bg-gradient-to-r from-purple-50 to-indigo-50">
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <Zap className="h-5 w-5 text-purple-600" />
+      <Card className="border-0 shadow-lg rounded-xl overflow-hidden bg-gem">
+        <CardHeader className="flex flex-row items-center justify-between bg-bin/60">
+          <CardTitle className="flex items-center gap-2 text-lg text-gold">
+            <Zap className="h-5 w-5 " />
             Recent Transactions
           </CardTitle>
-          <Button variant="ghost" size="sm" className="text-purple-600 hover:text-purple-700 hover:bg-purple-100">
+          <Button variant="ghost" size="sm" className="text-hover/80 hover:text-hover hover:bg-bin">
             View All
           </Button>
         </CardHeader>
@@ -494,14 +494,14 @@ export default function AdminDashboard() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b bg-gray-50">
-                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">ID</th>
-                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">User</th>
-                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Type</th>
-                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Amount</th>
-                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Currency</th>
-                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Status</th>
-                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Date</th>
+                <tr className="border-b text-gold">
+                  <th className="text-left py-4 px-6 text-sm font-semibold">ID</th>
+                  <th className="text-left py-4 px-6 text-sm font-semibold">User</th>
+                  <th className="text-left py-4 px-6 text-sm font-semibold">Type</th>
+                  <th className="text-left py-4 px-6 text-sm font-semibold">Amount</th>
+                  <th className="text-left py-4 px-6 text-sm font-semibold">Currency</th>
+                  <th className="text-left py-4 px-6 text-sm font-semibold">Status</th>
+                  <th className="text-left py-4 px-6 text-sm font-semibold">Date</th>
                 </tr>
               </thead>
               <tbody>

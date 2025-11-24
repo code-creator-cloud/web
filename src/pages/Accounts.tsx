@@ -10,22 +10,13 @@ export default function Accounts() {
 
   const accounts = [
     { 
-      id: 1, 
-      name: "Main Account", 
-      number: "**** 4582", 
-      balance: "$8,450.00", 
-      type: "Main", 
-      bank: " ", 
-      color: "bg-blue-500" 
-    },
-    { 
       id: 2, 
       name: "NFP Account", 
       number: "**** 7821", 
       balance: "$12,300.50", 
       type: "trade", 
       bank: "Global Bank", 
-      color: "bg-green-500" 
+      color: "bg-hover/80" 
     },
     { 
       id: 3, 
@@ -34,7 +25,7 @@ export default function Accounts() {
       balance: "$24,800.00", 
       type: "trades", 
       bank: "Wealth Management", 
-      color: "bg-purple-500" 
+       color: "bg-hover"  
     },
     { 
       id: 4, 
@@ -43,7 +34,7 @@ export default function Accounts() {
       balance: "-$2,345.67", 
       type: "FOMC Trades", 
       bank: "Global Bank", 
-      color: "bg-orange-500" 
+       color: "bg-hover/90" 
     },
   ];
 
@@ -60,19 +51,19 @@ export default function Accounts() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold text-[var(--color-primary)]">Accounts</h1>
-        <p className="text-gray-600">Select the various investment package</p>
+        <h1 className="text-3xl font-bold text-gold">Accounts</h1>
+        <p className="text-gray-500">Select the various investment package</p>
       </div>
 
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex border-b">
           <button
-            className={`py-2 px-4 border-b-2 ${activeTab === 'all' ? 'border-[var(--color-accent)] text-[var(--color-primary)]' : 'border-transparent text-gray-500'}`}
+            className={`py-2 px-4 border-b-2 ${activeTab === 'all' ? 'border-gold text-gold' : 'border-transparent text-gray-500'}`}
             onClick={() => setActiveTab('all')}
           >
             All Accounts
           </button>
-          <button
+          {/* <button
             className={`py-2 px-4 border-b-2 ${activeTab === 'checking' ? 'border-[var(--color-accent)] text-[var(--color-primary)]' : 'border-transparent text-gray-500'}`}
             onClick={() => setActiveTab('checking')}
           >
@@ -83,28 +74,28 @@ export default function Accounts() {
             onClick={() => setActiveTab('savings')}
           >
             Savings
-          </button>
+          </button> */}
         </div>
         
-        <Button className="bg-[var(--color-accent)] hover:bg-[var(--color-accent)]/90 gap-2">
+        {/* <Button className=" hover:text-hover/80 gap-2 text-hover">
           <Plus size={16} />
           Add Account
-        </Button>
+        </Button> */}
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {accounts.map((account) => (
-          <Card key={account.id} className="border-0 shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+          <Card key={account.id} className="border-0 shadow-md overflow-hidden hover:shadow-lg transition-shadow bg-lighter">
             <div className={`h-2 ${account.color}`}></div>
             <CardHeader className="pb-3">
               <div className="flex justify-between items-start">
                 <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-lg ${account.color} text-white`}>
+                  <div className={`p-2 rounded-lg ${account.color} text-bin`}>
                     {getAccountIcon(account.type)}
                   </div>
                   <div>
-                    <CardTitle className="text-lg">{account.name}</CardTitle>
-                    <p className="text-sm text-gray-500">{account.number}</p>
+                    <CardTitle className="text-lg text-gold">{account.name}</CardTitle>
+                    <p className="text-sm text-gray-400">{account.number}</p>
                   </div>
                 </div>
                 <Button variant="ghost" size="icon">
@@ -115,20 +106,20 @@ export default function Accounts() {
             <CardContent>
               <div className="space-y-4">
                 <div>
-                  <p className="text-sm text-gray-600">Current Balance</p>
-                  <p className={`text-xl font-bold ${account.balance.startsWith('-') ? 'text-red-600' : 'text-gray-800'}`}>
+                  <p className="text-sm text-gray-500">Current Balance</p>
+                  <p className={`text-xl font-bold ${account.balance.startsWith('-') ? 'text-hover/80' : 'text-hover/80'}`}>
                     {account.balance}
                   </p>
                 </div>
                 
                 <div className="flex gap-2">
-                  <Button variant="outline" className="flex-1">Details</Button>
-                  <Button className="flex-1 bg-[var(--color-primary)] hover:bg-[var(--color-primary)]/90">
+                  <Button variant="outline" className="flex-1 border-0 text-gem bg-hover/70 hover:bg-hover/90">Details</Button>
+                  <Button className="flex-1 bg-bin hover:bg-bin/90 text-hover/90">
                     Transfer
                   </Button>
                 </div>
                 
-                <div className="pt-3 border-t">
+                <div className="pt-3 border-t text-hover">
                   <p className="text-sm text-gray-600">{account.bank}</p>
                   <p className="text-sm text-gray-600 capitalize">{account.type} Account</p>
                 </div>
@@ -138,19 +129,18 @@ export default function Accounts() {
         ))}
         
         {/* Add New Account Card */}
-        <Card className="border-2 border-dashed border-gray-300 bg-transparent hover:border-[var(--color-accent)] transition-colors">
+         <Card className="border-2 border-dashed border-gray-300 bg-lighter text-gold hover:border-[var(--color-accent)] transition-colors">
+          <CardTitle className='p-3 text-gold'>Investment Packages</CardTitle>
           <CardContent className="flex flex-col items-center justify-center h-64 p-6 text-center">
-            <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-              <Plus size={24} className="text-gray-400" />
-            </div>
-            <h3 className="font-semibold text-gray-700 mb-2">Add New Account</h3>
-            <p className="text-sm text-gray-500 mb-4">Connect your bank account or add a manual account</p>
-            <Button variant="outline" className="gap-2">
-              <Plus size={16} />
-              Add Account
-            </Button>
+            <p className="text-sm text-gray-500 mb-4">This is a special package designed according to your risk you can take. the options are below and feel free to explore the different packages.</p>
+            <div className="flex gap-2 border-b p-3">
+                  <Button variant="outline" className=" border-0 text-gem bg-hover/70 hover:bg-hover/90">Details</Button>
+                  <Button className="flex-1 bg-bin hover:bg-bin/90 text-hover/90">
+                    Transfer
+                  </Button>
+                </div>
           </CardContent>
-        </Card>
+        </Card> 
       </div>
     </div>
   );

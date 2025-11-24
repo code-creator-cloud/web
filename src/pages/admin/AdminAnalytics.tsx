@@ -47,44 +47,44 @@ export default function AdminAnalytics() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold text-[var(--color-primary)]">Platform Analytics</h1>
-        <p className="text-gray-600">Detailed analytics and insights about your platform</p>
+        <h1 className="text-3xl font-bold text-gold">Platform Analytics</h1>
+        <p className="text-gray-500">Detailed analytics and insights about your platform</p>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <Card className="border-0 shadow-md">
+        <Card className="border-0 shadow-md bg-lighter">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+            <CardTitle className="text-sm font-medium text-gold">Total Revenue</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$45,230.00</div>
+            <div className="text-2xl font-bold text-hover/60">$45,230.00</div>
             <p className="text-xs text-muted-foreground">+12.5% from last week</p>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-md">
+        <Card className="border-0 shadow-md bg-lighter">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Users</CardTitle>
+            <CardTitle className="text-sm font-medium text-gold">Active Users</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">12,845</div>
+            <div className="text-2xl font-bold text-hover/60">12,845</div>
             <p className="text-xs text-muted-foreground">+8.3% from last week</p>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-md">
+        <Card className="border-0 shadow-md bg-lighter">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Conversion Rate</CardTitle>
+            <CardTitle className="text-sm font-medium text-gold">Conversion Rate</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">28.5%</div>
+            <div className="text-2xl font-bold text-hover/60">28.5%</div>
             <p className="text-xs text-muted-foreground">+2.1% from last week</p>
           </CardContent>
         </Card>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card className="border-0 shadow-md">
+        <Card className="border-0 shadow-md bg-lighter">
           <CardHeader>
-            <CardTitle>Weekly Transaction Volume</CardTitle>
+            <CardTitle className='text-gold'>Weekly Transaction Volume</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-80">
@@ -103,9 +103,9 @@ export default function AdminAnalytics() {
           </CardContent>
         </Card>
 
-        <Card className="border-0 shadow-md">
+        <Card className="border-0 shadow-md bg-lighter">
           <CardHeader>
-            <CardTitle>User Growth</CardTitle>
+            <CardTitle className='text-gold'>User Growth</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-80">
@@ -124,9 +124,9 @@ export default function AdminAnalytics() {
         </Card>
       </div>
 
-      <Card className="border-0 shadow-md">
+      <Card className="border-0 shadow-md bg-lighter">
         <CardHeader>
-          <CardTitle>Platform Usage</CardTitle>
+          <CardTitle className='text-gold'>Platform Usage</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="h-80">

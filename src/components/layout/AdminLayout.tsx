@@ -98,14 +98,14 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   const SidebarContent = ({ isCollapsed = false }: { isCollapsed?: boolean }) => (
     <motion.div 
-      className={`flex flex-col h-full bg-[var(--color-primary)] text-[var(--color-primary-foreground)] ${isCollapsed ? 'w-16' : 'w-64'}`}
+      className={`flex flex-col h-full bg-lighter text-gold ${isCollapsed ? 'w-16' : 'w-64'}`}
       initial={{ x: -300, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: -300, opacity: 0 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-[#382a6b]">
+      <div className="flex items-center justify-between p-2.5 border-b">
         {!isCollapsed && (
           <motion.h1 
             className="text-xl font-bold"
@@ -150,9 +150,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             <motion.button
               key={item.name}
               onClick={() => handleNavigation(item.path)}
-              className={`flex items-center rounded-lg p-3 transition-all duration-200 hover:bg-[#382a6b] w-full ${
+              className={`flex items-center rounded-lg p-3 transition-all duration-200 hover:bg-bin w-full ${
                 isActive
-                  ? 'bg-[var(--color-accent)] text-[var(--color-accent-foreground)] font-bold shadow-lg'
+                  ? 'font-bold shadow-lg'
                   : 'text-gray-300 hover:text-white'
               } ${isCollapsed ? 'justify-center' : 'gap-3'}`}
               title={isCollapsed ? item.name : undefined}
@@ -177,9 +177,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       </nav>
       
       {/* Footer */}
-      <div className="p-4 border-t border-[#382a6b] mt-auto">
-        <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-3 mb-4 p-3 bg-[#382a6b] rounded-lg'}`}>
-          <div className="w-10 h-10 rounded-full bg-[var(--color-accent)] flex items-center justify-center flex-shrink-0">
+      <div className="p-4 border-t  mt-auto">
+        <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-3 mb-4 p-3 bg-bin rounded-lg'}`}>
+          <div className="w-10 h-10 rounded-full bg-lighter flex items-center justify-center flex-shrink-0">
             <User size={20} />
           </div>
           {!isCollapsed && (
@@ -196,7 +196,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         {!isCollapsed && (
           <Button 
             variant="ghost" 
-            className="w-full justify-start gap-2 text-gray-300 hover:text-white hover:bg-[#382a6b] transition-colors duration-200"
+            className="w-full justify-start gap-2 text-gray-300 hover:text-hover transition-colors duration-200"
             onClick={() => adminAuthContext?.adminLogout()}
           >
             <LogOut size={16} />
@@ -226,7 +226,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           <Button 
             variant="outline" 
             size="icon" 
-            className="md:hidden fixed top-2 right-4 z-50 h-8 w-8 bg-white shadow-md hover:bg-gray-50 transition-colors"
+            className="md:hidden fixed top-3.5 left-3 right-4 z-50 h-8 w-8  bg-gold border-none shadow-md hover:bg-hover/90 hover:text-lighter transition-colors"
             onClick={() => setIsSidebarOpen(true)}
           >
             <Menu size={16} />
@@ -234,7 +234,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </SheetTrigger>
         <SheetContent 
           side="left" 
-          className="p-0 w-64 bg-[var(--color-primary)] border-r-0"
+          className="p-0 w-64 border-r-0"
         >
           <SidebarContent isCollapsed={false} />
         </SheetContent>
@@ -243,25 +243,23 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top header */}
-        <header className="bg-white border-b border-gray-200 py-4 px-6 flex items-center justify-between">
+        <header className="bg-lighter py-5 px-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
             {/* Desktop sidebar toggle removed to prevent duplication */}
-            <div className="flex items-center gap-2 text-sm text-gray-600">
+            <div className="flex items-center gap-2 text-sm text-gray-600 pl-6.5">
               <button 
                 onClick={() => navigate('/')}
-                className="text-gray-400 hover:text-[var(--color-primary)] transition-colors"
+                className="text-gray-400 hover:text-gold transition-colors"
               >
                 Home
               </button>
               <span className="text-gray-400">/</span>
-              <span className="text-[var(--color-primary)] font-medium">Admin</span>
-              <span className="text-gray-400">/</span>
-              <span className="text-[var(--color-primary)] font-medium">{getBreadcrumb()}</span>
+              <span className=" font-medium">Admin {getBreadcrumb()}</span>
             </div>
           </div>
           
-          <div className="flex items-center gap-4">
-            <div className="text-sm text-gray-700 font-medium hidden sm:block">Admin User</div>
+          <div className="flex items-center gap-4 ">
+            <div className="text-sm text-gray-400 font-medium hidden sm:block ">Admin User</div>
             {/* <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[var(--color-primary)] flex items-center justify-center text-white shadow-sm">
               <User size={16} className="sm:size-5" />
             </div> */}
@@ -269,12 +267,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-auto p-4 sm:p-6 bg-gray-50">
+        <main className="flex-1 overflow-auto p-4 sm:p-6 bg-gem">
           {children}
         </main>
 
         {/* Footer */}
-        <footer className="bg-white border-t border-gray-200 py-4 px-6">
+        <footer className="bg-lighter py-4 px-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div className="flex items-center gap-6 text-sm text-gray-600">
               <span className="flex items-center gap-1">
@@ -296,7 +294,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         {/* AI Chat Bot Button */}
         <button
           onClick={() => setIsChatOpen(true)}
-          className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-[var(--color-accent)] text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-all z-40 hover:scale-105 transform duration-200"
+          className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-bin text-gold flex items-center justify-center shadow-lg hover:shadow-xl transition-all z-40 hover:scale-105 transform duration-200"
           aria-label="Open AI Chat"
         >
           <MessageCircle size={24} />

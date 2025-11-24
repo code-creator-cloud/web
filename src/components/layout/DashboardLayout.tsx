@@ -99,22 +99,29 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   // console.log('DashboardLayout: Rendering layout for user:', user?.email);
 
   const SidebarContent = () => (
-    <div className="flex flex-col h-full bg-[var(--color-primary)] text-[var(--color-primary-foreground)]">
-      <div className="flex items-center justify-between p-6 border-b border-[#382a6b]">
-        <h1 className="text-xl font-bold">FinTrack Pro</h1>
+    <div className="flex flex-col h-full bg-lighter text-gold">
+      <div className="flex items-center p-3 border-b">
+         <img
+                src="/images/logo.webp"
+                alt="Black Gem Logo"
+                className="h-12 w-18 object-contain transition-transform hover:scale-105"
+                
+              />
+        <h1 className="text-xl font-bold">BLACK GEM</h1>
         <div className="md:hidden">
           <Button
             variant="ghost"
             size="icon"
-            className="text-white hover:bg-white/20"
+            className="text-gold hover:bg-gold/20"
             onClick={() => setIsSidebarOpen(false)}
           >
-            <X size={16} />
+            <X size={19} />
+            
           </Button>
         </div>
       </div>
       
-      <nav className="flex-1 p-4 space-y-1 mt-6">
+      <nav className="flex-1 p-4 space-y-1 mt-6 ">
         {menuItems.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path;
@@ -123,9 +130,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             <button
               key={item.name}
               onClick={() => handleNavigation(item.path)}
-              className={`flex items-center gap-3 rounded-lg px-4 py-3 transition-all hover:bg-[#382a6b] w-full text-left ${
+              className={`flex items-center gap-3 rounded-lg px-4 py-3 transition-all hover:bg-hover hover:text-lighter w-full text-left ${
                 isActive
-                  ? 'bg-[var(--color-accent)] text-[var(--color-accent-foreground)] font-bold'
+                  ? 'bg-gold text-bin font-bold'
                   : 'text-gray-300'
               }`}
             >
@@ -136,7 +143,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         })}
         <Button 
     variant="secondary" 
-    className="w-full justify-start gap-2 mb-2 bg-[var(--color-accent)] hover:bg-[var(--color-accent)]/90 text-white border-0"
+    className="w-full justify-start gap-2 mb-2 bg-bin hover:bg-hover/80 hover:text-bin text-hover border-0"
     onClick={() => setIsCalendlyOpen(true)}
   >
     <Calendar className="w-4 h-4" />
@@ -146,13 +153,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       
       
       <div className="p-4 border-t border-[#382a6b] mt-auto">
-        <div className="flex items-center gap-3 mb-4 p-3 bg-[#382a6b] rounded-lg">
-          <div className="w-10 h-10 rounded-full bg-[var(--color-accent)] flex items-center justify-center">
-            <User size={20} />
+        <div className="flex items-center gap-3 mb-4 p-3 bg-bin rounded-lg">
+          <div className="w-10 h-10 rounded-full bg-gold flex items-center justify-center">
+            <User size={20} className='text-bin'/>
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium truncate">{user?.username || 'User'}</p>
-            <p className="text-xs text-gray-400 truncate">Premium Account</p>
+            <p className="text-xs text-gray-400 truncate">New Account</p>
           </div>
           <ChevronDown size={16} className="text-gray-400" />
         </div>
@@ -160,7 +167,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         
         <Button 
           variant="ghost" 
-          className="w-full justify-start gap-2 text-gray-300 hover:text-white hover:bg-[#382a6b]"
+          className="w-full justify-start gap-2 hover:text-bin hover:bg-hover/70"
           onClick={handleLogout}
         >
           <LogOut size={16} />
@@ -171,8 +178,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   );
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      <aside className="hidden md:flex flex-col w-64 bg-[var(--color-primary)] text-[var(--color-primary-foreground)]">
+    <div className="flex h-screen bg-gem">
+      <aside className="hidden md:flex flex-col w-64">
         <SidebarContent />
       </aside>
 
@@ -182,41 +189,41 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             <Button 
               variant="outline" 
               size="icon" 
-              className="h-10 w-10 bg-white"
+              className="h-10 w-10 bg-lighter border-none text-white hover:bg-lighter hover:text-gold"
               onClick={() => setIsSidebarOpen(true)}
             >
-              <Menu size={16} />
+              <Menu size={25} />
             </Button>
           </SheetTrigger>
         </div>
-        <SheetContent side="left" className="p-0 w-64 bg-[var(--color-primary)] border-r-0">
+        <SheetContent side="left" className="p-0 w-64 border-none">
           <SidebarContent />
         </SheetContent>
       </Sheet>
 
       <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="bg-white border-b border-gray-200 py-4 px-6 flex items-center justify-between">
+        <header className="bg-lighter border-b border-none py-4 px-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-4 md:gap-2">
               <div className="md:hidden flex items-center gap-4">
-                <span className="text-lg font-bold text-[var(--color-primary)]">FinTrack</span>
+                <span className="text-lg font-bold text-[var(--color-gold)] pl-10">WELCOME . . .</span>
               </div>
               <div className="hidden md:flex items-center gap-2 text-sm text-gray-600">
                 <button 
                   onClick={() => navigate('/')}
-                  className="text-gray-400 hover:text-[var(--color-primary)]"
+                  className="text-gold hover:text-gold/70 font-medium"
                 >
                   Home
                 </button>
-                <span className="text-gray-400">/</span>
-                <span className="text-[var(--color-primary)] font-medium">{getBreadcrumb()}</span>
+                <span className="text-gold/60">/</span>
+                <span className="text-[var(--color-gold)] font-medium">{getBreadcrumb()}</span>
               </div>
             </div>
           </div>
           
           <div className="flex items-center gap-4">
-            <div className="text-sm text-gray-700 font-medium hidden sm:block">{user?.username || 'User'}</div>
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[var(--color-primary)] flex items-center justify-center text-white">
+            <div className="text-sm text-gold font-medium hidden sm:block">{user?.username || 'User'}</div>
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gold/80 flex items-center justify-center text-lighter">
               <User size={16} className="sm:size-5" />
             </div>
           </div>
@@ -228,7 +235,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
         <button
           onClick={() => setIsChatOpen(true)}
-          className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-[var(--color-accent)] text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-all z-40"
+          className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-[var(--color-hover)] text-lighter flex items-center justify-center shadow-lg hover:shadow-xl transition-all z-40"
         >
           <MessageCircle size={24} />
         </button>
