@@ -9,35 +9,35 @@ import { AuthContext } from '../lib/contexts/AuthContext';
 import { userDashboardService } from '../lib/services/userDasboardService';
 import type { Transaction } from '../lib/types/transaction';
 import { toast } from 'sonner';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Loader from '../components/common/Loader'
 
 const MTNIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="12" cy="12" r="12" fill="#FFC107"/>
-    <path d="M12 6L16 10H13V14H11V10H8L12 6Z" fill="#241151"/>
+    <circle cx="12" cy="12" r="12" fill="#FFC107" />
+    <path d="M12 6L16 10H13V14H11V10H8L12 6Z" fill="#241151" />
   </svg>
 );
 
 const BNBIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="12" cy="12" r="12" fill="#F3BA2F"/>
-    <path d="M9.6 10.8L12 8.4L14.4 10.8L16 9.2L12 5.2L8 9.2L9.6 10.8ZM5.2 12L6.8 10.4L8.4 12L6.8 13.6L5.2 12ZM9.6 13.2L12 15.6L14.4 13.2L16 14.8L12 18.8L8 14.8L9.6 13.2ZM15.6 12L17.2 10.4L18.8 12L17.2 13.6L15.6 12ZM12 10.4L13.6 12L12 13.6L10.4 12L12 10.4Z" fill="#241151"/>
+    <circle cx="12" cy="12" r="12" fill="#F3BA2F" />
+    <path d="M9.6 10.8L12 8.4L14.4 10.8L16 9.2L12 5.2L8 9.2L9.6 10.8ZM5.2 12L6.8 10.4L8.4 12L6.8 13.6L5.2 12ZM9.6 13.2L12 15.6L14.4 13.2L16 14.8L12 18.8L8 14.8L9.6 13.2ZM15.6 12L17.2 10.4L18.8 12L17.2 13.6L15.6 12ZM12 10.4L13.6 12L12 13.6L10.4 12L12 10.4Z" fill="#241151" />
   </svg>
 );
 
 const TRXIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="12" cy="12" r="12" fill="#EB0029"/>
-    <path d="M16.8 7H18V17H16.8V12.2L13.2 17H12L8.4 12.2V17H7.2V7H8.4L12 11.8L15.6 7H16.8Z" fill="white"/>
+    <circle cx="12" cy="12" r="12" fill="#EB0029" />
+    <path d="M16.8 7H18V17H16.8V12.2L13.2 17H12L8.4 12.2V17H7.2V7H8.4L12 11.8L15.6 7H16.8Z" fill="white" />
   </svg>
 );
 
 const OrangeIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="12" cy="12" r="12" fill="#FF6B35"/>
-    <path d="M15.2 9.6C15.2 8.16 13.92 7 12.4 7C10.88 7 9.6 8.16 9.6 9.6C9.6 11.04 10.88 12.2 12.4 12.2C13.92 12.2 15.2 11.04 15.2 9.6Z" fill="white"/>
-    <path d="M16 15.4C16 14.52 14.96 13.8 13.6 13.8H11.2C9.84 13.8 8.8 14.52 8.8 15.4V17H16V15.4Z" fill="white"/>
+    <circle cx="12" cy="12" r="12" fill="#FF6B35" />
+    <path d="M15.2 9.6C15.2 8.16 13.92 7 12.4 7C10.88 7 9.6 8.16 9.6 9.6C9.6 11.04 10.88 12.2 12.4 12.2C13.92 12.2 15.2 11.04 15.2 9.6Z" fill="white" />
+    <path d="M16 15.4C16 14.52 14.96 13.8 13.6 13.8H11.2C9.84 13.8 8.8 14.52 8.8 15.4V17H16V15.4Z" fill="white" />
   </svg>
 );
 
@@ -51,6 +51,8 @@ export default function Transactions() {
   const [withdrawMethod, setWithdrawMethod] = useState('');
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchParams] = useSearchParams();
+  const depositRef = searchParams.get('ref') || '';
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -75,12 +77,12 @@ export default function Transactions() {
     fetchTransactions();
   }, [authContext?.user, navigate]);
 
-  const filteredTransactions = activeTab === 'all' 
-    ? transactions 
+  const filteredTransactions = activeTab === 'all'
+    ? transactions
     : transactions.filter(tx => tx.type === activeTab);
 
   const getMethodIcon = (method: string) => {
-    switch(method) {
+    switch (method) {
       case 'mtn': return <MTNIcon />;
       case 'bnb': return <BNBIcon />;
       case 'trx': return <TRXIcon />;
@@ -100,8 +102,8 @@ export default function Transactions() {
     }
 
     try {
-      await userDashboardService.createTransaction('deposit', parseFloat(depositAmount), depositMethod);
-      toast.success(`Deposit of $${depositAmount} via ${depositMethod.toUpperCase()} requested`);
+      await userDashboardService.createTransaction('deposit', parseFloat(depositAmount), depositMethod, depositRef || undefined);
+      toast.success(`Deposit of $${depositAmount} via ${depositMethod.toUpperCase()} requested${depositRef ? ` for ${depositRef}` : ''}`);
       setDepositAmount('');
       setDepositMethod('');
       const data = await userDashboardService.getUserTransactions();
@@ -156,6 +158,9 @@ export default function Transactions() {
               <ArrowDown className="h-5 w-5" />
               Deposit Funds
             </CardTitle>
+            {depositRef && (
+              <p className="text-sm text-white/80 mt-1">Reference: <span className="font-semibold">{depositRef}</span></p>
+            )}
           </CardHeader>
           <CardContent className="p-5">
             <div className="space-y-4">
@@ -172,38 +177,36 @@ export default function Transactions() {
                   />
                 </div>
               </div>
-              
+
               <div>
                 <label className="text-sm font-medium text-gray-700 mb-2 block">Payment Method</label>
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     onClick={() => setDepositMethod('trx')}
-                    className={`p-3 border rounded-lg flex flex-col items-center justify-center transition-all ${
-                      depositMethod === 'trx' 
-                        ? 'border-blue-500 bg-blue-50' 
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
+                    className={`p-3 border rounded-lg flex flex-col items-center justify-center transition-all ${depositMethod === 'trx'
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                      }`}
                   >
                     <div className="w-8 h-8 flex items-center justify-center mb-1">
                       <TRXIcon />
                     </div>
                     <span className="text-xs font-medium">TRX</span>
                   </button>
-                  
+
                   <button
                     onClick={() => setDepositMethod('bnb')}
-                    className={`p-3 border rounded-lg flex flex-col items-center justify-center transition-all ${
-                      depositMethod === 'bnb' 
-                        ? 'border-blue-500 bg-blue-50' 
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
+                    className={`p-3 border rounded-lg flex flex-col items-center justify-center transition-all ${depositMethod === 'bnb'
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                      }`}
                   >
                     <div className="w-8 h-8 flex items-center justify-center mb-1">
                       <BNBIcon />
                     </div>
                     <span className="text-xs font-medium">BNB</span>
                   </button>
-                  
+
                   <button
                     className="p-3 border border-gray-200 rounded-lg flex flex-col items-center justify-center opacity-50 cursor-not-allowed"
                     disabled
@@ -214,7 +217,7 @@ export default function Transactions() {
                     </div>
                     <span className="text-xs font-medium">MTN</span>
                   </button>
-                  
+
                   <button
                     className="p-3 border border-gray-200 rounded-lg flex flex-col items-center justify-center opacity-50 cursor-not-allowed"
                     disabled
@@ -227,8 +230,8 @@ export default function Transactions() {
                   </button>
                 </div>
               </div>
-              
-              <Button 
+
+              <Button
                 className="w-full bg-accent"
                 onClick={handleDeposit}
                 disabled={!depositAmount || !depositMethod}
@@ -261,38 +264,36 @@ export default function Transactions() {
                   />
                 </div>
               </div>
-              
+
               <div>
                 <label className="text-sm font-medium text-gray-700 mb-2 block">Withdrawal Method</label>
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     onClick={() => setWithdrawMethod('trx')}
-                    className={`p-3 border rounded-lg flex flex-col items-center justify-center transition-all ${
-                      withdrawMethod === 'trx' 
-                        ? 'border-blue-500 bg-blue-50' 
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
+                    className={`p-3 border rounded-lg flex flex-col items-center justify-center transition-all ${withdrawMethod === 'trx'
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                      }`}
                   >
                     <div className="w-8 h-8 flex items-center justify-center mb-1">
                       <TRXIcon />
                     </div>
                     <span className="text-xs font-medium">TRX</span>
                   </button>
-                  
+
                   <button
                     onClick={() => setWithdrawMethod('bnb')}
-                    className={`p-3 border rounded-lg flex flex-col items-center justify-center transition-all ${
-                      withdrawMethod === 'bnb' 
-                        ? 'border-blue-500 bg-blue-50' 
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
+                    className={`p-3 border rounded-lg flex flex-col items-center justify-center transition-all ${withdrawMethod === 'bnb'
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                      }`}
                   >
                     <div className="w-8 h-8 flex items-center justify-center mb-1">
                       <BNBIcon />
                     </div>
                     <span className="text-xs font-medium">BNB</span>
                   </button>
-                  
+
                   <button
                     className="p-3 border border-gray-200 rounded-lg flex flex-col items-center justify-center opacity-50 cursor-not-allowed"
                     disabled
@@ -303,7 +304,7 @@ export default function Transactions() {
                     </div>
                     <span className="text-xs font-medium">MTN</span>
                   </button>
-                  
+
                   <button
                     className="p-3 border border-gray-200 rounded-lg flex flex-col items-center justify-center opacity-50 cursor-not-allowed"
                     disabled
@@ -316,8 +317,8 @@ export default function Transactions() {
                   </button>
                 </div>
               </div>
-              
-              <Button 
+
+              <Button
                 className="w-full bg-primary"
                 onClick={handleWithdraw}
                 disabled={!withdrawAmount || !withdrawMethod}
@@ -346,7 +347,7 @@ export default function Transactions() {
                 </div>
                 <Badge variant="success">Available</Badge>
               </div>
-              
+
               <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
@@ -359,7 +360,7 @@ export default function Transactions() {
                 </div>
                 <Badge variant="success">Available</Badge>
               </div>
-              
+
               <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg opacity-60">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
@@ -372,7 +373,7 @@ export default function Transactions() {
                 </div>
                 <Badge variant="secondary">Unavailable</Badge>
               </div>
-              
+
               <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg opacity-60">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
@@ -401,7 +402,7 @@ export default function Transactions() {
                 <TabsTrigger value="withdrawal" onClick={() => setActiveTab('withdrawal')}>Withdrawals</TabsTrigger>
               </TabsList>
             </Tabs>
-            
+
             <div className="flex gap-2">
               <div className="relative flex-1">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
@@ -439,8 +440,8 @@ export default function Transactions() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className={`p-2 rounded-full ${transaction.type === 'deposit' ? 'bg-green-100' : 'bg-red-100'}`}>
-                          {transaction.type === 'deposit' ? 
-                            <Plus className="h-4 w-4 text-green-600" /> : 
+                          {transaction.type === 'deposit' ?
+                            <Plus className="h-4 w-4 text-green-600" /> :
                             <Minus className="h-4 w-4 text-red-600" />
                           }
                         </div>

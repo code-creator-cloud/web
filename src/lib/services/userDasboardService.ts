@@ -21,9 +21,9 @@ export const userDashboardService = {
     }
   },
 
-  async createTransaction(type: string, amount: number, walletAddress: string): Promise<Transaction> {
+  async createTransaction(type: string, amount: number, walletAddress: string, notes?: string): Promise<Transaction> {
     try {
-      const response = await authApi.post('/api/transactions/', { type, amount, wallet_address: walletAddress } as CreateTransactionRequest);
+      const response = await authApi.post('/api/transactions/', { type, amount, wallet_address: walletAddress, notes } as CreateTransactionRequest);
       return response.data;
     } catch (error: any) {
       throw new Error(error.response?.data?.detail?.message || 'Failed to create transaction');

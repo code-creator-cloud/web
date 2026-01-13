@@ -9,6 +9,11 @@ import Transactions from './pages/Transactions';
 import Accounts from './pages/Accounts';
 import Settings from './pages/Settings';
 import Home from './pages/Home';
+import Platforms from './pages/Platforms';
+import Research from './pages/Research';
+import Products from './pages/Products';
+import Education from './pages/Education';
+import Support from './pages/Support';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -77,6 +82,11 @@ function App() {
       <Toaster richColors position="top-right" />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/platforms" element={<Platforms />} />
+        <Route path="/research" element={<Research />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/education" element={<Education />} />
+        <Route path="/support" element={<Support />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/admin/login" element={
